@@ -21,7 +21,7 @@ export default defineConfig({
               url: 'https://canjie.org',
             },
           },
-          prevNextLinksOrder: 'reverse-chronological', // 确保这里是有效值
+          prevNextLinksOrder: 'reverse-chronological',
         }),
       ],
       title: 'My Docs',
