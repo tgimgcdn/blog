@@ -1,0 +1,230 @@
+---
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import DefaultPage from '@astrojs/starlight/components/StarlightPage.astro';
+
+// 从属性获取当前页面信息
+const { data, ...props } = Astro.props;
+const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+
+// 如果是首页，处理博客文章的逻辑
+let displayPosts = [];
+let hasMorePosts = false;
+
+if (isHomePage && Astro.locals.starlightBlog) {
+  // 获取博客文章数据
+  const { posts } = Astro.locals.starlightBlog;
+
+  // 对文章进行排序：首先是精选文章，然后按日期降序
+  const sortedPosts = [...posts].sort((a, b) => {
+    // 首先按精选状态排序
+    if (a.entry.data.featured && !b.entry.data.featured) return -1;
+    if (!a.entry.data.featured && b.entry.data.featured) return 1;
+    
+    // 然后按日期排序（从新到旧）
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  // 只获取前9篇文章
+  displayPosts = sortedPosts.slice(0, 9);
+  hasMorePosts = sortedPosts.length > 9;
+}
+
+// 格式化日期
+function formatDate(dateString) {
+  return new Date(dateString).toLocaleDateString('zh-CN');
+}
+---
+
+{isHomePage ? (
+  <main class="home-page">
+    <header class="hero">
+      <div class="container">
+        <h1>我的博客</h1>
+        <p class="tagline">探索技术与生活的无限可能</p>
+        <div class="actions">
+          <a href="/archives/" class="action primary">
+            <span>浏览全部文章</span>
+            <span class="icon">→</span>
+          </a>
+          <a href="/about/" class="action secondary">
+            <span>关于我</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <h2>最新文章</h2>
+      <CardGrid>
+        {displayPosts.map(post => (
+          <Card title={post.entry.data.featured ? `${post.title} ⭐` : post.title}>
+            <p>{post.entry.data.excerpt || ''}</p>
+            <div class="card-meta">
+              <time datetime={post.createdAt}>
+                {formatDate(post.createdAt)}
+              </time>
+              {post.entry.data.tags && (
+                <div class="card-tags">
+                  {post.entry.data.tags.map(tag => (
+                    <span class="tag">#{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div class="read-more">
+              <a href={post.href}>阅读全文 →</a>
+            </div>
+          </Card>
+        ))}
+      </CardGrid>
+
+      {hasMorePosts && (
+        <div class="see-all">
+          <a href="/archives/" class="action-button">
+            查看更多文章
+            <span class="icon">→</span>
+          </a>
+        </div>
+      )}
+    </div>
+  </main>
+) : (
+  <DefaultPage {...props} data={data}>
+    <slot />
+  </DefaultPage>
+)}
+
+<style>
+  .home-page {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .hero {
+    background-color: var(--sl-color-bg-accent);
+    padding: 4rem 0;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    margin: 0 0 1rem;
+    color: var(--sl-color-white);
+  }
+  
+  .tagline {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--sl-color-gray-1);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .primary {
+    background-color: var(--sl-color-text-accent);
+    color: var(--sl-color-bg);
+  }
+  
+  .primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .secondary {
+    background-color: transparent;
+    border: 1px solid var(--sl-color-gray-5);
+    color: var(--sl-color-text);
+  }
+  
+  .secondary:hover {
+    background-color: var(--sl-color-gray-6);
+  }
+  
+  h2 {
+    margin: 3rem 0 2rem;
+    text-align: center;
+    font-size: 2rem;
+  }
+  
+  .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-3);
+    margin-top: 0.5rem;
+  }
+  
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .tag {
+    color: var(--sl-color-text-accent);
+    font-size: 0.85rem;
+  }
+  
+  .read-more {
+    margin-top: 1rem;
+  }
+  
+  .read-more a {
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .read-more a:hover {
+    text-decoration: underline;
+  }
+  
+  .see-all {
+    text-align: center;
+    margin: 2rem 0;
+  }
+  
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--sl-color-accent-low);
+    color: var(--sl-color-accent);
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .action-button:hover {
+    background-color: var(--sl-color-accent);
+    color: var(--sl-color-white);
+    transform: translateY(-2px);
+  }
+</style> 
