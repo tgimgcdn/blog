@@ -1,0 +1,128 @@
+---
+// 获取所有博客文章
+const { posts } = Astro.locals.starlightBlog;
+
+// 按日期排序（从新到旧）
+const sortedPosts = [...posts].sort((a, b) => {
+  return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+});
+
+// 按年份和月份分组
+const postsByYearAndMonth: Record<string, Record<string, any[]>> = {};
+
+for (const post of sortedPosts) {
+  const date = new Date(post.createdAt);
+  const year = date.getFullYear().toString();
+  const month = (date.getMonth() + 1).toString();
+  
+  if (!postsByYearAndMonth[year]) {
+    postsByYearAndMonth[year] = {};
+  }
+  
+  if (!postsByYearAndMonth[year][month]) {
+    postsByYearAndMonth[year][month] = [];
+  }
+  
+  postsByYearAndMonth[year][month].push(post);
+}
+
+// 获取所有年份，从新到旧排序
+const years = Object.keys(postsByYearAndMonth).sort((a, b) => Number(b) - Number(a));
+
+// 格式化日期
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+---
+
+<div class="archive-page">
+  {years.map(year => {
+    const months = Object.keys(postsByYearAndMonth[year]).sort((a, b) => Number(b) - Number(a));
+    const yearPostsCount = months.reduce((count, month) => count + postsByYearAndMonth[year][month].length, 0);
+    
+    return (
+      <div class="archive-year">
+        <h2>{year}年 ({yearPostsCount}篇文章)</h2>
+        
+        {months.map(month => (
+          <div class="archive-month">
+            <h3>{month}月</h3>
+            <ul>
+              {postsByYearAndMonth[year][month].map(post => (
+                <li>
+                  <span class="archive-date">{formatDate(post.createdAt)}</span>
+                  <a href={post.href}>{post.title}</a>
+                  {post.entry.data.tags && (
+                    <span class="archive-tags">
+                      {post.entry.data.tags.map((tag: string) => `#${tag}`).join(' ')}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+  })}
+</div>
+
+<style>
+.archive-page {
+  font-family: var(--sl-font);
+}
+
+.archive-year {
+  margin-bottom: 2rem;
+}
+
+.archive-month {
+  margin-left: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.archive-date {
+  display: inline-block;
+  min-width: 4rem;
+  margin-right: 0.5rem;
+  color: var(--sl-color-gray-3);
+}
+
+.archive-tags {
+  font-size: 0.85rem;
+  color: var(--sl-color-text-accent);
+  white-space: normal;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+h2 {
+  border-bottom: 1px solid var(--sl-color-gray-5);
+  padding-bottom: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+h3 {
+  margin-top: 1.5rem;
+  color: var(--sl-color-text-accent);
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+</style> 
