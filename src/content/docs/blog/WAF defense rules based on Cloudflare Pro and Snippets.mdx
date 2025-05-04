@@ -153,7 +153,7 @@ Mozilla/5.0 (compatible; CensysInspect/1.1; +https://about.censys.io/)
 
 代码如下(仅供参考，自行修改secretKey的值)
 
-```JavaScript
+```javascript
 export default {
     async fetch(request) {
         const clientIp = request.headers.get('cf-connecting-ip') || "";
