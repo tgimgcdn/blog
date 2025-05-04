@@ -3,10 +3,10 @@ title: Iove ad thyrsos sororis
 date: 2020-05-05
 excerpt: Morbi nisi tellus, suscipit id felis eu, convallis sollicitudin dui. In gravida mattis erat, et semper ipsum cursus vel. Nullam condimentum nunc dolor, a molestie ante faucibus in. Fusce efficitur eget purus vel vehicula. Nunc metus nisi, hendrerit sit amet vulputate in, tincidunt a ex. Nunc viverra enim dui, ut aliquam turpis pulvinar quis. Vestibulum lacus nisl, iaculis eu felis non, tempor eleifend nisl. In.
 authors:
-  - name: Ghost
+  - name: cmssky
     picture: https://avatars.githubusercontent.com/u/10137?s=200
-    url: https://github.com/ghost
-  - hideoo
+    url: https://github.com/cmssky
+  - cmssky
 ---
 
 ## Externa sum verba in timor

@@ -3,7 +3,7 @@ title: Ipsum nunc aliquet
 date: 2020-10-10
 excerpt: Aenean id blandit quam, hendrerit molestie est. Proin faucibus eros nibh, tempus posuere neque consectetur non. Mauris vel nibh quis tellus aliquam semper id a sem. Praesent et varius massa. Suspendisse potenti. Vivamus commodo varius nisl, quis malesuada justo aliquam.
 authors:
-  - name: Ghost
+  - name: cmssky
     picture: https://avatars.githubusercontent.com/u/10137?s=200
 cover:
   alt: Different covers in dark and light mode

@@ -3,9 +3,9 @@ title: Haerent huc curae
 date: 2020-04-04
 excerpt: Nunc vitae facilisis ex. Nunc turpis dui, molestie ac nisi nec, semper varius turpis. Maecenas iaculis quis neque quis pulvinar. Sed malesuada porta quam sed sollicitudin. Curabitur quis varius enim, quis porttitor justo. Donec convallis consectetur odio eget fermentum. Fusce volutpat sagittis ligula. Mauris vel justo sed neque sollicitudin luctus id vel magna. Quisque ligula diam, vulputate sed ullamcorper id, tempor ut lorem. Duis eget.
 authors:
-  - name: Ghost
+  - name: cmssky
     picture: https://avatars.githubusercontent.com/u/10137?s=200
-    url: https://github.com/ghost
+    url: https://github.com/cmssky
   - name: Astro
     picture: https://avatars.githubusercontent.com/u/44914786?s=200
     url: https://github.com/withastro

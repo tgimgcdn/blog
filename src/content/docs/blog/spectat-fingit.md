@@ -3,9 +3,9 @@ title: Spectat fingit
 date: 2020-03-03
 excerpt: Fusce massa lacus, rhoncus sed magna sit amet, aliquet faucibus leo. Nulla interdum mauris nec lorem hendrerit, quis molestie velit pulvinar. Donec iaculis neque libero, sed mollis massa feugiat lobortis. Proin dictum quam non augue ornare, a auctor massa aliquam. In euismod risus eu massa dapibus, eget vulputate enim faucibus.
 authors:
-  name: Ghost
+  name: cmssky
   picture: https://avatars.githubusercontent.com/u/10137?s=200
-  url: https://github.com/ghost
+  url: https://github.com/cmssky
 tags:
   - Example
   - Test

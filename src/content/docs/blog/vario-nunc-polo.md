@@ -5,10 +5,10 @@ lastUpdated: 2021-12-30
 tags:
   - Placeholder
 authors:
-  - name: Ghost
+  - name: cmssky
     picture: https://avatars.githubusercontent.com/u/10137?s=200
-    url: https://github.com/ghost
-  - hideoo
+    url: https://github.com/cmssky
+  - cmssky
 cover:
   alt: A cover
   image: ../../../assets/cover.png
