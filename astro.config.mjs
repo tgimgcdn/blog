@@ -26,7 +26,7 @@ export default defineConfig({
                   prevNextLinksOrder: 'chronological',
                   prefix: 'blog'
                 }),
-		starlightThemeFlexoki(),
+		starlightThemeFlexoki()
             ],
 			title: 'My Docs',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
