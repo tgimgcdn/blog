@@ -11,12 +11,13 @@ export default defineConfig({
 	site: 'https://canjie.ggff.net',
 	integrations: [
 	      starlight({
-	        components: {
-              MarkdownContent: './src/components/CustomMarkdownContent.astro',
-            },
+		// 添加自定义组件覆盖，使用我们的PageFrame
+		components: {
+              	  PageFrame: './src/components/PageFrame.astro',
+            	},
 	        plugins: [
-		starlightThemeFlexoki(),
-                starlightBlog({
+                starlightImageZoom(),
+		        starlightBlog({
                   authors: {
                     cmssky: {
                       name: 'cmssky',
@@ -27,7 +28,8 @@ export default defineConfig({
                   },
                   prevNextLinksOrder: 'chronological',
                   prefix: 'blog'
-                })
+                }),
+                starlightThemeFlexoki()
             ],
 			title: 'My Docs',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
