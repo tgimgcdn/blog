@@ -81,7 +81,7 @@ const defaultThumbnail = "/social-card.webp";
     <div class="pagination">
       {Array.from({ length: totalPages }).map((_, i) => (
         <a 
-          href={i === 0 ? '/' : `/page/${i + 1}`} 
+          href={i === 0 ? '/' : `/blog/page-${i + 1}`} 
           class={`page-link ${currentPage === i + 1 ? 'active' : ''}`}
         >
           {i + 1}
@@ -111,9 +111,11 @@ const defaultThumbnail = "/social-card.webp";
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
-    height: 100%;
     background-color: var(--sl-color-bg);
     display: flex;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1.3; /* 固定宽高比例 */
   }
   
   .grid-item:hover {
@@ -124,18 +126,20 @@ const defaultThumbnail = "/social-card.webp";
   .grid-item-content {
     display: flex;
     flex-direction: column;
-    height: 100%;
     width: 100%;
+    height: 100%;
   }
   
   .thumbnail-link {
     display: block;
     text-decoration: none;
-    height: 180px;
+    height: 50%; /* 固定为容器高度的一半 */
+    width: 100%;
   }
   
   .thumbnail {
     height: 100%;
+    width: 100%;
     overflow: hidden;
   }
   
@@ -154,42 +158,44 @@ const defaultThumbnail = "/social-card.webp";
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    height: 50%; /* 固定为容器高度的一半 */
+    overflow: hidden;
   }
   
   .title-link {
     text-decoration: none;
     color: inherit;
+    margin-bottom: 0.5rem;
   }
   
   .title {
     font-size: 1.1rem;
-    margin: 0 0 0.5rem;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--sl-color-text);
-    height: 1.5rem;
-    line-height: 1.5rem;
+    line-height: 1.5;
   }
   
   .featured-star {
     color: gold;
     margin-right: 0.25rem;
     vertical-align: middle;
+    display: inline-block;
   }
   
   .excerpt {
     font-size: 0.9rem;
     line-height: 1.4;
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.5rem;
     color: var(--sl-color-text-accent);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 2.8rem;
+    flex: 1;
   }
   
   .meta {
