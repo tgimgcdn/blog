@@ -1,9 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import starlightBlog from 'starlight-blog'
 import starlightImageZoom from 'starlight-image-zoom'
-
+import starlightBlog from 'starlight-blog'
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 
 
@@ -12,8 +11,11 @@ export default defineConfig({
 	site: 'https://canjie.ggff.net',
 	integrations: [
 	      starlight({
+	        components: {
+              MarkdownContent: './src/components/CustomMarkdownContent.astro',
+            },
 	        plugins: [
-		
+		starlightThemeFlexoki(),
                 starlightBlog({
                   authors: {
                     cmssky: {
@@ -25,9 +27,7 @@ export default defineConfig({
                   },
                   prevNextLinksOrder: 'chronological',
                   prefix: 'blog'
-                }),
-		starlightImageZoom(),
-		starlightThemeFlexoki()
+                })
             ],
 			title: 'My Docs',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
