@@ -14,12 +14,22 @@ const sortedPosts = [...posts].sort((a, b) => {
 
 // 找到当前文章的索引
 const currentPostIndex = sortedPosts.findIndex(post => {
-  return currentPath.endsWith(post.href) || currentPath === post.href;
+  // 对比路径时，忽略URI末尾的斜杠差异
+  const postHref = post.href.replace(/\/$/, '');
+  const currentPathNormalized = currentPath.replace(/\/$/, '');
+  return currentPathNormalized === postHref || currentPathNormalized.endsWith(postHref);
 });
 
 // 获取上一篇和下一篇文章
 const prevPost = currentPostIndex > 0 ? sortedPosts[currentPostIndex - 1] : null;
 const nextPost = currentPostIndex < sortedPosts.length - 1 ? sortedPosts[currentPostIndex + 1] : null;
+
+// 调试输出
+console.log('当前文章索引:', currentPostIndex);
+console.log('所有文章数:', sortedPosts.length);
+console.log('当前路径:', currentPath);
+if (prevPost) console.log('上一篇:', prevPost.href);
+if (nextPost) console.log('下一篇:', nextPost.href);
 ---
 
 {(prevPost || nextPost) && (
