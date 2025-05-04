@@ -1,6 +1,7 @@
----
+|}F&*)f&)&Y^gfc7gf ---
 import { Card, CardGrid } from '@astrojs/starlight/components';
 import DefaultPage from '@astrojs/starlight/components/StarlightPage.astro';
+import HomePage from './HomePage.astro';
 
 // 从属性获取当前页面信息
 const { data, ...props } = Astro.props;
@@ -36,58 +37,7 @@ function formatDate(dateString) {
 ---
 
 {isHomePage ? (
-  <main class="home-page">
-    <header class="hero">
-      <div class="container">
-        <h1>我的博客</h1>
-        <p class="tagline">探索技术与生活的无限可能</p>
-        <div class="actions">
-          <a href="/archives/" class="action primary">
-            <span>浏览全部文章</span>
-            <span class="icon">→</span>
-          </a>
-          <a href="/about/" class="action secondary">
-            <span>关于我</span>
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <div class="container">
-      <h2>最新文章</h2>
-      <CardGrid>
-        {displayPosts.map(post => (
-          <Card title={post.entry.data.featured ? `${post.title} ⭐` : post.title}>
-            <p>{post.entry.data.excerpt || ''}</p>
-            <div class="card-meta">
-              <time datetime={post.createdAt}>
-                {formatDate(post.createdAt)}
-              </time>
-              {post.entry.data.tags && (
-                <div class="card-tags">
-                  {post.entry.data.tags.map(tag => (
-                    <span class="tag">#{tag}</span>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div class="read-more">
-              <a href={post.href}>阅读全文 →</a>
-            </div>
-          </Card>
-        ))}
-      </CardGrid>
-
-      {hasMorePosts && (
-        <div class="see-all">
-          <a href="/archives/" class="action-button">
-            查看更多文章
-            <span class="icon">→</span>
-          </a>
-        </div>
-      )}
-    </div>
-  </main>
+  <HomePage />
 ) : (
   <DefaultPage {...props} data={data}>
     <slot />
