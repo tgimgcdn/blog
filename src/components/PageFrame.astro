@@ -1,4 +1,5 @@
-import StarlightPageFrame from '@astrojs/starlight/components/PageFrame.astro';
+---
+import { StarlightPageFrame } from '@astrojs/starlight/components';
 import BlogNavigation from './BlogNavigation.astro';
 
 // 确定当前页面是否是博客文章
@@ -6,6 +7,7 @@ const isBlogPost = Astro.url.pathname.includes('/blog/') &&
                   !Astro.url.pathname.endsWith('/blog/') && 
                   !Astro.url.pathname.includes('/tags/') && 
                   !Astro.url.pathname.includes('/authors/');
+---
 
 <StarlightPageFrame {...Astro.props}>
   <slot />
