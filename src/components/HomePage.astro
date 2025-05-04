@@ -113,6 +113,7 @@ const defaultThumbnail = "/social-card.webp";
     transition: transform 0.2s, box-shadow 0.2s;
     height: 100%;
     background-color: var(--sl-color-bg);
+    display: flex;
   }
   
   .grid-item:hover {
@@ -124,15 +125,17 @@ const defaultThumbnail = "/social-card.webp";
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
   }
   
   .thumbnail-link {
     display: block;
     text-decoration: none;
+    height: 180px;
   }
   
   .thumbnail {
-    height: 180px;
+    height: 100%;
     overflow: hidden;
   }
   
@@ -166,11 +169,14 @@ const defaultThumbnail = "/social-card.webp";
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--sl-color-text);
+    height: 1.5rem;
+    line-height: 1.5rem;
   }
   
   .featured-star {
     color: gold;
     margin-right: 0.25rem;
+    vertical-align: middle;
   }
   
   .excerpt {
@@ -183,6 +189,7 @@ const defaultThumbnail = "/social-card.webp";
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 2.8rem;
   }
   
   .meta {
