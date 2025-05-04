@@ -14,7 +14,6 @@ export default defineConfig({
 	      starlight({
 	        plugins: [
 		starlightImageZoom(),
-		starlightThemeFlexoki(),
                 starlightBlog({
                   authors: {
                     cmssky: {
@@ -26,7 +25,8 @@ export default defineConfig({
                   },
                   prevNextLinksOrder: 'chronological',
                   prefix: 'blog'
-                })
+                }),
+		starlightThemeFlexoki(),
             ],
 			title: 'My Docs',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
