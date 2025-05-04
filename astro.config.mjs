@@ -28,11 +28,11 @@ export default defineConfig({
                    leftSidebarEnabled: true,
                    rightSidebarEnabled: true,
 		// to have the sidebars appear until the user collapses
-                leftSidebarCollapsedWidth: "0px",
-                rightSidebarCollapsedWidth: "0px",
+                leftSidebarCollapsedWidth: "50px",
+                rightSidebarCollapsedWidth: "50px",
                // to never let the sidebars appear
-               leftSidebarExpandedWidth: "0px",
-              rightSidebarExpandedWidth: "0px",
+               leftSidebarExpandedWidth: "null",
+              rightSidebarExpandedWidth: "null",
               })
             ],
 			title: 'My Docs',
