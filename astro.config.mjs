@@ -23,7 +23,7 @@ export default defineConfig({
                       url: 'https://canjie.org',
                     },
                   },
-                  prevNextLinksOrder: 'chronological',
+                  prevNextLinksOrder: 'reverse-chronological',
                   prefix: 'blog'
                 }),
 		starlightThemeFlexoki()
