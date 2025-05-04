@@ -30,6 +30,7 @@ export default defineConfig({
 			title: 'My Docs',
 			components: {
 				Footer: './src/components/Footer.astro',
+				Page: './src/components/Page.astro',
 			  },
 			sidebar: [
 				{
@@ -42,6 +43,12 @@ export default defineConfig({
 				{
 					label: 'Reference',
 					autogenerate: { directory: 'reference' },
+				},
+				{
+					label: '博客',
+					items: [
+						{ label: '文章归档', link: '/archives/' },
+					],
 				},
 			],
 		}),
