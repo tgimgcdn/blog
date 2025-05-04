@@ -1,27 +1,20 @@
 ---
-// 导入必要的函数
-import { getCollection } from 'astro:content';
-import { getEntry } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
+// 使用 starlightBlog API 获取博客数据
+const { posts } = Astro.locals.starlightBlog;
 
 // 获取当前页面路径
 const currentPath = Astro.url.pathname;
 
-// 获取所有博客文章
-const allBlogPosts = await getCollection('docs', (entry) => {
-  return entry.slug.startsWith('blog/') && !entry.slug.endsWith('/index') && entry.data.date !== undefined;
-});
-
 // 按日期排序（从旧到新）
-const sortedPosts = [...allBlogPosts].sort((a, b) => {
-  const dateA = new Date(a.data.date).getTime();
-  const dateB = new Date(b.data.date).getTime();
+const sortedPosts = [...posts].sort((a, b) => {
+  const dateA = new Date(a.createdAt).getTime();
+  const dateB = new Date(b.createdAt).getTime();
   return dateA - dateB;
 });
 
 // 找到当前文章的索引
 const currentPostIndex = sortedPosts.findIndex(post => {
-  return currentPath.endsWith(post.slug + '/') || currentPath.endsWith(post.slug);
+  return currentPath.endsWith(post.href) || currentPath === post.href;
 });
 
 // 获取上一篇和下一篇文章
@@ -33,16 +26,16 @@ const nextPost = currentPostIndex < sortedPosts.length - 1 ? sortedPosts[current
   <div class="post-navigation">
     <div class="post-navigation-links">
       {prevPost && (
-        <a href={`/${prevPost.slug}/`} class="prev-post">
+        <a href={prevPost.href} class="prev-post">
           <span class="nav-label">上一篇</span>
-          <span class="post-title">{prevPost.data.title}</span>
+          <span class="post-title">{prevPost.title}</span>
         </a>
       )}
       
       {nextPost && (
-        <a href={`/${nextPost.slug}/`} class="next-post">
+        <a href={nextPost.href} class="next-post">
           <span class="nav-label">下一篇</span>
-          <span class="post-title">{nextPost.data.title}</span>
+          <span class="post-title">{nextPost.title}</span>
         </a>
       )}
     </div>
