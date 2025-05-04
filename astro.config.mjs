@@ -26,7 +26,7 @@ export default defineConfig({
               }),
 		starlightFullViewMode({
                    leftSidebarEnabled: true,
-                   rightSidebarEnabled: true
+                   rightSidebarEnabled: true,
 		// to have the sidebars appear until the user collapses
                 leftSidebarCollapsedWidth: "0px",
                 rightSidebarCollapsedWidth: "0px",
