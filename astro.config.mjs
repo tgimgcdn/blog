@@ -4,16 +4,17 @@ import starlight from '@astrojs/starlight';
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 import starlightImageZoom from 'starlight-image-zoom'
 import starlightBlog from 'starlight-blog'
+import starlightFullViewMode from 'starlight-fullview-mode'
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://canjie.ggff.net',
 	integrations: [
-		starlight({
-			plugins: [
-			  starlightImageZoom(),
-			  starlightThemeFlexoki(),
-              starlightBlog({
+	      starlight({
+	        plugins: [
+		starlightImageZoom(),
+		starlightThemeFlexoki(),
+                starlightBlog({
                 authors: {
                   cmssky: {
                     name: 'cmssky',
@@ -22,6 +23,10 @@ export default defineConfig({
                     url: 'https://canjie.org',
                   },
                 },
+              }),
+		starlightFullViewMode({
+                   leftSidebarEnabled: false,
+                   rightSidebarEnabled: true
               })
             ],
 			title: 'My Docs',
