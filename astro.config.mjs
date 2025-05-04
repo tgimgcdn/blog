@@ -1,8 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import starlightImageZoom from 'starlight-image-zoom'
 import starlightBlog from 'starlight-blog'
+import starlightImageZoom from 'starlight-image-zoom'
+
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 
 
