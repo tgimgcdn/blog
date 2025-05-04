@@ -12,17 +12,7 @@ export default defineConfig({
 	integrations: [
 	      starlight({
 	        plugins: [
-		starlightImageZoom({
-                  // Configure zoom to be disabled on mobile
-                  filter: (img) => {
-                    // This script runs client-side and checks if device is mobile
-                    if (typeof window !== 'undefined') {
-                      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-                      return !isMobile; // Return false for mobile devices
-                    }
-                    return true; // Default to true on server side
-                  }
-                }),
+		starlightImageZoom(),
 		starlightThemeFlexoki(),
                 starlightBlog({
                 authors: {
