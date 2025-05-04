@@ -25,6 +25,10 @@ export default defineConfig({
                 },
               })
             ],
+            components: {
+              // 添加自定义Head组件
+              Head: './src/components/Head.astro',
+            },
 			title: 'My Docs',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
 			sidebar: [
