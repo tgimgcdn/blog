@@ -13,7 +13,7 @@ export default defineConfig({
 	integrations: [
 	      starlight({
 	        plugins: [
-		starlightImageZoom(),
+		
                 starlightBlog({
                   authors: {
                     cmssky: {
@@ -26,6 +26,7 @@ export default defineConfig({
                   prevNextLinksOrder: 'chronological',
                   prefix: 'blog'
                 }),
+		starlightImageZoom(),
 		starlightThemeFlexoki()
             ],
 			title: 'My Docs',
