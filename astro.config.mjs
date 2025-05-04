@@ -29,7 +29,9 @@ export default defineConfig({
 		starlightThemeFlexoki()
             ],
 			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			components: {
+				Footer: './src/components/Footer.astro',
+			  },
 			sidebar: [
 				{
 					label: 'Guides',
