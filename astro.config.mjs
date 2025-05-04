@@ -25,8 +25,14 @@ export default defineConfig({
                 },
               }),
 		starlightFullViewMode({
-                   leftSidebarEnabled: false,
+                   leftSidebarEnabled: true,
                    rightSidebarEnabled: true
+		// to have the sidebars appear until the user collapses
+                leftSidebarCollapsedWidth: "0px",
+                rightSidebarCollapsedWidth: "0px",
+               // to never let the sidebars appear
+               leftSidebarExpandedWidth: "0px",
+              rightSidebarExpandedWidth: "0px",
               })
             ],
 			title: 'My Docs',
