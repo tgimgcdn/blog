@@ -11,9 +11,18 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			plugins: [
+			  starlightImageZoom(),
 			  starlightThemeFlexoki(),
-              starlightBlog(),
-              starlightImageZoom()
+              starlightBlog({
+                authors: {
+                  cmssky: {
+                    name: 'cmssky',
+                    title: '网站管理员',
+                    picture: 'https://cdn.canjie.org/avatar2.jpg',
+                    url: 'https://canjie.org',
+                  },
+                },
+              })
             ],
 			title: 'My Docs',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
