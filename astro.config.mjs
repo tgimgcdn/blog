@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 import starlightImageZoom from 'starlight-image-zoom'
 import starlightBlog from 'starlight-blog'
-import starlightFullViewMode from 'starlight-fullview-mode'
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -23,16 +23,6 @@ export default defineConfig({
                     url: 'https://canjie.org',
                   },
                 },
-              }),
-		starlightFullViewMode({
-                   leftSidebarEnabled: true,
-                   rightSidebarEnabled: true,
-		// to have the sidebars appear until the user collapses
-                leftSidebarCollapsedWidth: "50px",
-                rightSidebarCollapsedWidth: "50px",
-               // to never let the sidebars appear
-               leftSidebarExpandedWidth: "null",
-              rightSidebarExpandedWidth: "null",
               })
             ],
 			title: 'My Docs',
