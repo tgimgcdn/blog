@@ -23,7 +23,7 @@ export default defineConfig({
                     url: 'https://canjie.org',
                   },
                 },
-				prevNextLinksOrder: 'reverse-chronological',
+				prevNextLinksOrder: 'chronological',
               })
             ],
 			title: 'My Docs',
