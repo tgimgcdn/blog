@@ -19,7 +19,7 @@ export default defineConfig({
                   cmssky: {
                     name: 'cmssky',
                     title: '网站管理员',
-                    picture: 'https://cdn.canjie.org/avatar2.jpg',
+                    picture: 'https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg',
                     url: 'https://canjie.org',
                   },
                 },
