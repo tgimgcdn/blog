@@ -1,76 +1,81 @@
 ---
 import { Card, CardGrid } from '@astrojs/starlight/components';
-import DefaultPage from '@astrojs/starlight/components/StarlightPage.astro';
-import HomePage from './HomePage.astro';
+import DefaultPage from '@astrojs/starlight/components/DefaultPage.astro';
+import HomePage from '@astrojs/starlight/components/HomePage.astro';
+import { getEntryBySlug } from '@astrojs/starlight/content';
+import { getImage } from '@astrojs/image';
 
-// 从属性获取当前页面信息
-const { data, ...props } = Astro.props;
-const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const { entry } = Astro.props;
+const isHomePage = entry.data.layout === 'home';
+const isBlogPage = entry.data.layout === 'blog';
 
-// 检查是否为博客页面（URL中包含/blog/）
-const isBlogPage = Astro.url.pathname.includes('/blog/');
-
-// 获取当前站点域名
-const currentDomain = Astro.url.hostname;
-
-// 处理外部链接的函数
-function processExternalLinks(content: string) {
-  // 使用正则表达式匹配所有链接
-  return content.replace(
-    /<a\s+(?:[^>]*?\s+)?href="([^"]*)"([^>]*)>/g,
-    (match, href, rest) => {
-      try {
-        const url = new URL(href);
-        // 如果是外部链接
-        if (url.hostname !== currentDomain && url.protocol.startsWith('http')) {
-          // 将链接替换为重定向链接
-          return `<a href="/link?url=${encodeURIComponent(href)}"${rest}>`;
-        }
-      } catch (e) {
-        // 如果URL解析失败，保持原样
-        return match;
-      }
-      return match;
-    }
-  );
-}
-
-// 如果是首页，处理博客文章的逻辑
-let displayPosts = [];
-let hasMorePosts = false;
-
-if (isHomePage && Astro.locals.starlightBlog) {
-  // 获取博客文章数据
-  const { posts } = Astro.locals.starlightBlog;
-
-  // 对文章进行排序：首先是精选文章，然后按日期降序
-  const sortedPosts = [...posts].sort((a, b) => {
-    // 首先按精选状态排序
-    if (a.entry.data.featured && !b.entry.data.featured) return -1;
-    if (!a.entry.data.featured && b.entry.data.featured) return 1;
-    
-    // 然后按日期排序（从新到旧）
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-
-  // 只获取前9篇文章
-  displayPosts = sortedPosts.slice(0, 9);
-  hasMorePosts = sortedPosts.length > 9;
-}
-
-// 格式化日期
-function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString('zh-CN');
-}
+// 获取所有博客文章并按日期排序
+const blogPosts = await Astro.glob('../../content/blog/**/*.md');
+const sortedPosts = blogPosts
+  .sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime())
+  .slice(0, 9); // 只显示前9篇文章
 ---
 
 {isHomePage ? (
-  <HomePage />
+  <HomePage entry={entry} />
+) : isBlogPage ? (
+  <DefaultPage entry={entry}>
+    <CardGrid>
+      {sortedPosts.map((post) => (
+        <Card
+          title={post.frontmatter.title}
+          href={post.url}
+          cta="阅读全文"
+          icon="book"
+        >
+          {post.frontmatter.description}
+        </Card>
+      ))}
+    </CardGrid>
+  </DefaultPage>
 ) : (
-  <DefaultPage {...props} data={data}>
-    <slot set:html={processExternalLinks} />
+  <DefaultPage entry={entry}>
+    <slot />
   </DefaultPage>
 )}
+
+<script>
+  // 处理外部链接
+  function processExternalLinks() {
+    const currentDomain = window.location.hostname;
+    const links = document.querySelectorAll('a[href]');
+    
+    links.forEach(link => {
+      try {
+        const url = new URL(link.href);
+        if (url.hostname !== currentDomain && url.protocol.startsWith('http')) {
+          // 使用base64编码URL
+          const encodedUrl = btoa(link.href);
+          link.href = `/link?url=${encodedUrl}`;
+        }
+      } catch (e) {
+        // 如果URL解析失败，保持原样
+      }
+    });
+  }
+
+  // 页面加载时处理链接
+  document.addEventListener('DOMContentLoaded', processExternalLinks);
+
+  // 使用MutationObserver监听DOM变化
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'childList') {
+        processExternalLinks();
+      }
+    });
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+</script>
 
 <style>
   .home-page {
