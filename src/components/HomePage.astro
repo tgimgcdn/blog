@@ -1,20 +1,9 @@
 ---
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-// 从URL参数获取页码
-let currentPage = 1;
-try {
-  const url = new URL(Astro.request.url);
-  const pageParam = url.searchParams.get('page');
-  if (pageParam && !isNaN(parseInt(pageParam))) {
-    currentPage = parseInt(pageParam);
-  } else if (Astro.props.pageNum && !isNaN(parseInt(Astro.props.pageNum))) {
-    currentPage = parseInt(Astro.props.pageNum);
-  }
-} catch (error) {
-  // 出错时使用默认页码1
-  console.error("Error parsing page parameter:", error);
-}
+// 从props获取页码
+const { pageNum } = Astro.props;
+let currentPage = pageNum || 1;
 
 // 获取博客文章数据
 const starlightBlog = Astro.locals.starlightBlog;
@@ -112,14 +101,19 @@ const defaultThumbnail = "/social-card.webp";
   
   {totalPages > 1 && (
     <div class="pagination">
-      {Array.from({ length: totalPages }).map((_, i) => (
-        <a 
-          href={i === 0 ? '/' : `/page/${i + 1}`} 
-          class={`page-link ${currentPage === i + 1 ? 'active' : ''}`}
-        >
-          {i + 1}
-        </a>
-      ))}
+      {Array.from({ length: totalPages }).map((_, i) => {
+        const pageNum = i + 1;
+        // 生成一致的分页URL结构：第一页是首页，其他页面使用 /page/2, /page/3 等
+        const pageUrl = pageNum === 1 ? '/' : `/page/${pageNum}`;
+        return (
+          <a 
+            href={pageUrl} 
+            class={`page-link ${currentPage === pageNum ? 'active' : ''}`}
+          >
+            {pageNum}
+          </a>
+        );
+      })}
     </div>
   )}
 </main>
