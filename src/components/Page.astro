@@ -47,57 +47,6 @@ function formatDate(dateString) {
   </DefaultPage>
 )}
 
-<style is:global>
-  #simple-back-to-top {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: var(--sl-color-accent, #3584e4);
-    color: white;
-    border: none;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
-    z-index: 9999;
-  }
-  
-  #simple-back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  
-  #simple-back-to-top:hover {
-    background-color: var(--sl-color-accent-high, #1a6bbd);
-    transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* 移动设备适配 */
-  @media (max-width: 768px) {
-    #simple-back-to-top {
-      width: 40px;
-      height: 40px;
-      bottom: 20px;
-      right: 20px;
-    }
-    
-    #simple-back-to-top svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-</style>
-
 <style>
   .home-page {
     margin: 0;
@@ -232,29 +181,3 @@ function formatDate(dateString) {
     transform: translateY(-2px);
   }
 </style> 
-
-<script is:inline>
-  // 初始化返回顶部按钮
-  document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('simple-back-to-top');
-    if (!btn) return;
-    
-    function handleScroll() {
-      if (window.scrollY > 300) {
-        btn.classList.add('visible');
-      } else {
-        btn.classList.remove('visible');
-      }
-    }
-    
-    btn.addEventListener('click', function() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-    
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-  });
-</script> 
