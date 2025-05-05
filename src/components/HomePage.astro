@@ -1,9 +1,20 @@
 ---
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-// 获取传入的页码参数，默认为第1页
-const { pageNum = 1 } = Astro.props;
-const currentPage = pageNum;
+// 从URL参数获取页码
+let currentPage = 1;
+try {
+  const url = new URL(Astro.request.url);
+  const pageParam = url.searchParams.get('page');
+  if (pageParam && !isNaN(parseInt(pageParam))) {
+    currentPage = parseInt(pageParam);
+  } else if (Astro.props.pageNum && !isNaN(parseInt(Astro.props.pageNum))) {
+    currentPage = parseInt(Astro.props.pageNum);
+  }
+} catch (error) {
+  // 出错时使用默认页码1
+  console.error("Error parsing page parameter:", error);
+}
 
 // 获取博客文章数据
 const starlightBlog = Astro.locals.starlightBlog;
