@@ -1,21 +1,15 @@
 ---
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
+// 获取传入的页码参数，默认为第1页
+const { pageNum = 1 } = Astro.props;
+const currentPage = pageNum;
+
 // 获取博客文章数据
 const starlightBlog = Astro.locals.starlightBlog;
 let posts = [];
 if (starlightBlog && starlightBlog.posts) {
   posts = starlightBlog.posts;
-}
-
-// 获取当前页码
-const url = new URL(Astro.request.url);
-const pathSegments = url.pathname.split('/').filter(Boolean);
-let currentPage = 1;
-
-// 检查URL是否包含页码信息
-if (pathSegments.length > 0 && pathSegments[0] === 'page' && !isNaN(parseInt(pathSegments[1]))) {
-  currentPage = parseInt(pathSegments[1]);
 }
 
 // 对文章进行排序：首先是精选文章，然后按日期降序
