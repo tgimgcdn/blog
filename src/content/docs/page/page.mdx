@@ -1,34 +1,10 @@
 ---
 title: 博客文章列表
-description: 博客文章分页
+description: 博客文章页面
 template: splash
 ---
 
-import { getCollection } from 'astro:content';
 import HomePage from '../../../components/HomePage.astro';
 
-export async function getStaticPaths() {
-  // 获取所有博客文章
-  const allPosts = await getCollection('docs', entry => entry.id.startsWith('blog/'));
-  const postsPerPage = 9; // 每页9篇文章
-  const totalPages = Math.ceil(allPosts.length / postsPerPage);
-  
-  console.log(`[page].mdx: 总文章数=${allPosts.length}, 总页数=${totalPages}`);
-  
-  // 生成路径 (从第2页开始)
-  const paths = [];
-  for (let i = 2; i <= totalPages; i++) {
-    paths.push({
-      params: { page: String(i) },
-      props: { pageNum: i }
-    });
-  }
-  
-  console.log(`[page].mdx 生成路径: ${paths.map(p => `/page/${p.params.page}/`).join(', ')}`);
-  return paths;
-}
-
-const { pageNum } = Astro.props;
-console.log(`渲染页面 /page/${pageNum}/`);
-
-<HomePage pageNum={pageNum} /> 
+{/* 处理特殊的 /page/page/ 路径，返回第一页内容 */}
+<HomePage pageNum={1} /> 
