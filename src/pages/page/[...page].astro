@@ -1,18 +1,17 @@
 ---
-// 直接导入博客插件的内部函数
-import { getBlogData } from 'starlight-blog/middleware';
-import { getBlogEntries } from 'starlight-blog/libs/content';
+// 导入公开的组件
+import { getCollection } from 'astro:content';
 import HomePage from '../../components/HomePage.astro';
 
 export async function getStaticPaths() {
-  // 尝试获取所有博客文章
-  let totalArticles = 0;
+  // 使用标准Astro方法获取所有博客文章
+  let allPosts = [];
   let totalPages = 0;
   
   try {
-    // 直接从博客插件获取文章
-    const entries = await getBlogEntries('root');
-    totalArticles = entries.length;
+    // 获取所有博客文章（与博客插件使用相同的路径模式）
+    allPosts = await getCollection('docs', entry => entry.id.startsWith('blog/'));
+    const totalArticles = allPosts.length;
     const postsPerPage = 9; // 每页9篇文章
     totalPages = Math.ceil(totalArticles / postsPerPage);
     
@@ -26,7 +25,7 @@ export async function getStaticPaths() {
   // 为所有页面生成路径
   const paths = [];
   
-  // 首页重定向
+  // 首页重定向 - 这会创建 /page/ 路径
   paths.push({
     params: { page: undefined },
     props: { pageNum: 1 }
@@ -46,51 +45,8 @@ export async function getStaticPaths() {
 // 从路由参数获取页码
 const { pageNum } = Astro.props;
 
-// 创建一个类似于Starlight路由数据的对象
-const starlightRoute = {
-  locale: 'root', // 假设使用默认语言
-  slug: '/',
-  id: 'index',
-  isFallback: false,
-  entryMeta: {},
-  entries: {}
-};
-
-// 尝试直接获取博客数据
-try {
-  // 直接调用博客插件的函数获取数据
-  const blogData = await getBlogData(starlightRoute);
-  
-  // 如果成功获取，设置它到Astro.locals以便HomePage组件可以使用
-  if (!Astro.locals) {
-    Astro.locals = {};
-  }
-  Astro.locals.starlightBlog = blogData;
-  
-  console.log(`[...page].astro 页面 ${pageNum}: 成功获取博客数据，文章数:`, blogData.posts?.length || 0);
-} catch (error) {
-  console.error(`[...page].astro 页面 ${pageNum}: 获取博客数据失败:`, error);
-  
-  // 尝试第二种方法：直接获取文章
-  try {
-    const entries = await getBlogEntries('root');
-    console.log(`[...page].astro 页面 ${pageNum}: 成功通过备用方法获取博客文章，文章数:`, entries.length);
-    
-    // 创建一个类似的数据结构
-    if (!Astro.locals) {
-      Astro.locals = {};
-    }
-    Astro.locals.starlightBlog = {
-      posts: entries.map(entry => ({
-        entry,
-        href: `/blog/${entry.slug || entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '')}`,
-        title: entry.data.title
-      }))
-    };
-  } catch (secondError) {
-    console.error(`[...page].astro 页面 ${pageNum}: 备用方法也失败:`, secondError);
-  }
-}
+// 为了调试目的记录当前页码
+console.log(`[...page].astro: 渲染页面 ${pageNum}`);
 ---
 
 <HomePage pageNum={pageNum} /> 
