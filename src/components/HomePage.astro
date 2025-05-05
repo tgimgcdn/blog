@@ -1,6 +1,6 @@
 ---
-// 从props获取页码和可选的自定义文章列表
-const { pageNum, customPosts } = Astro.props;
+// 从props获取页码
+const { pageNum } = Astro.props;
 let currentPage = parseInt(pageNum || 1);
 
 // 调试输出
@@ -8,45 +8,31 @@ console.log(`当前页码: ${currentPage}`);
 
 // 获取博客文章数据
 let posts = [];
-if (customPosts) {
-  // 如果提供了自定义文章列表，使用它
-  console.log(`使用自定义文章列表，数量: ${customPosts.length}`);
-  posts = customPosts.map(entry => {
-    // 将内容集合条目转换为与starlightBlog.posts兼容的格式
-    const blogPath = entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
-    return {
-      title: entry.data.title,
-      href: `/blog/${entry.slug || blogPath}`,
-      entry: entry
-    };
+// 统一从starlightBlog获取数据，确保与首页完全一致
+const starlightBlog = Astro.locals.starlightBlog;
+if (starlightBlog && starlightBlog.posts) {
+  posts = starlightBlog.posts;
+  
+  // 修复链接：确保每篇文章都有正确的href
+  posts = posts.map(post => {
+    // 检查文章的href
+    if (!post.href || post.href.includes('undefined')) {
+      // 如果href不存在或包含undefined，则根据文章ID生成新的href
+      const blogPath = post.entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
+      return {
+        ...post,
+        href: `/blog/${post.entry.slug || blogPath}`
+      };
+    }
+    return post;
   });
+  
+  // 打印一些文章的示例链接进行调试
+  console.log("Sample post links:", posts.slice(0, 3).map(p => ({title: p.title, href: p.href})));
+  console.log(`总文章数: ${posts.length}`);
 } else {
-  // 否则尝试从starlightBlog获取
-  const starlightBlog = Astro.locals.starlightBlog;
-  if (starlightBlog && starlightBlog.posts) {
-    posts = starlightBlog.posts;
-    
-    // 修复链接：确保每篇文章都有正确的href
-    posts = posts.map(post => {
-      // 检查文章的href
-      if (!post.href || post.href.includes('undefined')) {
-        // 如果href不存在或包含undefined，则根据文章ID生成新的href
-        const blogPath = post.entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
-        return {
-          ...post,
-          href: `/blog/${post.entry.slug || blogPath}`
-        };
-      }
-      return post;
-    });
-    
-    // 打印一些文章的示例链接进行调试
-    console.log("Sample post links:", posts.slice(0, 3).map(p => ({title: p.title, href: p.href})));
-  } else {
-    console.error("No starlightBlog data available and no custom posts provided!", Astro.locals);
-  }
+  console.error("No starlightBlog data available!", Astro.locals);
 }
-console.log(`总文章数: ${posts.length}`);
 
 // 对文章进行排序：首先是精选文章，然后按日期降序
 const sortedPosts = [...posts].sort((a, b) => {
@@ -134,8 +120,8 @@ const defaultThumbnail = "/social-card.webp";
     <div class="pagination">
       {Array.from({ length: totalPages }).map((_, i) => {
         const pageNum = i + 1;
-        // 生成一致的分页URL结构：第一页是首页，其他页面使用 /page/2, /page/3 等
-        const pageUrl = pageNum === 1 ? '/' : `/page/${pageNum}`;
+        // 更新分页URL结构：第一页是首页，其他页面使用 /page/2, /page/3 等
+        const pageUrl = pageNum === 1 ? '/' : `/page/${pageNum}/`;
         return (
           <a 
             href={pageUrl} 
