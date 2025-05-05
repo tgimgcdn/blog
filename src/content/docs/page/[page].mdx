@@ -1,26 +1,25 @@
 ---
 title: 博客文章
-description: 博客文章列表
+description: 博客文章列表 - 第 {frontmatter.page} 页
 template: splash
+setup: |
+  import HomePage from '../../../components/HomePage.astro'
 ---
 
 import { getCollection } from 'astro:content';
-import HomePage from '../../../components/HomePage.astro';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('docs', entry => entry.id.startsWith('blog/'));
   const totalPages = Math.ceil(allPosts.length / 9);
   
-  return Array.from({ length: totalPages }).map((_, i) => {
-    const pageNum = i + 1;
-    if (pageNum === 1) return null; // 跳过第一页，因为我们已经有首页了
+  // 只生成第2页及以后的页面，因为第1页已经由首页处理
+  return Array.from({ length: totalPages - 1 }).map((_, i) => {
+    const pageNum = i + 2; // 从第2页开始
     return {
       params: { page: String(pageNum) },
       props: { pageNum }
     };
-  }).filter(Boolean); // 过滤掉空值
+  });
 }
 
-const { pageNum } = Astro.props;
-
-<HomePage pageNum={pageNum} /> 
+<HomePage pageNum={frontmatter.page || Astro.props.pageNum} /> 
