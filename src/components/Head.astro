@@ -87,4 +87,41 @@ import Default from '@astrojs/starlight/components/Head.astro';
       console.log('[全局重定向] 脚本已加载, 当前域名:', currentDomain);
     })();
   </script>
+
+  <!-- 简单的外链处理脚本 -->
+  <script is:inline>
+    (function() {
+      // 获取当前域名
+      const currentDomain = window.location.hostname;
+      
+      // 检查是否是外部链接
+      function isExternalLink(url) {
+        try {
+          const urlObj = new URL(url);
+          return urlObj.hostname !== currentDomain && 
+                 urlObj.protocol.startsWith('http');
+        } catch (e) {
+          return false;
+        }
+      }
+      
+      // 处理链接点击
+      document.addEventListener('click', function(e) {
+        let target = e.target;
+        while (target && target.tagName !== 'A') {
+          target = target.parentNode;
+          if (!target || target === document) return;
+        }
+        
+        if (!target || !target.href) return;
+        
+        // 如果是外部链接
+        if (isExternalLink(target.href)) {
+          e.preventDefault();
+          // 跳转到确认页面
+          window.location.href = `/link?url=${encodeURIComponent(target.href)}`;
+        }
+      }, true);
+    })();
+  </script>
 </Default> 
