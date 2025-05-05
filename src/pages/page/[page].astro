@@ -1,20 +1,10 @@
 ---
+import DefaultPage from '@astrojs/starlight/components/StarlightPage.astro';
 import HomePage from '../../components/HomePage.astro';
-import { getCollection } from 'astro:content';
 
-// 从内容集合中获取所有博客文章，用于计算分页
-export async function getStaticPaths() {
-  const allPosts = await getCollection('docs', ({ id, data }) => {
-    return id.startsWith('blog/') && !data.draft;
-  });
-
-  // 每页显示的文章数
-  const postsPerPage = 9;
-  // 计算总页数
-  const totalPages = Math.ceil(allPosts.length / postsPerPage);
-
-  // 为每个页码生成路径
-  return Array.from({ length: totalPages }).map((_, i) => {
+// 为动态路由生成静态路径
+export function getStaticPaths() {
+  return Array.from({ length: 10 }).map((_, i) => {
     return {
       params: { page: String(i + 1) },
     };
@@ -23,6 +13,16 @@ export async function getStaticPaths() {
 
 // 获取页码参数
 const { page } = Astro.params;
+const currentPage = parseInt(page);
+
+// 创建页面元数据
+const meta = {
+  title: `博客 - 第${currentPage}页`,
+  description: `博客文章列表 - 第${currentPage}页`
+};
 ---
 
-<HomePage pageNum={parseInt(page)} /> 
+<!-- 使用与index.mdx相同的页面布局，确保可以访问Astro.locals -->
+<DefaultPage {...Astro.props} data={{...Astro.props.data, ...meta}}>
+  <HomePage pageNum={currentPage} />
+</DefaultPage> 
