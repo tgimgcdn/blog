@@ -8,6 +8,16 @@ if (starlightBlog && starlightBlog.posts) {
   posts = starlightBlog.posts;
 }
 
+// 获取当前页码
+const url = new URL(Astro.request.url);
+const pathSegments = url.pathname.split('/').filter(Boolean);
+let currentPage = 1;
+
+// 检查URL是否包含页码信息
+if (pathSegments.length > 0 && pathSegments[0] === 'page' && !isNaN(parseInt(pathSegments[1]))) {
+  currentPage = parseInt(pathSegments[1]);
+}
+
 // 对文章进行排序：首先是精选文章，然后按日期降序
 const sortedPosts = [...posts].sort((a, b) => {
   // 首先按精选状态排序
@@ -22,7 +32,6 @@ const sortedPosts = [...posts].sort((a, b) => {
 
 // 计算分页
 const postsPerPage = 9; // 每页显示9篇文章
-const currentPage = 1; // 当前页码，默认为第1页
 const startIndex = (currentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
 const displayPosts = sortedPosts.slice(startIndex, endIndex);
