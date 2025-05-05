@@ -83,6 +83,37 @@ function formatDate(dateString) {
     }
   }
   
+  // 处理单个链接
+  function processLink(link) {
+    if (!link || !link.href) return;
+    
+    // 如果已经处理过，跳过
+    if (link.hasAttribute('data-processed')) return;
+    
+    // 检查是否是外部链接
+    if (isExternalLink(link.href)) {
+      console.log('[全局重定向] 处理链接:', link.href);
+      // 保存原始链接
+      link.setAttribute('data-original-href', link.href);
+      // 修改为跳转链接
+      link.href = redirectPage + '?url=' + encodeURIComponent(link.href);
+      // 标记为已处理
+      link.setAttribute('data-processed', 'true');
+    }
+  }
+  
+  // 处理所有链接
+  function processAllLinks() {
+    document.querySelectorAll('a').forEach(processLink);
+  }
+  
+  // 页面加载完成后立即处理所有链接
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', processAllLinks);
+  } else {
+    processAllLinks();
+  }
+  
   // 替换window.open方法
   window.open = function(url, target, features) {
     if (isExternalLink(url)) {
@@ -117,24 +148,26 @@ function formatDate(dateString) {
     }
   }, true);
   
-  // 劫持所有链接的href属性
+  // 监听DOM变化，处理新添加的链接
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'href') {
-        var link = mutation.target;
-        if (link.tagName === 'A' && isExternalLink(link.href)) {
-          console.log('[全局重定向] 拦截链接href修改:', link.href);
-          var redirectUrl = redirectPage + '?url=' + encodeURIComponent(link.href);
-          link.setAttribute('data-original-href', link.href);
-          link.href = redirectUrl;
-        }
+      if (mutation.type === 'childList') {
+        mutation.addedNodes.forEach(function(node) {
+          if (node.nodeType === 1) { // 元素节点
+            if (node.tagName === 'A') {
+              processLink(node);
+            }
+            node.querySelectorAll('a').forEach(processLink);
+          }
+        });
       }
     });
   });
   
-  // 观察所有a标签的href属性变化
-  document.querySelectorAll('a').forEach(function(link) {
-    observer.observe(link, { attributes: true });
+  // 开始观察整个文档
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
   });
   
   console.log('[全局重定向] 脚本已加载, 当前域名:', currentDomain);
