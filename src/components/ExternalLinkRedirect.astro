@@ -1,0 +1,58 @@
+---
+// 不需要特殊的导入
+---
+
+<div class="link-redirect">
+  <div class="redirect-container">
+    <div class="icon-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="warning-icon">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    </div>
+    <h1>您即将离开本站</h1>
+    <p id="target-domain">正在加载目标网站信息...</p>
+    <p class="warning">本站不对外部网站的内容负责，请注意保护您的个人信息安全</p>
+    <div class="button-group">
+      <button id="confirm-redirect" class="confirm">确认继续</button>
+      <button id="cancel-redirect" class="cancel">返回上一页</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 从URL获取目标链接
+    const urlParams = new URLSearchParams(window.location.search);
+    let targetUrl = urlParams.get('url');
+    
+    // 显示目标域名
+    const targetDomainElement = document.getElementById('target-domain');
+    if (targetUrl) {
+      try {
+        const url = new URL(decodeURIComponent(targetUrl));
+        targetDomainElement.textContent = '即将前往: ' + url.hostname;
+      } catch (e) {
+        targetDomainElement.textContent = '链接格式无效';
+      }
+    } else {
+      targetDomainElement.textContent = '未提供目标链接';
+    }
+    
+    // 设置按钮行为
+    const confirmButton = document.getElementById('confirm-redirect');
+    confirmButton.addEventListener('click', function() {
+      if (targetUrl) {
+        window.location.href = decodeURIComponent(targetUrl);
+      } else {
+        window.history.back();
+      }
+    });
+    
+    const cancelButton = document.getElementById('cancel-redirect');
+    cancelButton.addEventListener('click', function() {
+      window.history.back();
+    });
+  });
+</script> 
