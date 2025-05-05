@@ -1,19 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import DefaultPage from '@astrojs/starlight/components/StarlightPage.astro';
 import HomePage from '../../components/HomePage.astro';
 
 // 为动态路由生成静态路径
-export async function getStaticPaths() {
-  // 获取所有博客文章以计算总页数
-  const blogEntries = await getCollection('docs', (entry) => {
-    return entry.id.startsWith('blog/');
-  });
-  
-  // 计算总页数（每页9篇文章）
-  const totalPages = Math.ceil(blogEntries.length / 9);
-  
-  // 生成页面路径
-  return Array.from({ length: totalPages }).map((_, i) => ({
+export function getStaticPaths() {
+  return Array.from({ length: 10 }).map((_, i) => ({
     params: { page: String(i + 1) }
   }));
 }
@@ -22,25 +13,18 @@ export async function getStaticPaths() {
 const { page } = Astro.params;
 const currentPage = parseInt(page);
 
-// 直接获取博客文章数据
-const allBlogPosts = await getCollection('docs', (entry) => {
-  return entry.id.startsWith('blog/');
-});
-
-// 将获取的数据转换为与starlightBlog兼容的格式
-const posts = allBlogPosts.map(entry => {
-  return {
-    entry: entry,
-    slug: entry.slug,
-    href: `/docs/${entry.slug}`,
-    title: entry.data.title,
-    createdAt: entry.data.date || new Date(),
-  };
-});
-
-// 设置到Astro.locals，这样HomePage组件可以访问
-Astro.locals = Astro.locals || {};
-Astro.locals.starlightBlog = { posts };
+// 页面元数据
+const content = {
+  title: `博客文章 - 第${currentPage}页`,
+  description: '查看我们的博客文章',
+  template: 'splash',
+  editUrl: false,
+  lastUpdated: false,
+  tableOfContents: false,
+  head: [],
+};
 ---
 
-<HomePage pageNum={currentPage} /> 
+<DefaultPage content={content}>
+  <HomePage pageNum={currentPage} />
+</DefaultPage> 
