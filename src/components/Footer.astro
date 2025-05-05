@@ -20,7 +20,11 @@ import { Icon } from '@astrojs/starlight/components';
 
 <!-- 返回顶部按钮 -->
 <div id="back-to-top-container" data-astro-cid-sz7xmlte>
-  <button id="back-to-top-button" aria-label="返回顶部" title="返回顶部">
+  <button 
+    id="back-to-top-button" 
+    aria-label="返回顶部" 
+    title="返回顶部" 
+    style="cursor: pointer !important; pointer-events: auto !important;">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
@@ -46,10 +50,24 @@ import { Icon } from '@astrojs/starlight/components';
         return;
       }
       
+      // 强制设置按钮样式
+      function enforceButtonStyles() {
+        backToTopButton.style.cursor = 'pointer';
+        backToTopButton.style.pointerEvents = 'auto';
+      }
+      
+      // 立即应用样式
+      enforceButtonStyles();
+      
+      // 定期检查并应用样式，以防被其他脚本覆盖
+      const styleInterval = setInterval(enforceButtonStyles, 1000);
+      
       // 滚动处理函数
       function handleScroll() {
         if (window.scrollY > 300) {
           backToTopButton.classList.add('visible');
+          // 当按钮可见时额外确保样式正确
+          enforceButtonStyles();
         } else {
           backToTopButton.classList.remove('visible');
         }
@@ -101,6 +119,21 @@ import { Icon } from '@astrojs/starlight/components';
       
       // 标记为已初始化
       window.__backToTopInitialized = true;
+      
+      // 添加鼠标事件处理，额外强化样式
+      backToTopButton.addEventListener('mouseover', function() {
+        document.body.style.cursor = 'pointer';
+        backToTopButton.style.cursor = 'pointer';
+      });
+      
+      backToTopButton.addEventListener('mouseout', function() {
+        document.body.style.cursor = '';
+      });
+      
+      // 注册清理函数
+      window.addEventListener('beforeunload', function() {
+        clearInterval(styleInterval);
+      });
     }
     
     // 如果DOM已加载，立即执行；否则等待DOM加载完成
@@ -185,6 +218,18 @@ import { Icon } from '@astrojs/starlight/components';
     transform: translateY(20px);
     transition: all 0.3s ease;
     z-index: 9999;
+    pointer-events: auto !important;
+    /* 增加专门用于指针样式的类 */
+    -webkit-cursor: pointer !important;
+    -moz-cursor: pointer !important;
+  }
+  
+  /* 强制应用鼠标手形样式于按钮和所有子元素 */
+  #back-to-top-button,
+  #back-to-top-button *,
+  #back-to-top-button svg,
+  #back-to-top-button polyline {
+    cursor: pointer !important;
     pointer-events: auto !important;
   }
   
