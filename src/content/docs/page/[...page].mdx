@@ -30,7 +30,9 @@ export async function getStaticPaths() {
   }).filter(Boolean); // 过滤掉null值
 }
 
+// 解构获取页码值
 const { pageNum } = Astro.props;
-console.log(`[...page].mdx 渲染页面: ${pageNum}`);
+const currentPageNum = pageNum || 1;
+console.log(`[...page].mdx 渲染页面: ${currentPageNum}`);
 
-<HomePage pageNum={pageNum} /> 
+<HomePage pageNum={currentPageNum} /> 
