@@ -1,7 +1,10 @@
 ---
-// 从props获取页码
-const { pageNum } = Astro.props;
-let currentPage = parseInt(pageNum || 1);
+// 从props获取页码，并提供默认值1
+const { pageNum = 1 } = Astro.props;
+// 确保页码是有效的数字
+let currentPage = typeof pageNum === 'number' ? pageNum : parseInt(pageNum || '1', 10) || 1;
+// 确保页码至少为1
+currentPage = Math.max(1, currentPage);
 
 // 调试输出
 console.log(`当前页码: ${currentPage}`);
