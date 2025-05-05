@@ -55,7 +55,6 @@ export default defineConfig({
 				excludeSelectors: ['[data-pagefind-ignore]'],
 			},
 			tableOfContents: false, // 隐藏链接页面的目录
-			],
 		}),
 	],
 });
