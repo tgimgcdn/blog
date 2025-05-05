@@ -31,8 +31,6 @@ export default defineConfig({
 			components: {
 				Footer: './src/components/Footer.astro',
 				Page: './src/components/Page.astro',
-				MarkdownContent: './src/components/MarkdownContent.astro',
-				Head: './src/components/Head.astro',
 			},
 			sidebar: [
 				{
@@ -58,9 +56,6 @@ export default defineConfig({
 				excludeSelectors: ['[data-pagefind-ignore]'],
 			},
 			tableOfContents: false, // 隐藏链接页面的目录
-			customCss: [
-				// 添加自定义CSS，可在此处添加全局样式
-				'./src/styles/custom.css',
 			],
 		}),
 	],
