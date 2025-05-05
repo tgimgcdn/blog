@@ -117,6 +117,26 @@ function formatDate(dateString) {
     }
   }, true);
   
+  // 劫持所有链接的href属性
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'href') {
+        var link = mutation.target;
+        if (link.tagName === 'A' && isExternalLink(link.href)) {
+          console.log('[全局重定向] 拦截链接href修改:', link.href);
+          var redirectUrl = redirectPage + '?url=' + encodeURIComponent(link.href);
+          link.setAttribute('data-original-href', link.href);
+          link.href = redirectUrl;
+        }
+      }
+    });
+  });
+  
+  // 观察所有a标签的href属性变化
+  document.querySelectorAll('a').forEach(function(link) {
+    observer.observe(link, { attributes: true });
+  });
+  
   console.log('[全局重定向] 脚本已加载, 当前域名:', currentDomain);
 })();
 </script>
