@@ -1,0 +1,30 @@
+---
+title: 博客文章列表
+description: 博客文章分页 - 第 {frontmatter.page} 页
+template: splash
+---
+
+import { getCollection } from 'astro:content';
+import HomePage from '../../../components/HomePage.astro';
+
+export async function getStaticPaths() {
+  // 获取所有博客文章
+  const allPosts = await getCollection('docs', entry => entry.id.startsWith('blog/'));
+  const postsPerPage = 9; // 每页9篇文章
+  const totalPages = Math.ceil(allPosts.length / postsPerPage);
+  
+  console.log(`[page].mdx 构建: 总文章数=${allPosts.length}, 总页数=${totalPages}`);
+  
+  // 只生成第2页及以后的路径
+  const paths = [];
+  for (let i = 2; i <= totalPages; i++) {
+    paths.push({
+      params: { page: String(i) }
+    });
+  }
+  
+  console.log(`[page].mdx 生成路径: ${paths.map(p => `/page/${p.params.page}/`).join(', ')}`);
+  return paths;
+}
+
+<HomePage pageNum={Astro.params.page ? parseInt(Astro.params.page) : 1} /> 
