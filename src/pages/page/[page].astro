@@ -9,21 +9,18 @@ export async function getStaticPaths() {
   const postsPerPage = 9; // 每页显示9篇文章
   const totalPages = Math.ceil(allPosts.length / postsPerPage);
   
-  console.log(`[page].astro: 总文章数=${allPosts.length}, 总页数=${totalPages}`);
-  
   // 生成除第一页外的所有页码路径
   return Array.from({ length: totalPages - 1 }, (_, i) => {
     const pageNum = i + 2; // 页码从2开始
     return {
       params: { page: String(pageNum) },
-      props: { pageNum, totalPages, postCount: allPosts.length }
+      props: { pageNum }
     };
   });
 }
 
-// 从路由参数获取页码
-const { pageNum, totalPages, postCount } = Astro.props;
-console.log(`[page].astro: 渲染页码=${pageNum}, 总页数=${totalPages}, 总文章数=${postCount}`);
+const { page } = Astro.params;
+const { pageNum } = Astro.props;
 ---
 
 <HomePage pageNum={pageNum} /> 
