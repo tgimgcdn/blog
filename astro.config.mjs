@@ -32,7 +32,7 @@ export default defineConfig({
 				Footer: './src/components/Footer.astro',
 				Page: './src/components/Page.astro',
 				MarkdownContent: './src/components/MarkdownContent.astro',
-			  },
+			},
 			sidebar: [
 				{
 					label: 'Guides',
@@ -52,6 +52,16 @@ export default defineConfig({
 					],
 				},
 			],
+			// 添加需要隐藏在侧边栏和搜索结果中的页面
+			pagefind: {
+				excludeSelectors: ['[data-pagefind-ignore]'],
+			},
+			tableOfContents: false, // 隐藏链接页面的目录
+			customCss: [
+				// 添加自定义CSS，可在此处添加全局样式
+				'./src/styles/custom.css',
+			],
 		}),
 	],
 });
+
