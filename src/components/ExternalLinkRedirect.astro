@@ -44,7 +44,8 @@
     const confirmButton = document.getElementById('confirm-redirect');
     confirmButton.addEventListener('click', function() {
       if (targetUrl) {
-        window.location.href = decodeURIComponent(targetUrl);
+        // 使用新的API路由进行重定向
+        window.location.href = `/api/redirect?to=${encodeURIComponent(decodeURIComponent(targetUrl))}`;
       } else {
         window.history.back();
       }
