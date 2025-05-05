@@ -1,0 +1,94 @@
+/* 
+ * 自定义全局样式
+ * 此文件包含应用于整个网站的自定义样式
+ */
+
+/* 外链页面的样式 */
+.link-redirect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  width: 100%;
+  padding: 2rem;
+}
+
+.redirect-container {
+  background-color: var(--sl-color-bg);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-wrapper {
+  background-color: var(--sl-color-accent-low);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.warning-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--sl-color-accent);
+}
+
+/* 通用按钮样式 */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.confirm {
+  background-color: var(--sl-color-accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 99px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.confirm:hover {
+  background-color: var(--sl-color-accent-high);
+  transform: translateY(-2px);
+}
+
+.cancel {
+  background-color: var(--sl-color-gray-5);
+  color: var(--sl-color-text);
+  padding: 0.75rem 1.5rem;
+  border-radius: 99px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.cancel:hover {
+  background-color: var(--sl-color-gray-4);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+  .button-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .confirm, .cancel {
+    width: 100%;
+  }
+} 
