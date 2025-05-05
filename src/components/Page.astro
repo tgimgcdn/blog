@@ -2,10 +2,14 @@
 import { Card, CardGrid } from '@astrojs/starlight/components';
 import DefaultPage from '@astrojs/starlight/components/StarlightPage.astro';
 import HomePage from './HomePage.astro';
+import BackToTop from './BackToTop.astro';
 
 // 从属性获取当前页面信息
 const { data, ...props } = Astro.props;
 const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+
+// 检查是否为博客页面（URL中包含/blog/）
+const isBlogPage = Astro.url.pathname.includes('/blog/');
 
 // 如果是首页，处理博客文章的逻辑
 let displayPosts = [];
@@ -43,6 +47,9 @@ function formatDate(dateString) {
     <slot />
   </DefaultPage>
 )}
+
+{/* 只在博客页面显示返回顶部按钮 */}
+{isBlogPage && <BackToTop />}
 
 <style>
   .home-page {
