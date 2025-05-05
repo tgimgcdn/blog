@@ -40,7 +40,7 @@ function formatDate(dateString) {
 ---
 
 <!-- 添加外链处理脚本，确保在最前面加载 -->
-<script src="/scripts/exterlink-handler.js" is:inline></script>
+<script src="/scripts/exterlink-capture.js" is:inline></script>
 
 {isHomePage ? (
   <HomePage />
@@ -58,14 +58,6 @@ function formatDate(dateString) {
     path: location.pathname,
     currentDomain: location.hostname,
   });
-  
-  // 确保外链处理函数被调用
-  if (window.handleExternalLinks) {
-    console.log('[页面调试] 手动调用外链处理函数');
-    window.handleExternalLinks();
-  } else {
-    console.warn('[页面调试] 外链处理函数未找到！');
-  }
 </script>
 
 <style>
