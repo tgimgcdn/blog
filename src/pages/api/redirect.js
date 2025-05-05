@@ -1,4 +1,4 @@
-export async function GET({ request, url }) {
+export async function onRequest({ request, url }) {
   const target = url.searchParams.get('url');
   
   if (!target) {
