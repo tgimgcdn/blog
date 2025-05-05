@@ -43,11 +43,8 @@ import { Icon } from '@astrojs/starlight/components';
       const backToTopButton = document.getElementById('back-to-top-button');
       
       if (!backToTopButton) {
-        console.error('返回顶部按钮未找到');
         return;
       }
-      
-      console.log('找到返回顶部按钮元素', backToTopButton);
       
       // 滚动处理函数
       function handleScroll() {
@@ -58,96 +55,26 @@ import { Icon } from '@astrojs/starlight/components';
         }
       }
       
-      // 创建一个新的按钮在原按钮之上，确保捕获点击事件
-      function createOverlayButton() {
-        // 移除任何现有的覆盖按钮
-        const existingOverlay = document.getElementById('back-to-top-overlay');
-        if (existingOverlay) {
-          existingOverlay.remove();
-        }
-        
-        // 获取原按钮的位置信息
-        const rect = backToTopButton.getBoundingClientRect();
-        
-        // 创建一个绝对定位的透明div作为覆盖层
-        const overlay = document.createElement('div');
-        overlay.id = 'back-to-top-overlay';
-        overlay.style.cssText = `
-          position: fixed;
-          bottom: ${window.innerHeight - rect.bottom}px;
-          right: ${window.innerWidth - rect.right}px;
-          width: ${rect.width + 20}px;
-          height: ${rect.height + 20}px;
-          background-color: transparent;
-          z-index: 20000;
-          cursor: pointer;
-        `;
-        
-        // 添加点击事件
-        overlay.addEventListener('click', function(e) {
-          console.log('覆盖层被点击了');
-          e.preventDefault();
-          e.stopPropagation();
-          scrollToTop();
-          return false;
-        }, true);
-        
-        // 添加到body
-        document.body.appendChild(overlay);
-        console.log('创建了覆盖按钮');
-        
-        // 每次按钮位置变化时更新覆盖层
-        window.addEventListener('resize', function() {
-          const newRect = backToTopButton.getBoundingClientRect();
-          overlay.style.bottom = `${window.innerHeight - newRect.bottom}px`;
-          overlay.style.right = `${window.innerWidth - newRect.right}px`;
-          overlay.style.width = `${newRect.width + 20}px`;
-          overlay.style.height = `${newRect.height + 20}px`;
-        });
-        
-        // 当按钮显示/隐藏时，也相应更新覆盖层
-        const observer = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.attributeName === 'class') {
-              if (backToTopButton.classList.contains('visible')) {
-                overlay.style.display = 'block';
-              } else {
-                overlay.style.display = 'none';
-              }
-            }
-          });
-        });
-        
-        observer.observe(backToTopButton, { attributes: true });
-        
-        // 初始状态
-        overlay.style.display = backToTopButton.classList.contains('visible') ? 'block' : 'none';
-      }
-      
       // 滚动到顶部函数
       function scrollToTop() {
-        console.log('执行滚动到顶部');
         try {
           window.scrollTo({
             top: 0,
             behavior: 'smooth'
           });
         } catch (error) {
-          console.log('使用备用滚动方法');
           window.scrollTo(0, 0);
         }
       }
       
       // 为原按钮绑定事件（多种方式）
       backToTopButton.onclick = function(e) {
-        console.log('原按钮被点击了');
         e.preventDefault();
         scrollToTop();
         return false;
       };
       
       backToTopButton.addEventListener('click', function(e) {
-        console.log('原按钮被点击了(addEventListener)');
         e.preventDefault();
         scrollToTop();
       }, true);  // 使用捕获阶段
@@ -158,12 +85,8 @@ import { Icon } from '@astrojs/starlight/components';
       // 初始检查
       handleScroll();
       
-      // 创建覆盖按钮
-      createOverlayButton();
-      
-      // 最后的备用方案：通过全局点击检测
+      // 全局点击检测，确保在任何情况下按钮都能响应点击
       document.addEventListener('click', function(e) {
-        // 检查点击是否在按钮区域内
         const rect = backToTopButton.getBoundingClientRect();
         if (
           backToTopButton.classList.contains('visible') &&
@@ -172,12 +95,9 @@ import { Icon } from '@astrojs/starlight/components';
           e.clientY >= rect.top && 
           e.clientY <= rect.bottom
         ) {
-          console.log('全局点击检测到按钮区域被点击');
           scrollToTop();
         }
-      }, true);  // 使用捕获阶段
-      
-      console.log('返回顶部按钮已完全初始化');
+      }, true);
       
       // 标记为已初始化
       window.__backToTopInitialized = true;
@@ -193,7 +113,6 @@ import { Icon } from '@astrojs/starlight/components';
     // 作为备份，确保在window加载完成后一定会执行
     window.addEventListener('load', function() {
       if (!window.__backToTopInitialized) {
-        console.log('使用window.load事件作为备份初始化');
         initBackToTop();
       }
     });
