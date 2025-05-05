@@ -4,7 +4,31 @@ description: 欢迎来到我的博客
 template: splash
 ---
 
+import { getBlogData } from 'starlight-blog/middleware';
 import HomePage from '../../components/HomePage.astro';
 
-{/* 首页显示第一页内容 */}
+export const prerender = true;
+
+{/* 直接获取博客数据 */}
+export async function getStaticProps() {
+  // 尝试获取博客数据
+  try {
+    const starlightRoute = {
+      locale: 'root',
+      slug: '/',
+      id: 'index',
+      isFallback: false,
+      entryMeta: {},
+      entries: {}
+    };
+    
+    // 直接调用博客插件的函数
+    const blogData = await getBlogData(starlightRoute);
+    return { starlightBlog: blogData };
+  } catch (error) {
+    console.error("首页获取博客数据失败:", error);
+    return {};
+  }
+}
+
 <HomePage pageNum={1} />
