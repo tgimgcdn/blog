@@ -1,8 +1,36 @@
 ---
 import HomePage from '../../components/HomePage.astro';
 
+// 从Astro.locals获取数据
+export async function getStaticPaths() {
+  // 导入必要的组件以获取数据
+  const { locals } = await import('@astrojs/starlight/utils');
+  
+  // 计算总页数
+  let totalPages = 1;
+  try {
+    // 尝试获取文章数据并计算页数
+    const starlightBlog = locals.starlightBlog;
+    if (starlightBlog && starlightBlog.posts) {
+      const postsPerPage = 9;
+      totalPages = Math.ceil(starlightBlog.posts.length / postsPerPage);
+    }
+  } catch (error) {
+    console.error("Error calculating pages:", error);
+  }
+  
+  // 生成所有可能的页面路径
+  return Array.from({ length: totalPages }).map((_, i) => {
+    return {
+      params: { page: String(i + 1) },
+      props: { currentPage: i + 1 }
+    };
+  });
+}
+
 // 获取页码参数
 const { page } = Astro.params;
+const { currentPage } = Astro.props;
 ---
 
 <HomePage /> 
