@@ -170,6 +170,7 @@ const defaultThumbnail = "/social-card.webp";
     background-color: var(--sl-color-bg);
     height: 100%;
     display: flex;
+    align-items: stretch;
   }
   
   .grid-item:hover {
@@ -192,6 +193,7 @@ const defaultThumbnail = "/social-card.webp";
     height: 180px;
     width: 100%;
     overflow: hidden;
+    flex-shrink: 0;
   }
   
   .thumbnail img {
@@ -283,7 +285,6 @@ const defaultThumbnail = "/social-card.webp";
   .pagination-container {
     margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid var(--sl-color-gray-5);
     width: 100%;
   }
   
