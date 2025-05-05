@@ -1,0 +1,12 @@
+---
+title: 页面导航
+description: 博客文章的页面导航
+template: splash
+---
+
+import HomePage from '../../../components/HomePage.astro';
+
+{/* 处理 /page/page/ 路径的访问，显示第一页内容 */}
+<HomePage pageNum={1} />
+
+export const prerender = true; 
