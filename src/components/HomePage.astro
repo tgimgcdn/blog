@@ -1,7 +1,10 @@
 ---
 // 从props获取页码
 const { pageNum } = Astro.props;
-let currentPage = pageNum || 1;
+let currentPage = parseInt(pageNum || 1);
+
+// 调试输出
+console.log(`当前页码: ${currentPage}`);
 
 // 获取博客文章数据
 const starlightBlog = Astro.locals.starlightBlog;
@@ -25,6 +28,7 @@ if (starlightBlog && starlightBlog.posts) {
   
   // 打印一些文章的示例链接进行调试
   console.log("Sample post links:", posts.slice(0, 3).map(p => ({title: p.title, href: p.href})));
+  console.log(`总文章数: ${posts.length}`);
 } else {
   console.error("No starlightBlog data available!", Astro.locals);
 }
@@ -47,6 +51,8 @@ const startIndex = (currentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
 const displayPosts = sortedPosts.slice(startIndex, endIndex);
 const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+console.log(`分页信息: 当前页=${currentPage}, 总页数=${totalPages}, 本页文章数=${displayPosts.length}`);
+console.log(`分页范围: 起始索引=${startIndex}, 结束索引=${endIndex}, 总文章数=${sortedPosts.length}`);
 const hasMorePosts = totalPages > 1;
 
 // 格式化日期
@@ -59,6 +65,18 @@ const defaultThumbnail = "/social-card.webp";
 ---
 
 <main class="grid-container">
+  {!displayPosts || displayPosts.length === 0 ? (
+    <div class="debug-info">
+      <h2>调试信息</h2>
+      <p>当前页码: {currentPage}</p>
+      <p>总页数: {totalPages}</p>
+      <p>总文章数: {sortedPosts.length}</p>
+      <p>起始索引: {startIndex}</p>
+      <p>结束索引: {endIndex}</p>
+      <p>本页应有文章数: {Math.min(postsPerPage, sortedPosts.length - startIndex)}</p>
+    </div>
+  ) : null}
+
   <div class="custom-grid">
     {displayPosts.map(post => (
       <div class="grid-item">
@@ -292,5 +310,25 @@ const defaultThumbnail = "/social-card.webp";
     .custom-grid {
       grid-template-columns: 1fr;
     }
+  }
+  
+  .debug-info {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #212529;
+  }
+  
+  .debug-info h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .debug-info p {
+    margin: 0.25rem 0;
+    font-family: monospace;
   }
 </style> 
