@@ -18,102 +18,146 @@ import { Icon } from '@astrojs/starlight/components';
   </div>
 </footer>
 
-<!-- 返回顶部按钮 - 使用纯HTML元素和内联样式确保最大兼容性 -->
-<a 
-  href="#top" 
-  id="back-to-top-btn" 
-  title="返回顶部" 
-  style="
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #3584e4;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 99999;
-    cursor: pointer;
-    pointer-events: auto;
-  "
->
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="24" 
-    height="24" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    stroke-width="2" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-    style="cursor: pointer;"
+<!-- 返回顶部按钮 -->
+<div id="back-to-top-container" data-astro-cid-sz7xmlte>
+  <button 
+    id="back-to-top-button" 
+    aria-label="返回顶部" 
+    title="返回顶部"
+    class="cursor-pointer"
   >
-    <polyline points="18 15 12 9 6 15" style="cursor: pointer;"></polyline>
-  </svg>
-</a>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+</div>
 
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', function() {
-    // 避免重复初始化
-    if (window._backToTopInitialized) return;
-    window._backToTopInitialized = true;
-    
-    const btn = document.getElementById('back-to-top-btn');
-    if (!btn) return;
-    
-    // 监听滚动事件
-    window.addEventListener('scroll', function() {
-      if (window.pageYOffset > 300) {
-        btn.style.opacity = '1';
-        btn.style.visibility = 'visible';
-      } else {
-        btn.style.opacity = '0';
-        btn.style.visibility = 'hidden';
-      }
-    });
-    
-    // 处理点击事件
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    
-    // 鼠标悬停时的特效
-    btn.addEventListener('mouseover', function() {
-      btn.style.backgroundColor = '#1a6bbd';
-      btn.style.transform = 'translateY(-3px)';
-      btn.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
-    });
-    
-    btn.addEventListener('mouseout', function() {
-      btn.style.backgroundColor = '#3584e4';
-      btn.style.transform = '';
-      btn.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
-    });
-    
-    // 初始状态
-    if (window.pageYOffset > 300) {
-      btn.style.opacity = '1';
-      btn.style.visibility = 'visible';
-    }
-  });
+  // 使用标志变量防止多次初始化
+  window.__backToTopInitialized = window.__backToTopInitialized || false;
   
-  // 备份：确保在窗口加载完成后依然初始化
-  window.addEventListener('load', function() {
-    if (!window._backToTopInitialized) {
-      const event = new Event('DOMContentLoaded');
-      document.dispatchEvent(event);
+  // 立即执行函数，避免全局变量污染
+  (function() {
+    // 如果已经初始化过，就直接返回
+    if (window.__backToTopInitialized) {
+      return;
     }
-  });
+    
+    // 确保在DOM加载完成后执行
+    function initBackToTop() {
+      const backToTopButton = document.getElementById('back-to-top-button');
+      
+      if (!backToTopButton) {
+        return;
+      }
+      
+      // 设置内联样式，优先级最高
+      backToTopButton.setAttribute('style', 'cursor: pointer !important;');
+      
+      // 添加cursor-pointer类，以防内联样式被覆盖
+      backToTopButton.classList.add('cursor-pointer');
+      
+      // 强制添加一个全局样式规则，在任何页面都适用
+      try {
+        const style = document.createElement('style');
+        style.textContent = `
+          #back-to-top-button, 
+          #back-to-top-button * {
+            cursor: pointer !important;
+            pointer-events: auto !important;
+          }
+          
+          /* 在任何情况下都强制鼠标指针 */
+          .cursor-pointer,
+          .cursor-pointer * {
+            cursor: pointer !important;
+          }
+        `;
+        document.head.appendChild(style);
+      } catch (e) {
+        // 忽略错误，继续执行
+      }
+      
+      // 滚动处理函数
+      function handleScroll() {
+        if (window.scrollY > 300) {
+          backToTopButton.classList.add('visible');
+        } else {
+          backToTopButton.classList.remove('visible');
+        }
+      }
+      
+      // 滚动到顶部函数
+      function scrollToTop() {
+        try {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        } catch (error) {
+          window.scrollTo(0, 0);
+        }
+      }
+      
+      // 为按钮绑定事件（多种方式）
+      backToTopButton.onclick = function(e) {
+        e.preventDefault();
+        scrollToTop();
+        return false;
+      };
+      
+      backToTopButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        scrollToTop();
+      }, true);
+      
+      // 添加滚动事件监听
+      window.addEventListener('scroll', handleScroll);
+      
+      // 初始检查
+      handleScroll();
+      
+      // 标记为已初始化
+      window.__backToTopInitialized = true;
+    }
+    
+    // 如果DOM已加载，立即执行；否则等待DOM加载完成
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initBackToTop);
+    } else {
+      setTimeout(initBackToTop, 0);
+    }
+    
+    // 作为备份，确保在window加载完成后一定会执行
+    window.addEventListener('load', function() {
+      if (!window.__backToTopInitialized) {
+        initBackToTop();
+      }
+      
+      // 博客页面特殊处理
+      setTimeout(function() {
+        const backToTopButton = document.getElementById('back-to-top-button');
+        if (backToTopButton) {
+          // 检查是否在博客页面
+          if (window.location.pathname.includes('/blog/')) {
+            // 在博客页面上应用额外的样式和事件
+            backToTopButton.style.cursor = 'pointer';
+            backToTopButton.style.pointerEvents = 'auto';
+            
+            // 添加一个额外的事件监听器
+            backToTopButton.addEventListener('mouseover', function() {
+              this.style.cursor = 'pointer';
+              document.body.style.cursor = 'pointer';
+            });
+            
+            backToTopButton.addEventListener('mouseout', function() {
+              document.body.style.cursor = '';
+            });
+          }
+        }
+      }, 1000); // 延迟1秒，确保页面完全加载
+    });
+  })();
 </script>
 
 <style>
@@ -154,18 +198,75 @@ import { Icon } from '@astrojs/starlight/components';
     color: var(--sl-color-accent);
   }
   
-  /* 确保移动设备适配 */
+  /* 返回顶部容器 */
+  #back-to-top-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 10000;
+    pointer-events: none;
+  }
+  
+  /* 返回顶部按钮样式 */
+  #back-to-top-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--sl-color-accent, #3584e4);
+    color: white;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+    pointer-events: auto !important;
+  }
+  
+  /* 在全局作用域定义cursor-pointer类 */
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+  
+  /* 特别针对鼠标指针的CSS */
+  #back-to-top-button,
+  #back-to-top-button svg,
+  #back-to-top-button * {
+    cursor: pointer !important;
+  }
+  
+  #back-to-top-button.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  #back-to-top-button:hover {
+    background-color: var(--sl-color-accent-high, #1a6bbd);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* 移动设备适配 */
   @media (max-width: 768px) {
-    #back-to-top-btn {
-      bottom: 20px !important;
-      right: 20px !important;
-      width: 40px !important;
-      height: 40px !important;
+    #back-to-top-container {
+      bottom: 20px;
+      right: 20px;
     }
     
-    #back-to-top-btn svg {
-      width: 20px !important;
-      height: 20px !important;
+    #back-to-top-button {
+      width: 40px;
+      height: 40px;
+    }
+    
+    #back-to-top-button svg {
+      width: 20px;
+      height: 20px;
     }
   }
 </style> 
