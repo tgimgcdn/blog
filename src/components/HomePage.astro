@@ -8,9 +8,11 @@ console.log(`当前页码: ${currentPage}`);
 
 // 获取博客文章数据
 let posts = [];
-// 统一从starlightBlog获取数据，确保与首页完全一致
+// 尝试从starlightBlog获取数据
 const starlightBlog = Astro.locals.starlightBlog;
+
 if (starlightBlog && starlightBlog.posts) {
+  // 使用starlightBlog数据
   posts = starlightBlog.posts;
   
   // 修复链接：确保每篇文章都有正确的href
@@ -31,19 +33,19 @@ if (starlightBlog && starlightBlog.posts) {
   console.log("Sample post links:", posts.slice(0, 3).map(p => ({title: p.title, href: p.href})));
   console.log(`总文章数: ${posts.length}`);
 } else {
-  console.error("No starlightBlog data available!", Astro.locals);
+  console.log("starlightBlog数据不可用，请确保在Starlight页面中使用");
 }
 
 // 对文章进行排序：首先是精选文章，然后按日期降序
 const sortedPosts = [...posts].sort((a, b) => {
   // 首先按精选状态排序
-  if (a.entry.data.featured && !b.entry.data.featured) return -1;
-  if (!a.entry.data.featured && b.entry.data.featured) return 1;
+  if (a.entry?.data?.featured && !b.entry?.data?.featured) return -1;
+  if (!a.entry?.data?.featured && b.entry?.data?.featured) return 1;
   
   // 然后按日期排序（从新到旧）
-  const dateA = a.entry.data.pubDate || a.entry.data.date;
-  const dateB = b.entry.data.pubDate || b.entry.data.date;
-  return new Date(dateB).getTime() - new Date(dateA).getTime();
+  const dateA = a.entry?.data?.pubDate || a.entry?.data?.date;
+  const dateB = b.entry?.data?.pubDate || b.entry?.data?.date;
+  return new Date(dateB || 0).getTime() - new Date(dateA || 0).getTime();
 });
 
 // 计算分页
@@ -58,7 +60,7 @@ const hasMorePosts = totalPages > 1;
 
 // 格式化日期
 function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString('zh-CN');
+  return dateString ? new Date(dateString).toLocaleDateString('zh-CN') : '';
 }
 
 // 默认缩略图
@@ -75,6 +77,8 @@ const defaultThumbnail = "/social-card.webp";
       <p>起始索引: {startIndex}</p>
       <p>结束索引: {endIndex}</p>
       <p>本页应有文章数: {Math.min(postsPerPage, sortedPosts.length - startIndex)}</p>
+      <p>starlightBlog可用: {starlightBlog ? '是' : '否'}</p>
+      {starlightBlog && <p>starlightBlog文章数: {starlightBlog.posts?.length || 0}</p>}
     </div>
   ) : null}
 
@@ -85,8 +89,8 @@ const defaultThumbnail = "/social-card.webp";
           <a href={post.href} class="thumbnail-link">
             <div class="thumbnail">
               <img 
-                src={post.entry.data.thumbnail || defaultThumbnail} 
-                alt={post.title}
+                src={post.entry?.data?.thumbnail || defaultThumbnail} 
+                alt={post.title || '文章封面'}
                 onerror="this.src='/social-card.webp'"
               />
             </div>
@@ -94,16 +98,16 @@ const defaultThumbnail = "/social-card.webp";
           <div class="content">
             <a href={post.href} class="title-link">
               <h3 class="title" title={post.title}>
-                {post.entry.data.featured && <span class="featured-star">⭐</span>}
-                {post.title}
+                {post.entry?.data?.featured && <span class="featured-star">⭐</span>}
+                {post.title || '无标题文章'}
               </h3>
             </a>
-            <p class="excerpt">{post.entry.data.description || post.entry.data.excerpt || ''}</p>
+            <p class="excerpt">{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
             <div class="meta">
-              <span class="category">{post.entry.data.category || '未分类'}</span>
-              <time class="date">{formatDate(post.entry.data.pubDate || post.entry.data.date)}</time>
+              <span class="category">{post.entry?.data?.category || '未分类'}</span>
+              <time class="date">{formatDate(post.entry?.data?.pubDate || post.entry?.data?.date || new Date())}</time>
             </div>
-            {post.entry.data.tags && (
+            {post.entry?.data?.tags && (
               <div class="tags">
                 {post.entry.data.tags.map(tag => (
                   <a href={`/blog/tags/${tag}`} class="tag">#{tag}</a>
@@ -120,12 +124,14 @@ const defaultThumbnail = "/social-card.webp";
     <div class="pagination">
       {Array.from({ length: totalPages }).map((_, i) => {
         const pageNum = i + 1;
-        // 更新分页URL结构：第一页是首页，其他页面使用 /page/2, /page/3 等
+        // 使用新的分页URL结构
         const pageUrl = pageNum === 1 ? '/' : `/page/${pageNum}/`;
         return (
           <a 
             href={pageUrl} 
             class={`page-link ${currentPage === pageNum ? 'active' : ''}`}
+            aria-current={currentPage === pageNum ? 'page' : undefined}
+            aria-label={`第 ${pageNum} 页`}
           >
             {pageNum}
           </a>
