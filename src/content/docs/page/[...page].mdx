@@ -21,14 +21,21 @@ export async function getStaticPaths() {
   // 为每个页码生成路径（第2页到最后一页）
   for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
     paths.push({
+      // 确保路径格式正确，仅使用数字作为参数
       params: { page: String(pageNum) },
       props: { pageNum }
     });
   }
   
+  // 仅处理有效的数字页码，避免处理其他路径
+  console.log(`[...page].mdx 生成的路径数量: ${paths.length}`);
+  console.log(`路径示例: ${paths.length > 0 ? JSON.stringify(paths[0]) : '无路径'}`);
+  
   return paths;
 }
 
-const { pageNum } = Astro.props;
+// 确保始终有 pageNum 值，默认为 1（首页）
+const { pageNum = 1 } = Astro.props;
+console.log(`[...page].mdx 渲染: 使用页码 = ${pageNum}, 类型 = ${typeof pageNum}`);
 
 <HomePage pageNum={pageNum} /> 
