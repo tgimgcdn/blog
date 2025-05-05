@@ -1,7 +1,4 @@
 ---
-// 导入相关组件
-import { Card, CardGrid } from '@astrojs/starlight/components';
-
 // 为动态路由生成静态路径
 export function getStaticPaths() {
   return Array.from({ length: 10 }).map((_, i) => ({
@@ -54,10 +51,7 @@ const defaultThumbnail = "/social-card.webp";
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>博客 - 第{currentPage}页</title>
   <meta name="description" content={`博客文章列表 - 第${currentPage}页`} />
-  <!-- 使用与站点其他页面相同的样式 -->
-  <style is:global>
-    @import "/src/styles/global.css";
-  </style>
+  <!-- 不引用不存在的全局样式文件 -->
 </head>
 <body>
   <main class="grid-container">
