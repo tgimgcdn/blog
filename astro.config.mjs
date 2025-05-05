@@ -4,6 +4,41 @@ import starlight from '@astrojs/starlight';
 import starlightBlog from 'starlight-blog'
 import starlightImageZoom from 'starlight-image-zoom'
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
+import { visit } from 'unist-util-visit'
+
+// 自定义 Markdown 处理器
+function processMarkdownLinks() {
+	return {
+		name: 'process-markdown-links',
+		hooks: {
+			'astro:config:setup': ({ updateConfig }) => {
+				updateConfig({
+					markdown: {
+						remarkPlugins: [
+							function() {
+								return function(tree) {
+									// 遍历所有节点
+									visit(tree, 'link', (node) => {
+										try {
+											const url = new URL(node.url);
+											// 如果是外部链接
+											if (url.protocol.startsWith('http')) {
+												// 将链接替换为重定向链接
+												node.url = `/link?url=${encodeURIComponent(node.url)}`;
+											}
+										} catch (e) {
+											// 如果URL解析失败，保持原样
+										}
+									});
+								};
+							}
+						]
+					}
+				});
+			}
+		}
+	};
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -56,6 +91,7 @@ export default defineConfig({
 			},
 			tableOfContents: false, // 隐藏链接页面的目录
 		}),
+		processMarkdownLinks(),
 	],
 });
 
