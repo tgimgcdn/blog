@@ -127,8 +127,8 @@ const defaultThumbnail = "/social-card.webp";
     <div class="pagination">
       {Array.from({ length: totalPages }).map((_, i) => {
         const pageNum = i + 1;
-        // 更新为新的路由结构：首页是/，其他页是/page/2, /page/3等
-        const pageUrl = pageNum === 1 ? '/' : `/page/${pageNum}`;
+        // 更新为静态页面结构
+        const pageUrl = pageNum === 1 ? '/' : `/page/${pageNum}/`;
         return (
           <a 
             href={pageUrl} 
