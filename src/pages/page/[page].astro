@@ -6,13 +6,20 @@ export const getStaticPaths = async () => {
   const allPosts = await getCollection('docs', entry => entry.id.startsWith('blog/'));
   const totalPages = Math.ceil(allPosts.length / 9);
   
-  return Array.from({ length: totalPages }).map((_, i) => ({
-    params: { page: String(i + 1) },
-    props: { pageNum: i + 1 }
-  }));
+  console.log(`[getStaticPaths] 总文章数: ${allPosts.length}, 总页数: ${totalPages}`);
+  
+  return Array.from({ length: totalPages }).map((_, i) => {
+    const pageNum = i + 1;
+    console.log(`[getStaticPaths] 生成页面 ${pageNum}`);
+    return {
+      params: { page: String(pageNum) },
+      props: { pageNum }
+    };
+  });
 };
 
 const { pageNum } = Astro.props;
+console.log(`[page].astro 渲染页码: ${pageNum}`);
 ---
 
 <HomePage pageNum={pageNum} /> 
