@@ -1,5 +1,5 @@
 export async function GET({ request, url }) {
-  const target = url.searchParams.get('to');
+  const target = url.searchParams.get('url');
   
   if (!target) {
     return new Response('Missing target URL', { status: 400 });
