@@ -120,10 +120,10 @@ const defaultThumbnail = "/social-card.webp";
               <div class="tags">
                 {Array.isArray(post.entry.data.tags) 
                   ? post.entry.data.tags.map(tag => (
-                      <a href={`/tags/${processTagForUrl(tag)}`} class="tag">#{tag}</a>
+                      <a href={`/blog/tags/${processTagForUrl(tag)}`} class="tag">#{tag}</a>
                     ))
                   : typeof post.entry.data.tags === 'string' 
-                    ? <a href={`/tags/${processTagForUrl(post.entry.data.tags)}`} class="tag">#{post.entry.data.tags}</a>
+                    ? <a href={`/blog/tags/${processTagForUrl(post.entry.data.tags)}`} class="tag">#{post.entry.data.tags}</a>
                     : null
                 }
               </div>
