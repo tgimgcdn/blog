@@ -52,6 +52,14 @@ const sortedPosts = [...posts].sort((a, b) => {
   return new Date(dateB || 0).getTime() - new Date(dateA || 0).getTime();
 });
 
+// 打印一些标签信息进行调试
+if (sortedPosts.length > 0) {
+  const samplePost = sortedPosts[0];
+  console.log("示例文章标签:", samplePost.entry?.data?.tags);
+  console.log("标签类型:", typeof samplePost.entry?.data?.tags);
+  console.log("是否为数组:", Array.isArray(samplePost.entry?.data?.tags));
+}
+
 // 计算分页
 const postsPerPage = 9; // 每页显示9篇文章
 const startIndex = (currentPage - 1) * postsPerPage;
@@ -104,9 +112,14 @@ const defaultThumbnail = "/social-card.webp";
             </div>
             {post.entry?.data?.tags && (
               <div class="tags">
-                {post.entry.data.tags.map(tag => (
-                  <a href={`/blog/tags/${tag}`} class="tag">#{tag}</a>
-                ))}
+                {Array.isArray(post.entry.data.tags) 
+                  ? post.entry.data.tags.map(tag => (
+                      <a href={`/blog/tags/${tag}`} class="tag">#{tag}</a>
+                    ))
+                  : typeof post.entry.data.tags === 'string' 
+                    ? <a href={`/blog/tags/${post.entry.data.tags}`} class="tag">#{post.entry.data.tags}</a>
+                    : null
+                }
               </div>
             )}
           </div>
