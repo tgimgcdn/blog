@@ -5,7 +5,6 @@ template: splash
 
 import { getCollection } from 'astro:content';
 import HomePage from '../../components/HomePage.astro';
-import PageWrapper from '../../components/PageWrapper.astro';
 
 export const getStaticPaths = async () => {
   const allPosts = await getCollection('docs', entry => entry.id.startsWith('blog/'));
@@ -17,6 +16,4 @@ export const getStaticPaths = async () => {
   }));
 };
 
-const { pageNum } = Astro.props;
-
-<PageWrapper pageNum={pageNum} /> 
+<HomePage pageNum={Astro.props.pageNum} /> 
