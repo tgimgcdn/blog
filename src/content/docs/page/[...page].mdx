@@ -15,22 +15,28 @@ export async function getStaticPaths() {
   
   console.log(`[...page].mdx 中的路由生成: 总文章数 = ${allPosts.length}, 总页数 = ${totalPages}`);
   
-  // 生成第2页及以后的页面
+  // 生成所有分页页面路径，包括第1页
   const paths = [];
   
+  // 第1页 - 对应 /page/1/
+  paths.push({
+    params: { page: "1" },
+    props: { pageNum: 1 }
+  });
+  
+  // 第2页及以后 - 对应 /page/2/, /page/3/ 等
   for (let i = 1; i < totalPages; i++) {
-    const pageNum = i + 1; // 从第2页开始
-    
+    const pageNum = i + 1;
     paths.push({
-      params: { page: String(pageNum) }, // 对应 /page/2/, /page/3/ 等
+      params: { page: String(pageNum) },
       props: { pageNum }
     });
   }
   
-  // 不生成 /page/1/ - 我们已经有了 /page/ (index.mdx) 处理这个
   return paths;
 }
 
+// 确保访问时能获取到页码值
 const { pageNum } = Astro.props;
 console.log(`[...page].mdx 渲染页面: 页码=${pageNum}`);
 
