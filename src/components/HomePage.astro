@@ -21,6 +21,25 @@ const starlightBlog = Astro.locals.starlightBlog;
 let posts = [];
 if (starlightBlog && starlightBlog.posts) {
   posts = starlightBlog.posts;
+  
+  // 修复链接：确保每篇文章都有正确的href
+  posts = posts.map(post => {
+    // 检查文章的href
+    if (!post.href || post.href.includes('undefined')) {
+      // 如果href不存在或包含undefined，则根据文章ID生成新的href
+      const blogPath = post.entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
+      return {
+        ...post,
+        href: `/blog/${post.entry.slug || blogPath}`
+      };
+    }
+    return post;
+  });
+  
+  // 打印一些文章的示例链接进行调试
+  console.log("Sample post links:", posts.slice(0, 3).map(p => ({title: p.title, href: p.href})));
+} else {
+  console.error("No starlightBlog data available!", Astro.locals);
 }
 
 // 对文章进行排序：首先是精选文章，然后按日期降序
