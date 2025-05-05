@@ -1,6 +1,6 @@
 ---
-title: 博客文章
-description: 博客文章列表
+title: 博客文章列表
+description: 所有博客文章的分页浏览
 template: splash
 ---
 
@@ -10,23 +10,16 @@ import HomePage from '../../../components/HomePage.astro';
 export async function getStaticPaths() {
   // 获取所有博客文章
   const allPosts = await getCollection('docs', entry => entry.id.startsWith('blog/'));
-  const postsPerPage = 9;
+  const postsPerPage = 9; // 每页9篇文章
   const totalPages = Math.ceil(allPosts.length / postsPerPage);
   
   console.log(`[...page].mdx 中的路由生成: 总文章数 = ${allPosts.length}, 总页数 = ${totalPages}`);
   
-  // 生成所有分页页面路径，包括第1页
+  // 生成所有分页路径
   const paths = [];
   
-  // 第1页 - 对应 /page/1/
-  paths.push({
-    params: { page: "1" },
-    props: { pageNum: 1 }
-  });
-  
-  // 第2页及以后 - 对应 /page/2/, /page/3/ 等
-  for (let i = 1; i < totalPages; i++) {
-    const pageNum = i + 1;
+  // 为每个页码生成路径（第2页到最后一页）
+  for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
     paths.push({
       params: { page: String(pageNum) },
       props: { pageNum }
@@ -36,8 +29,6 @@ export async function getStaticPaths() {
   return paths;
 }
 
-// 确保访问时能获取到页码值
 const { pageNum } = Astro.props;
-console.log(`[...page].mdx 渲染页面: 页码=${pageNum}`);
 
 <HomePage pageNum={pageNum} /> 
