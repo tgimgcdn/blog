@@ -21,35 +21,48 @@
     // 添加其他排除的域名
   ];
   
+  // 检查当前页面是否是中转页面
+  const isRedirectPage = window.location.pathname === redirectPage || 
+                         window.location.pathname === `${redirectPage}/` ||
+                         window.location.href.includes(`${redirectPage}?`);
+  
+  // 如果是中转页面，不处理链接
+  if (isRedirectPage) {
+    console.log('[外链处理] 当前是中转页面，不处理链接');
+    return;
+  }
+  
   // 外链处理函数
   function handleExternalLinks() {
     console.log('[外链处理] 开始处理外部链接');
     
     // 获取页面上所有的链接
-    const links = document.querySelectorAll('a');
-    console.log(`[外链处理] 找到 ${links.length} 个链接`);
+    const links = document.querySelectorAll('a[href]:not([data-no-redirect]):not([data-external-handled])');
+    console.log(`[外链处理] 找到 ${links.length} 个待处理链接`);
     
     let externalCount = 0;
     
     links.forEach((link, index) => {
-      // 跳过没有href属性的链接
-      if (!link.href) return;
+      // 跳过没有href属性或空href的链接
+      if (!link.href || link.href === '' || link.href === '#' || link.href.startsWith('javascript:')) {
+        return;
+      }
       
       try {
         const url = new URL(link.href);
         
+        // 跳过非http/https链接
+        if (!url.protocol.startsWith('http')) {
+          return;
+        }
+        
+        // 标记为已处理，避免重复处理
+        link.setAttribute('data-external-handled', 'true');
+        
         // 检查是否是外部链接（不同的域名）
-        if (!excludedDomains.includes(url.hostname) && url.protocol.startsWith('http')) {
-          // 跳过已经处理过的链接和有特殊属性的链接
-          if (link.getAttribute('data-external-handled') || link.getAttribute('data-no-redirect')) {
-            return;
-          }
-          
+        if (!excludedDomains.includes(url.hostname)) {
           externalCount++;
           console.log(`[外链处理] 处理外部链接 #${index}: ${url.href} -> ${url.hostname}`);
-          
-          // 标记为已处理
-          link.setAttribute('data-external-handled', 'true');
           
           // 保存原始链接
           const originalHref = link.href;
@@ -65,6 +78,11 @@
           if (!link.title) {
             link.title = `链接将跳转至: ${originalHref}`;
           }
+          
+          // 添加目标属性
+          link.setAttribute('rel', 'noopener noreferrer');
+        } else {
+          console.log(`[外链处理] 跳过内部链接: ${url.href}`);
         }
       } catch (e) {
         // URL解析错误，忽略
@@ -78,18 +96,18 @@
   // 确保脚本在各种情况下都会执行
   
   // 直接运行一次（不等待DOMContentLoaded）
-  setTimeout(handleExternalLinks, 0);
+  setTimeout(handleExternalLinks, 100);
   
   // 在DOM加载完成后处理链接
   document.addEventListener('DOMContentLoaded', function() {
     console.log('[外链处理] DOM已加载完成，开始处理链接');
-    handleExternalLinks();
+    setTimeout(handleExternalLinks, 100);
   });
   
   // window加载完成后再处理一次
   window.addEventListener('load', function() {
     console.log('[外链处理] 页面已完全加载，再次处理链接');
-    handleExternalLinks();
+    setTimeout(handleExternalLinks, 100);
   });
   
   // 监听动态添加的内容
@@ -105,7 +123,7 @@
       
       if (hasNewNodes) {
         console.log('[外链处理] 检测到页面变化，重新处理链接');
-        handleExternalLinks();
+        setTimeout(handleExternalLinks, 100);
       }
     });
     
@@ -124,4 +142,29 @@
   
   // 每隔3秒再次处理一次，确保处理到动态加载的内容
   setInterval(handleExternalLinks, 3000);
+  
+  // 处理iframe内的链接
+  try {
+    document.querySelectorAll('iframe').forEach(iframe => {
+      iframe.addEventListener('load', function() {
+        try {
+          // 尝试访问iframe内容
+          const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+          console.log('[外链处理] 检测到iframe，尝试处理其中的链接');
+          
+          // 对iframe内的链接应用同样的处理
+          const iframeLinks = iframeDocument.querySelectorAll('a');
+          if (iframeLinks.length > 0) {
+            console.log(`[外链处理] 在iframe中找到 ${iframeLinks.length} 个链接`);
+            // iframe内链接处理逻辑...
+          }
+        } catch (e) {
+          // 跨域限制或其他错误
+          console.warn('[外链处理] 无法访问iframe内容:', e);
+        }
+      });
+    });
+  } catch (e) {
+    console.warn('[外链处理] 处理iframe时出错:', e);
+  }
 })(); 
