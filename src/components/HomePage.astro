@@ -2,12 +2,12 @@
 // 从props获取页码，并提供默认值1
 const { pageNum = 1 } = Astro.props;
 // 确保页码是有效的数字
-let currentPage = typeof pageNum === 'number' ? pageNum : parseInt(pageNum || '1', 10) || 1;
+let currentPage = typeof pageNum === 'number' ? pageNum : parseInt(String(pageNum || '1').trim(), 10) || 1;
 // 确保页码至少为1
 currentPage = Math.max(1, currentPage);
 
 // 调试输出
-console.log(`当前页码: ${currentPage}`);
+console.log(`HomePage组件: 接收到页码=${pageNum}, 处理后页码=${currentPage}`);
 
 // 获取博客文章数据
 let posts = [];
