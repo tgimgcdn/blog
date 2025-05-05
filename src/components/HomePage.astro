@@ -81,7 +81,7 @@ const defaultThumbnail = "/social-card.webp";
     <div class="pagination">
       {Array.from({ length: totalPages }).map((_, i) => (
         <a 
-          href={i === 0 ? '/' : `/blog/page-${i + 1}`} 
+          href={i === 0 ? '/' : `/page/${i + 1}`} 
           class={`page-link ${currentPage === i + 1 ? 'active' : ''}`}
         >
           {i + 1}
