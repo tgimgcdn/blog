@@ -10,6 +10,31 @@ const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.
 // 检查是否为博客页面（URL中包含/blog/）
 const isBlogPage = Astro.url.pathname.includes('/blog/');
 
+// 获取当前站点域名
+const currentDomain = Astro.url.hostname;
+
+// 处理外部链接的函数
+function processExternalLinks(content: string) {
+  // 使用正则表达式匹配所有链接
+  return content.replace(
+    /<a\s+(?:[^>]*?\s+)?href="([^"]*)"([^>]*)>/g,
+    (match, href, rest) => {
+      try {
+        const url = new URL(href);
+        // 如果是外部链接
+        if (url.hostname !== currentDomain && url.protocol.startsWith('http')) {
+          // 将链接替换为重定向链接
+          return `<a href="/link?url=${encodeURIComponent(href)}"${rest}>`;
+        }
+      } catch (e) {
+        // 如果URL解析失败，保持原样
+        return match;
+      }
+      return match;
+    }
+  );
+}
+
 // 如果是首页，处理博客文章的逻辑
 let displayPosts = [];
 let hasMorePosts = false;
@@ -39,161 +64,13 @@ function formatDate(dateString) {
 }
 ---
 
-<!-- 添加全局外链处理脚本，直接嵌入到页面中 -->
-<script is:inline>
-/**
- * 全局外链重定向脚本
- * 使用最简单直接的方式处理所有外链
- */
-(function() {
-  // 检查当前页面是否是中转页面
-  var currentPath = window.location.pathname;
-  var currentUrl = window.location.href;
-  var redirectPage = '/link';
-  
-  if (currentPath === redirectPage || 
-      currentPath === redirectPage + '/' || 
-      currentUrl.includes(redirectPage + '?')) {
-    console.log('[全局重定向] 当前是中转页面，不处理外链');
-    return;
-  }
-  
-  // 保存原始的window.open方法
-  var originalWindowOpen = window.open;
-  
-  // 获取当前站点域名
-  var currentDomain = window.location.hostname;
-  
-  // 简单判断是否是外部链接
-  function isExternalLink(url) {
-    try {
-      // 创建URL对象
-      var urlObj = new URL(url);
-      
-      // 如果协议不是http或https，不处理
-      if (!urlObj.protocol.startsWith('http')) {
-        return false;
-      }
-      
-      // 如果域名相同，不处理
-      return urlObj.hostname !== currentDomain;
-    } catch (e) {
-      // 无效URL，不处理
-      return false;
-    }
-  }
-  
-  // 处理单个链接
-  function processLink(link) {
-    if (!link || !link.href) return;
-    
-    // 如果已经处理过，跳过
-    if (link.hasAttribute('data-processed')) return;
-    
-    // 检查是否是外部链接
-    if (isExternalLink(link.href)) {
-      console.log('[全局重定向] 处理链接:', link.href);
-      // 保存原始链接
-      link.setAttribute('data-original-href', link.href);
-      // 修改为跳转链接
-      link.href = redirectPage + '?url=' + encodeURIComponent(link.href);
-      // 标记为已处理
-      link.setAttribute('data-processed', 'true');
-    }
-  }
-  
-  // 处理所有链接
-  function processAllLinks() {
-    document.querySelectorAll('a').forEach(processLink);
-  }
-  
-  // 页面加载完成后立即处理所有链接
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', processAllLinks);
-  } else {
-    processAllLinks();
-  }
-  
-  // 替换window.open方法
-  window.open = function(url, target, features) {
-    if (isExternalLink(url)) {
-      console.log('[全局重定向] 拦截window.open:', url);
-      var redirectUrl = redirectPage + '?url=' + encodeURIComponent(url);
-      return originalWindowOpen.call(window, redirectUrl, target, features);
-    }
-    return originalWindowOpen.apply(window, arguments);
-  };
-  
-  // 劫持所有链接点击
-  document.addEventListener('click', function(e) {
-    var target = e.target;
-    
-    // 向上查找最近的a标签
-    while (target && target.tagName !== 'A') {
-      target = target.parentNode;
-      if (!target || target === document) return;
-    }
-    
-    var link = target;
-    if (!link || !link.href) return;
-    
-    // 检查是否是外部链接
-    if (isExternalLink(link.href)) {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('[全局重定向] 拦截链接点击:', link.href);
-      var redirectUrl = redirectPage + '?url=' + encodeURIComponent(link.href);
-      window.location.href = redirectUrl;
-      return false;
-    }
-  }, true);
-  
-  // 监听DOM变化，处理新添加的链接
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      if (mutation.type === 'childList') {
-        mutation.addedNodes.forEach(function(node) {
-          if (node.nodeType === 1) { // 元素节点
-            if (node.tagName === 'A') {
-              processLink(node);
-            }
-            node.querySelectorAll('a').forEach(processLink);
-          }
-        });
-      }
-    });
-  });
-  
-  // 开始观察整个文档
-  observer.observe(document.documentElement, {
-    childList: true,
-    subtree: true
-  });
-  
-  console.log('[全局重定向] 脚本已加载, 当前域名:', currentDomain);
-})();
-</script>
-
-<!-- 移除原有的外链处理脚本 -->
-<!-- <script src="/scripts/exterlink-capture.js" is:inline></script> -->
-
 {isHomePage ? (
   <HomePage />
 ) : (
   <DefaultPage {...props} data={data}>
-    <slot />
+    <slot set:html={processExternalLinks} />
   </DefaultPage>
 )}
-
-<!-- 添加调试输出 -->
-<script is:inline>
-  console.log('[页面调试] 页面类型:', {
-    isHomePage: {isHomePage},
-    isBlogPage: {isBlogPage},
-    path: location.pathname,
-    currentDomain: location.hostname,
-  });
-</script>
 
 <style>
   .home-page {
