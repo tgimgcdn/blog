@@ -1,124 +1,184 @@
 ---
 // 外链跳转组件
-import { Image } from '@astrojs/image/components';
 ---
 
-<div class="redirect-container">
-  <div class="redirect-content">
-    <div class="icon-container">
-      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-        <polyline points="15 3 21 3 21 9"></polyline>
-        <line x1="10" y1="14" x2="21" y2="3"></line>
+<div class="link-redirect">
+  <div class="redirect-container">
+    <div class="icon-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="warning-icon">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
     </div>
-    <h1>即将离开本站</h1>
-    <p>您即将访问外部链接，请注意安全。</p>
+    <h1>您即将离开本站</h1>
+    <p id="target-domain">正在加载目标网站信息...</p>
+    <p class="warning">本站不对外部网站的内容负责，请注意保护您的个人信息安全！</p>
     <div class="button-group">
-      <button id="confirmBtn" class="confirm-button">
-        继续访问
-      </button>
-      <button id="cancelBtn" class="cancel-button">
-        取消
-      </button>
+      <button id="confirm-redirect" class="confirm">确认继续</button>
+      <button id="cancel-redirect" class="cancel">返回上一页</button>
     </div>
   </div>
 </div>
 
 <style>
-  .redirect-container {
+  /* 外链页面的样式 */
+  .link-redirect {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 1rem;
-    background: var(--sl-color-black);
-  }
-
-  .redirect-content {
-    background: var(--sl-color-white);
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 400px;
+    min-height: 60vh;
     width: 100%;
+    padding: 2rem;
   }
 
-  .icon-container {
+  .redirect-container {
+    background-color: var(--sl-color-bg);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .icon-wrapper {
+    background-color: var(--sl-color-accent-low);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 1.5rem;
-    color: var(--sl-color-blue);
+  }
+  
+  .warning-icon {
+    width: 40px;
+    height: 40px;
+    color: var(--sl-color-accent);
   }
 
   h1 {
-    margin: 0 0 1rem;
-    font-size: 1.5rem;
-    color: var(--sl-color-black);
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    color: var(--sl-color-text);
+  }
+  
+  p {
+    margin-bottom: 1rem;
+    color: var(--sl-color-text);
   }
 
-  p {
-    margin: 0 0 2rem;
-    color: var(--sl-color-gray-3);
+  #target-domain {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--sl-color-accent);
+    word-break: break-all;
+  }
+  
+  .warning {
+    margin-bottom: 2rem;
+    color: var(--sl-color-text-accent);
+    max-width: 400px;
+    font-size: 0.9rem;
   }
 
   .button-group {
     display: flex;
     gap: 1rem;
-    justify-content: center;
+    margin-top: 1rem;
+    width: 100%;
   }
 
-  .confirm-button,
-  .cancel-button {
+  button {
     flex: 1;
+    padding: 0.75rem 1.5rem;
+    border-radius: 99px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
     height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
   }
 
-  .confirm-button {
-    background: var(--sl-color-blue);
+  .confirm {
+    background-color: var(--sl-color-accent);
     color: white;
   }
 
-  .confirm-button:hover {
-    background: var(--sl-color-blue-hover);
+  .confirm:hover {
+    background-color: var(--sl-color-accent-high);
+    transform: translateY(-2px);
   }
 
-  .cancel-button {
-    background: var(--sl-color-gray-5);
-    color: var(--sl-color-black);
+  .cancel {
+    background-color: var(--sl-color-gray-5);
+    color: var(--sl-color-text);
   }
 
-  .cancel-button:hover {
-    background: var(--sl-color-gray-4);
+  .cancel:hover {
+    background-color: var(--sl-color-gray-4);
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 480px) {
+    .button-group {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    button {
+      width: 100%;
+    }
   }
 </style>
 
 <script>
-  // 获取URL参数
-  const urlParams = new URLSearchParams(window.location.search);
-  const encodedUrl = urlParams.get('url');
-  
-  if (!encodedUrl) {
-    window.location.href = '/';
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+    // 从URL获取目标链接
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedUrl = urlParams.get('url');
+    
+    if (!encodedUrl) {
+      window.location.href = '/';
+      return;
+    }
 
-  // 解码base64 URL
-  const targetUrl = atob(encodedUrl);
-
-  // 确认按钮点击事件
-  document.getElementById('confirmBtn')?.addEventListener('click', () => {
-    window.location.href = targetUrl;
-  });
-
-  // 取消按钮点击事件
-  document.getElementById('cancelBtn')?.addEventListener('click', () => {
-    window.history.back();
+    // 显示目标域名
+    const targetDomainElement = document.getElementById('target-domain');
+    try {
+      // 解码base64 URL
+      const decodedUrl = atob(encodedUrl);
+      const url = new URL(decodedUrl);
+      targetDomainElement.textContent = '即将前往: ' + url.hostname;
+    } catch (e) {
+      targetDomainElement.textContent = '链接格式无效';
+      return;
+    }
+    
+    // 设置按钮行为
+    const confirmButton = document.getElementById('confirm-redirect');
+    confirmButton.addEventListener('click', function() {
+      try {
+        // 解码base64 URL并跳转
+        const decodedUrl = atob(encodedUrl);
+        window.location.href = decodedUrl;
+      } catch (e) {
+        window.history.back();
+      }
+    });
+    
+    const cancelButton = document.getElementById('cancel-redirect');
+    cancelButton.addEventListener('click', function() {
+      window.history.back();
+    });
   });
 </script> 
