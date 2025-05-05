@@ -88,25 +88,26 @@ const defaultThumbnail = "/social-card.webp";
 
   <div class="custom-grid">
     {displayPosts.map(post => (
-      <div class="grid-item">
-        <div class="grid-item-content">
-          <a href={post.href} class="thumbnail-link">
-            <div class="thumbnail">
+      <div class="grid-item" style="display: flex; height: 100%;">
+        <div class="grid-item-content" style="display: flex; flex-direction: column; width: 100%; height: 100%;">
+          <a href={post.href} class="thumbnail-link" style="display: block; width: 100%;">
+            <div class="thumbnail" style="height: 180px; width: 100%; overflow: hidden; flex: 0 0 auto;">
               <img 
                 src={post.entry?.data?.thumbnail || defaultThumbnail} 
                 alt={post.title || '文章封面'}
                 onerror="this.src='/social-card.webp'"
+                style="width: 100%; height: 100%; object-fit: cover;"
               />
             </div>
           </a>
-          <div class="content">
+          <div class="content" style="padding: 1rem; display: flex; flex-direction: column; flex: 1 1 auto;">
             <a href={post.href} class="title-link">
               <h3 class="title" title={post.title}>
                 {post.entry?.data?.featured && <span class="featured-star">⭐</span>}
                 {post.title || '无标题文章'}
               </h3>
             </a>
-            <p class="excerpt">{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
+            <p class="excerpt" style="flex: 1 0 auto;">{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
             <div class="meta">
               <span class="category">{post.entry?.data?.category || '未分类'}</span>
               <time class="date">{formatDate(post.entry?.data?.pubDate || post.entry?.data?.date || new Date())}</time>
