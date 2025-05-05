@@ -23,8 +23,9 @@ function processMarkdownLinks() {
 											const url = new URL(node.url);
 											// 如果是外部链接
 											if (url.protocol.startsWith('http')) {
-												// 将链接替换为重定向链接
-												node.url = `/link?url=${encodeURIComponent(node.url)}`;
+												// 将链接替换为重定向链接，使用base64编码
+												const encodedUrl = btoa(node.url);
+												node.url = `/link?url=${encodedUrl}`;
 											}
 										} catch (e) {
 											// 如果URL解析失败，保持原样
@@ -64,7 +65,6 @@ export default defineConfig({
 			components: {
 				Footer: './src/components/Footer.astro',
 				Page: './src/components/Page.astro',
-				Head: './src/components/Head.astro',
 			},
 			sidebar: [
 				{
