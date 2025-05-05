@@ -13,13 +13,13 @@ export const getStaticPaths = async () => {
     console.log(`[getStaticPaths] 生成页面 ${pageNum}`);
     return {
       params: { page: String(pageNum) },
-      props: { pageNum }
+      props: { pageNum, posts: allPosts }
     };
   });
 };
 
-const { pageNum } = Astro.props;
-console.log(`[page].astro 渲染页码: ${pageNum}`);
+const { pageNum, posts } = Astro.props;
+console.log(`[page].astro 渲染页码: ${pageNum}, 文章数: ${posts.length}`);
 ---
 
-<HomePage pageNum={pageNum} /> 
+<HomePage pageNum={pageNum} customPosts={posts} /> 
