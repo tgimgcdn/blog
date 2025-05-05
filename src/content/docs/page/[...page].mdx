@@ -8,24 +8,29 @@ import { getCollection } from 'astro:content';
 import HomePage from '../../../components/HomePage.astro';
 
 export async function getStaticPaths() {
+  // 获取所有博客文章
   const allPosts = await getCollection('docs', entry => entry.id.startsWith('blog/'));
   const postsPerPage = 9;
   const totalPages = Math.ceil(allPosts.length / postsPerPage);
   
-  // 只生成第2页及以后的页面
+  console.log(`[...page].mdx 中的路由生成: 总文章数 = ${allPosts.length}, 总页数 = ${totalPages}`);
+  
+  // 生成第2页及以后的页面
   return Array.from({ length: totalPages }).map((_, i) => {
-    const page = i + 1;
+    const pageNum = i + 1;
     
-    // 跳过第1页，因为我们已经有首页了
-    if (page === 1) return null;
+    // 跳过第1页，因为首页已经处理了
+    if (pageNum === 1) return null;
     
     return {
-      params: { page: String(page) },
-      props: { page }
+      // 注意：这里的params.page将映射到URL中的/page/{page}/
+      params: { page: String(pageNum) },
+      props: { pageNum }
     };
   }).filter(Boolean); // 过滤掉null值
 }
 
-const { page } = Astro.props;
+const { pageNum } = Astro.props;
+console.log(`[...page].mdx 渲染页面: ${pageNum}`);
 
-<HomePage pageNum={page} /> 
+<HomePage pageNum={pageNum} /> 
