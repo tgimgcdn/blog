@@ -3,34 +3,33 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightBlog from 'starlight-blog'
 import starlightImageZoom from 'starlight-image-zoom'
-
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
-
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://canjie.ggff.net',
 	integrations: [
-	      starlight({
-	        plugins: [
-		starlightImageZoom(),
-                starlightBlog({
-                  authors: {
-                    cmssky: {
-                      name: 'cmssky',
-                      picture: 'https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg',
-                      url: 'https://canjie.org',
-                    },
-                  },
-                  prevNextLinksOrder: 'reverse-chronological',
-                  prefix: 'blog'
-                }),
-		starlightThemeFlexoki()
-            ],
+		starlight({
+			plugins: [
+				starlightImageZoom(),
+				starlightBlog({
+					authors: {
+						cmssky: {
+							name: 'cmssky',
+							picture: 'https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg',
+							url: 'https://canjie.org',
+						},
+					},
+					prevNextLinksOrder: 'reverse-chronological',
+					prefix: 'blog'
+				}),
+				starlightThemeFlexoki()
+			],
 			title: 'My Docs',
 			components: {
 				Footer: './src/components/Footer.astro',
 				Page: './src/components/Page.astro',
+				Head: './src/components/Head.astro',
 			},
 			sidebar: [
 				{
