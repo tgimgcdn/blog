@@ -1,3 +1,4 @@
+---
 import { getCollection } from 'astro:content';
 import HomePage from '../../components/HomePage.astro';
 
@@ -12,5 +13,6 @@ export const getStaticPaths = async () => {
 };
 
 const { pageNum } = Astro.props;
+---
 
 <HomePage pageNum={pageNum} /> 
