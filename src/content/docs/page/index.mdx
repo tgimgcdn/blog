@@ -7,4 +7,7 @@ template: splash
 import { getCollection } from 'astro:content';
 import HomePage from '../../../components/HomePage.astro';
 
-<HomePage pageNum={1} /> 
+// 明确定义页码为1
+export const pageNum = 1;
+
+<HomePage pageNum={pageNum} /> 
