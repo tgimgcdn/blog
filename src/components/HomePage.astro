@@ -10,50 +10,38 @@ currentPage = Math.max(1, currentPage);
 console.log(`HomePage组件: 接收到页码=${pageNum}, 处理后页码=${currentPage}`);
 
 // 获取博客文章数据
-import { getCollection } from 'astro:content';
-
 let posts = [];
-let sortedPosts = [];
-let totalPages = 0;
-let displayPosts = [];
 
-try {
-  // 直接使用Astro的API获取所有博客文章
-  const blogEntries = await getCollection('docs', entry => entry.id.startsWith('blog/'));
-  console.log(`直接获取博客文章：总数=${blogEntries.length}`);
+// 尝试从starlightBlog获取数据
+const starlightBlog = Astro.locals?.starlightBlog;
+
+if (starlightBlog && starlightBlog.posts) {
+  // 使用starlightBlog数据
+  posts = starlightBlog.posts;
   
-  // 将文章转换为所需格式
-  posts = blogEntries.map(entry => {
-    // 从文章ID生成href
-    const blogPath = entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
-    const href = `/blog/${entry.slug || blogPath}`;
-    
-    return {
-      entry,
-      href,
-      title: entry.data.title
-    };
+  // 修复链接：确保每篇文章都有正确的href
+  posts = posts.map(post => {
+    // 检查文章的href
+    if (!post.href || post.href.includes('undefined')) {
+      // 如果href不存在或包含undefined，则根据文章ID生成新的href
+      const blogPath = post.entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
+      return {
+        ...post,
+        href: `/blog/${post.entry.slug || blogPath}`
+      };
+    }
+    return post;
   });
   
   // 打印一些文章的示例链接进行调试
   console.log("Sample post links:", posts.slice(0, 3).map(p => ({title: p.title, href: p.href})));
   console.log(`总文章数: ${posts.length}`);
-} catch (error) {
-  console.error("获取博客文章失败", error);
-  
-  // 如果直接获取失败，尝试从starlightBlog获取
-  const starlightBlog = Astro.locals?.starlightBlog;
-  if (starlightBlog && starlightBlog.posts) {
-    // 使用starlightBlog数据
-    posts = starlightBlog.posts;
-    console.log("使用starlightBlog数据");
-  } else {
-    console.log("无法获取博客文章数据");
-  }
+} else {
+  console.log("starlightBlog数据不可用");
 }
 
 // 对文章进行排序：首先是精选文章，然后按日期降序
-sortedPosts = [...posts].sort((a, b) => {
+const sortedPosts = [...posts].sort((a, b) => {
   // 首先按精选状态排序
   if (a.entry?.data?.featured && !b.entry?.data?.featured) return -1;
   if (!a.entry?.data?.featured && b.entry?.data?.featured) return 1;
@@ -68,8 +56,8 @@ sortedPosts = [...posts].sort((a, b) => {
 const postsPerPage = 9; // 每页显示9篇文章
 const startIndex = (currentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
-displayPosts = sortedPosts.slice(startIndex, endIndex);
-totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+const displayPosts = sortedPosts.slice(startIndex, endIndex);
+const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
 console.log(`分页信息: 当前页=${currentPage}, 总页数=${totalPages}, 本页文章数=${displayPosts.length}`);
 console.log(`分页范围: 起始索引=${startIndex}, 结束索引=${endIndex}, 总文章数=${sortedPosts.length}`);
 const hasMorePosts = totalPages > 1;
@@ -93,6 +81,8 @@ const defaultThumbnail = "/social-card.webp";
       <p>起始索引: {startIndex}</p>
       <p>结束索引: {endIndex}</p>
       <p>本页应有文章数: {Math.min(postsPerPage, sortedPosts.length - startIndex)}</p>
+      <p>starlightBlog可用: {starlightBlog ? '是' : '否'}</p>
+      {starlightBlog && <p>starlightBlog文章数: {starlightBlog.posts?.length || 0}</p>}
     </div>
   ) : null}
 
@@ -138,7 +128,7 @@ const defaultThumbnail = "/social-card.webp";
     <div class="pagination">
       {Array.from({ length: totalPages }).map((_, i) => {
         const pageNum = i + 1;
-        // 更新为静态页面结构
+        // 使用正确的路径格式
         const pageUrl = pageNum === 1 ? '/' : `/page/${pageNum}/`;
         return (
           <a 
