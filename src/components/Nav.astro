@@ -1,0 +1,22 @@
+---
+import Default from '@astrojs/starlight/components/Nav.astro';
+const { entry } = Astro.props;
+---
+
+<Default>
+  <slot />
+</Default>
+
+<style>
+  /* 确保导航栏在所有页面上都显示 */
+  :global(.sl-nav) {
+    display: flex !important;
+  }
+  
+  /* 在移动设备上显示汉堡菜单 */
+  @media (max-width: 768px) {
+    :global(.sl-header-menu-button) {
+      display: flex !important;
+    }
+  }
+</style>
