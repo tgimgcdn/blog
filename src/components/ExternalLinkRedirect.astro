@@ -87,6 +87,8 @@
     max-width: 100%;
     font-size: 0.9rem;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .button-group {
@@ -109,11 +111,13 @@
     align-items: center;
     justify-content: center;
     line-height: 1;
+    box-sizing: border-box;
   }
 
   .confirm {
     background-color: var(--sl-color-accent);
     color: white;
+    height: 44px;
   }
 
   .confirm:hover {
@@ -124,6 +128,7 @@
   .cancel {
     background-color: var(--sl-color-gray-5);
     color: var(--sl-color-text);
+    height: 44px;
   }
 
   .cancel:hover {
