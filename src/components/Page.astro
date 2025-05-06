@@ -4,6 +4,7 @@ import DefaultPage from '@astrojs/starlight/components/DefaultPage.astro';
 import HomePage from '@astrojs/starlight/components/HomePage.astro';
 import { getEntryBySlug } from '@astrojs/starlight/content';
 import { getImage } from '@astrojs/image';
+import { Nav } from '@astrojs/starlight/components';
 
 const { entry } = Astro.props;
 const isHomePage = entry.data.layout === 'home';
@@ -19,17 +20,7 @@ const sortedPosts = blogPosts
 
 {isHomePage ? (
   <div class="splash-with-nav">
-    <header class="sl-header">
-      <div class="sl-header-content">
-        <div class="sl-header-right">
-          <button class="sl-header-menu-button" aria-label="打开菜单">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-      </div>
-    </header>
+    <Nav />
     <HomePage entry={entry} />
   </div>
 ) : isBlogPage ? (
