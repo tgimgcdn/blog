@@ -15,8 +15,8 @@
     <p id="target-domain">正在加载目标网站信息...</p>
     <p class="warning">本站不对外部网站的内容负责，请注意保护您的个人信息安全！</p>
     <div class="button-group">
-      <button id="confirm-redirect" class="confirm"><span>确认继续</span></button>
-      <button id="cancel-redirect" class="cancel"><span>返回上一页</span></button>
+      <a href="#" id="confirm-redirect" class="confirm"><span>确认继续</span></a>
+      <a href="#" id="cancel-redirect" class="cancel"><span>返回上一页</span></a>
     </div>
   </div>
 </div>
@@ -89,14 +89,14 @@
   }
 
   .button-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 1rem;
     margin-top: 1rem;
     width: 100%;
   }
 
-  button {
+  .button-group a {
+    flex: 1;
     height: 44px;
     padding: 0.75rem 1.5rem;
     border-radius: 99px;
@@ -110,6 +110,7 @@
     line-height: 1;
     white-space: nowrap;
     box-sizing: border-box;
+    text-decoration: none;
   }
 
   .confirm {
@@ -134,15 +135,11 @@
   
   @media (max-width: 480px) {
     .button-group {
-      grid-template-columns: 1fr;
+      flex-direction: column;
     }
     
-    button {
-      height: 44px;
-      padding: 0.75rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .button-group a {
+      width: 100%;
     }
   }
 </style>
@@ -172,7 +169,8 @@
     
     // 设置按钮行为
     const confirmButton = document.getElementById('confirm-redirect');
-    confirmButton.addEventListener('click', function() {
+    confirmButton.addEventListener('click', function(e) {
+      e.preventDefault();
       try {
         // 解码base64 URL并跳转
         const decodedUrl = atob(encodedUrl);
@@ -183,7 +181,8 @@
     });
     
     const cancelButton = document.getElementById('cancel-redirect');
-    cancelButton.addEventListener('click', function() {
+    cancelButton.addEventListener('click', function(e) {
+      e.preventDefault();
       window.history.back();
     });
   });
