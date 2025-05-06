@@ -89,6 +89,10 @@ export default defineConfig({
 			pagefind: {
 				excludeSelectors: ['[data-pagefind-ignore]'],
 			},
+			// 启用移动端菜单
+			mobileMenu: true,
+			// 确保在所有页面都显示导航
+			showNav: true,
 		}),
 		processMarkdownLinks(),
 	],
