@@ -66,6 +66,10 @@ export default defineConfig({
 				Footer: './src/components/Footer.astro',
 				Page: './src/components/Page.astro',
 			},
+			customCss: [
+				// 添加自定义CSS文件
+				'./src/styles/custom.css',
+			],
 			sidebar: [
 				{
 					label: 'Guides',
