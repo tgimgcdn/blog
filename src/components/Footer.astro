@@ -241,6 +241,16 @@ import { Icon } from '@astrojs/starlight/components';
     pointer-events: auto !important;
   }
   
+  /* 添加专门针对博客页面的样式 */
+  body[data-pagefind-body] #back-to-top-button,
+  body[data-pagefind-body] #back-to-top-button *,
+  .starlight-blog #back-to-top-button,
+  .starlight-blog #back-to-top-button * {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    z-index: 999999 !important;
+  }
+  
   #back-to-top-button.visible {
     opacity: 1;
     visibility: visible;
