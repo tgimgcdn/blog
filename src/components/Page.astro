@@ -1,13 +1,14 @@
 ---
 import { Card, CardGrid } from '@astrojs/starlight/components';
 import DefaultPage from '@astrojs/starlight/components/DefaultPage.astro';
-import HomePage from '@astrojs/starlight/components/HomePage.astro';
+import HomePage from './HomePage.astro';
 import { getEntryBySlug } from '@astrojs/starlight/content';
 import { getImage } from '@astrojs/image';
 
 const { entry } = Astro.props;
 const isHomePage = entry.data.layout === 'home';
 const isBlogPage = entry.data.layout === 'blog';
+const isSplashTemplate = entry.data.template === 'splash';
 
 // 获取所有博客文章并按日期排序
 const blogPosts = await Astro.glob('../../content/blog/**/*.md');
@@ -16,8 +17,8 @@ const sortedPosts = blogPosts
   .slice(0, 9); // 只显示前9篇文章
 ---
 
-{isHomePage ? (
-  <HomePage entry={entry} />
+{isHomePage || isSplashTemplate ? (
+  <HomePage pageNum={1} />
 ) : isBlogPage ? (
   <DefaultPage entry={entry}>
     <CardGrid>
@@ -78,149 +79,6 @@ const sortedPosts = blogPosts
 </script>
 
 <style>
-  .home-page {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-  
-  .hero {
-    background-color: var(--sl-color-bg-accent);
-    padding: 4rem 0;
-    text-align: center;
-    margin-bottom: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .hero h1 {
-    font-size: 3rem;
-    margin: 0 0 1rem;
-    color: var(--sl-color-white);
-    width: 100%;
-    text-align: center;
-    display: block;
-  }
-  
-  .tagline {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-    color: var(--sl-color-gray-1);
-    width: 100%;
-    text-align: center;
-    display: block;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-  
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-  }
-  
-  .action {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.25rem;
-    border-radius: 999px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  
-  .primary {
-    background-color: var(--sl-color-text-accent);
-    color: var(--sl-color-bg);
-  }
-  
-  .primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .secondary {
-    background-color: transparent;
-    border: 1px solid var(--sl-color-gray-5);
-    color: var(--sl-color-text);
-  }
-  
-  .secondary:hover {
-    background-color: var(--sl-color-gray-6);
-  }
-  
-  h2 {
-    margin: 3rem 0 2rem;
-    text-align: center;
-    font-size: 2rem;
-  }
-  
-  .card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--sl-color-gray-3);
-    margin-top: 0.5rem;
-  }
-  
-  .card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .tag {
-    color: var(--sl-color-text-accent);
-    font-size: 0.85rem;
-  }
-  
-  .read-more {
-    margin-top: 1rem;
-  }
-  
-  .read-more a {
-    color: var(--sl-color-text-accent);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .read-more a:hover {
-    text-decoration: underline;
-  }
-  
-  .see-all {
-    text-align: center;
-    margin: 2rem 0;
-  }
-  
-  .action-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: var(--sl-color-accent-low);
-    color: var(--sl-color-accent);
-    padding: 0.5rem 1.25rem;
-    border-radius: 999px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  
-  .action-button:hover {
-    background-color: var(--sl-color-accent);
-    color: var(--sl-color-white);
-    transform: translateY(-2px);
-  }
-
   /* 添加全局样式确保 Starlight hero 元素居中 */
   :global(.sl-hero) {
     display: flex !important;
@@ -228,6 +86,7 @@ const sortedPosts = blogPosts
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
+    width: 100% !important;
   }
 
   :global(.sl-hero-title),
@@ -235,5 +94,15 @@ const sortedPosts = blogPosts
     width: 100% !important;
     text-align: center !important;
     display: block !important;
+    margin: 0 auto !important;
+  }
+
+  :global(.sl-hero-content) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 </style> 
