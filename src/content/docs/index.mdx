@@ -1,17 +1,25 @@
 ---
 title: 欢迎光临参界说
-description: 欢迎来到我的博客
+description: 欢迎来到我的博客！
 template: splash
 hero:
-  title: 参界说
-  tagline: 分享技术，记录生活
+  title: 欢迎光临参界说
+  tagline: 分享技术，记录生活！
   image:
     html: |
-      <img 
-        src="https://api.canjie.ggff.net/api" 
-        alt="参界说" 
-        style="max-width: 100%; height: auto;"
-      />
+      <div style="display: flex; align-items: center; gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+        <div style="flex: 1;">
+          <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">欢迎光临参界说</h1>
+          <p style="font-size: 1.25rem; color: var(--sl-color-gray-3);">分享技术，记录生活！</p>
+        </div>
+        <div style="flex: 2;">
+          <img 
+            src="https://api.canjie.ggff.net/api" 
+            alt="参界说" 
+            style="width: 100%; height: auto; border-radius: 0.5rem;"
+          />
+        </div>
+      </div>
 ---
 
 import HomePage from '../../components/HomePage.astro';
