@@ -65,19 +65,10 @@ export default defineConfig({
 			components: {
 				Footer: './src/components/Footer.astro',
 				Page: './src/components/Page.astro',
+				Nav: './src/components/Nav.astro',
 			},
 			sidebar: [
-				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
-				},
+				
 				{
 					label: '博客',
 					items: [
