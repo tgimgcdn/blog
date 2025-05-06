@@ -11,6 +11,15 @@ hero:
         alt="参界说" 
         style="max-width: 100%; height: auto;"
       />
+      <script>
+        // 在页面加载时更新图片
+        document.addEventListener('DOMContentLoaded', () => {
+          const img = document.getElementById('hero-image');
+          if (img) {
+            img.src = `https://api.canjie.ggff.net/api?t=${Date.now()}`;
+          }
+        });
+      </script>
   actions:
     - text: Example Guide
       link: /guides/example/
