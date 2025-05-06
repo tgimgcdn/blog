@@ -4,7 +4,7 @@ import DefaultPage from '@astrojs/starlight/components/DefaultPage.astro';
 import HomePage from '@astrojs/starlight/components/HomePage.astro';
 import { getEntryBySlug } from '@astrojs/starlight/content';
 import { getImage } from '@astrojs/image';
-import { Nav } from '@astrojs/starlight/components';
+import Nav from '@astrojs/starlight/components/Nav.astro';
 
 const { entry } = Astro.props;
 const isHomePage = entry.data.layout === 'home';
