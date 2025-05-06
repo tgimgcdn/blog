@@ -18,6 +18,8 @@ featured: true
 
 ### Canes plura palmas eodem huc scelerate spectat
 
+[API随机变换图片](https://api.canjie.ggff.net/api) 
+
 Lorem markdownum, numen adducere Parthaoniae versa mirabere mea. Magnum utque, et senserat ferendum disiectisque sub coniunx et stolidi telum; duabus.
 
 > Crebri pantherarum talis sed etiamnum habet: modo transire. Cum Xanthos rura per iter erat tunc **insanos tibi** ignorant cum inde fulgebant, dicentem certamina **temptabat iam inpleratque**. Enim figuram aliter, semper curru mihi est.
