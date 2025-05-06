@@ -2,8 +2,14 @@
 title: 外部链接确认
 description: 您即将离开本站
 template: splash
-hero:
-  tagline: 您即将离开本站
+head:
+  - tag: style
+    content: |
+      .content-title {
+        text-align: center !important;
+        display: block !important;
+        width: 100% !important;
+      }
 ---
 
 import ExternalLinkRedirect from '../../components/ExternalLinkRedirect.astro';
