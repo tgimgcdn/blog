@@ -54,6 +54,14 @@ import { Icon } from '@astrojs/starlight/components';
       function enforceButtonStyles() {
         backToTopButton.style.cursor = 'pointer';
         backToTopButton.style.pointerEvents = 'auto';
+        backToTopButton.style.zIndex = '99999';
+        
+        // 强制设置所有子元素的样式
+        const allElements = backToTopButton.getElementsByTagName('*');
+        for (let element of allElements) {
+          element.style.cursor = 'pointer';
+          element.style.pointerEvents = 'auto';
+        }
       }
       
       // 立即应用样式
@@ -195,7 +203,7 @@ import { Icon } from '@astrojs/starlight/components';
     position: fixed;
     bottom: 30px;
     right: 30px;
-    z-index: 10000;
+    z-index: 99999;
     pointer-events: none;
     cursor: auto;
   }
@@ -217,7 +225,7 @@ import { Icon } from '@astrojs/starlight/components';
     visibility: hidden;
     transform: translateY(20px);
     transition: all 0.3s ease;
-    z-index: 9999;
+    z-index: 99999;
     pointer-events: auto !important;
     /* 增加专门用于指针样式的类 */
     -webkit-cursor: pointer !important;
