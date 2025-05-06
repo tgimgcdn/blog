@@ -29,13 +29,7 @@ hero:
 import HomePage from '../../components/HomePage.astro';
 import { Nav } from '@astrojs/starlight/components';
 
-<div class="splash-with-nav">
+<div className="splash-with-nav">
   <Nav />
   <HomePage pageNum={1} />
 </div>
-
-<style>
-  .splash-with-nav {
-    position: relative;
-  }
-</style>
