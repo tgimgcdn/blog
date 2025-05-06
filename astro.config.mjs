@@ -89,7 +89,6 @@ export default defineConfig({
 			pagefind: {
 				excludeSelectors: ['[data-pagefind-ignore]'],
 			},
-			tableOfContents: false, // 隐藏链接页面的目录
 		}),
 		processMarkdownLinks(),
 	],
