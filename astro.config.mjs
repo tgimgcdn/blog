@@ -61,7 +61,7 @@ export default defineConfig({
 				}),
 				starlightThemeFlexoki()
 			],
-			title: 'My Docs',
+			title: '参界说',
 			components: {
 				Footer: './src/components/Footer.astro',
 				Page: './src/components/Page.astro',
