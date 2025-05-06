@@ -1,14 +1,13 @@
 ---
 import { Card, CardGrid } from '@astrojs/starlight/components';
 import DefaultPage from '@astrojs/starlight/components/DefaultPage.astro';
-import HomePage from './HomePage.astro';
+import HomePage from '@astrojs/starlight/components/HomePage.astro';
 import { getEntryBySlug } from '@astrojs/starlight/content';
 import { getImage } from '@astrojs/image';
 
 const { entry } = Astro.props;
 const isHomePage = entry.data.layout === 'home';
 const isBlogPage = entry.data.layout === 'blog';
-const isSplashTemplate = entry.data.template === 'splash';
 
 // 获取所有博客文章并按日期排序
 const blogPosts = await Astro.glob('../../content/blog/**/*.md');
@@ -17,8 +16,8 @@ const sortedPosts = blogPosts
   .slice(0, 9); // 只显示前9篇文章
 ---
 
-{isHomePage || isSplashTemplate ? (
-  <HomePage pageNum={1} />
+{isHomePage ? (
+  <HomePage entry={entry} />
 ) : isBlogPage ? (
   <DefaultPage entry={entry}>
     <CardGrid>
@@ -79,58 +78,136 @@ const sortedPosts = blogPosts
 </script>
 
 <style>
-  /* 强制覆盖 Starlight 的 hero 样式 */
-  :global(.sl-hero) {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
+  .home-page {
+    margin: 0;
+    padding: 0;
+    width: 100%;
   }
-
-  :global(.sl-hero-title),
-  :global(.sl-hero-tagline) {
-    width: 100% !important;
-    text-align: center !important;
-    display: block !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
+  
+  .hero {
+    background-color: var(--sl-color-bg-accent);
+    padding: 4rem 0;
+    text-align: center;
+    margin-bottom: 2rem;
   }
-
-  :global(.sl-hero-content) {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
+  
+  .hero h1 {
+    font-size: 3rem;
+    margin: 0 0 1rem;
+    color: var(--sl-color-white);
   }
-
-  :global(.sl-container) {
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
+  
+  .tagline {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--sl-color-gray-1);
   }
-
-  :global(.content-panel) {
-    padding: 0 !important;
-    margin: 0 !important;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
   }
-
-  :global(.sl-flex.stack) {
-    width: 100% !important;
-    align-items: center !important;
-    justify-content: center !important;
+  
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
   }
-
-  :global(.sl-flex.copy) {
-    width: 100% !important;
-    text-align: center !important;
+  
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .primary {
+    background-color: var(--sl-color-text-accent);
+    color: var(--sl-color-bg);
+  }
+  
+  .primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .secondary {
+    background-color: transparent;
+    border: 1px solid var(--sl-color-gray-5);
+    color: var(--sl-color-text);
+  }
+  
+  .secondary:hover {
+    background-color: var(--sl-color-gray-6);
+  }
+  
+  h2 {
+    margin: 3rem 0 2rem;
+    text-align: center;
+    font-size: 2rem;
+  }
+  
+  .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-3);
+    margin-top: 0.5rem;
+  }
+  
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .tag {
+    color: var(--sl-color-text-accent);
+    font-size: 0.85rem;
+  }
+  
+  .read-more {
+    margin-top: 1rem;
+  }
+  
+  .read-more a {
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .read-more a:hover {
+    text-decoration: underline;
+  }
+  
+  .see-all {
+    text-align: center;
+    margin: 2rem 0;
+  }
+  
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--sl-color-accent-low);
+    color: var(--sl-color-accent);
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .action-button:hover {
+    background-color: var(--sl-color-accent);
+    color: var(--sl-color-white);
+    transform: translateY(-2px);
   }
 </style> 
