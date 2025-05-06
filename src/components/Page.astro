@@ -79,7 +79,7 @@ const sortedPosts = blogPosts
 </script>
 
 <style>
-  /* 添加全局样式确保 Starlight hero 元素居中 */
+  /* 强制覆盖 Starlight 的 hero 样式 */
   :global(.sl-hero) {
     display: flex !important;
     flex-direction: column !important;
@@ -87,6 +87,9 @@ const sortedPosts = blogPosts
     justify-content: center !important;
     text-align: center !important;
     width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
   }
 
   :global(.sl-hero-title),
@@ -95,6 +98,7 @@ const sortedPosts = blogPosts
     text-align: center !important;
     display: block !important;
     margin: 0 auto !important;
+    padding: 0 !important;
   }
 
   :global(.sl-hero-content) {
@@ -104,5 +108,29 @@ const sortedPosts = blogPosts
     justify-content: center !important;
     width: 100% !important;
     max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+
+  :global(.sl-container) {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  :global(.content-panel) {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  :global(.sl-flex.stack) {
+    width: 100% !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  :global(.sl-flex.copy) {
+    width: 100% !important;
+    text-align: center !important;
   }
 </style> 
