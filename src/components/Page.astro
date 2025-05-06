@@ -19,13 +19,17 @@ const sortedPosts = blogPosts
 
 {isHomePage ? (
   <div class="splash-with-nav">
-    <div class="mobile-nav-toggle">
-      <button class="hamburger" aria-label="打开菜单">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
+    <header class="sl-header">
+      <div class="sl-header-content">
+        <div class="sl-header-right">
+          <button class="sl-header-menu-button" aria-label="打开菜单">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
     <HomePage entry={entry} />
   </div>
 ) : isBlogPage ? (
@@ -86,14 +90,14 @@ const sortedPosts = blogPosts
     subtree: true
   });
 
-  // 处理移动端导航
+  // 处理汉堡菜单点击事件
   document.addEventListener('DOMContentLoaded', () => {
-    const hamburger = document.querySelector('.hamburger');
+    const menuButton = document.querySelector('.sl-header-menu-button');
     const navMenu = document.querySelector('.sl-nav');
     
-    if (hamburger && navMenu) {
-      hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
+    if (menuButton && navMenu) {
+      menuButton.addEventListener('click', () => {
+        menuButton.classList.toggle('active');
         navMenu.classList.toggle('active');
       });
     }
@@ -105,68 +109,59 @@ const sortedPosts = blogPosts
     position: relative;
   }
 
-  .mobile-nav-toggle {
+  .sl-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .sl-header-content {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sl-header-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .sl-header-menu-button {
     display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .sl-header-menu-button span {
+    width: 100%;
+    height: 2px;
+    background-color: var(--sl-color-text);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .sl-header-menu-button.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .sl-header-menu-button.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .sl-header-menu-button.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
   }
 
   @media (max-width: 768px) {
-    .mobile-nav-toggle {
-      display: block;
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 1000;
-    }
-
-    .hamburger {
+    .sl-header-menu-button {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 30px;
-      height: 21px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      z-index: 1001;
-    }
-
-    .hamburger span {
-      width: 100%;
-      height: 3px;
-      background-color: var(--sl-color-text);
-      border-radius: 3px;
-      transition: all 0.3s ease;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: translateY(9px) rotate(45deg);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: translateY(-9px) rotate(-45deg);
-    }
-
-    .sl-nav {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 80%;
-      max-width: 300px;
-      height: 100vh;
-      background-color: var(--sl-color-bg);
-      padding: 4rem 2rem 2rem;
-      transition: right 0.3s ease;
-      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-      z-index: 999;
-    }
-
-    .sl-nav.active {
-      right: 0;
     }
   }
 
