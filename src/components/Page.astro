@@ -4,12 +4,10 @@ import DefaultPage from '@astrojs/starlight/components/DefaultPage.astro';
 import HomePage from '@astrojs/starlight/components/HomePage.astro';
 import { getEntryBySlug } from '@astrojs/starlight/content';
 import { getImage } from '@astrojs/image';
-import { Nav } from '@astrojs/starlight/components';
 
 const { entry } = Astro.props;
 const isHomePage = entry.data.layout === 'home';
 const isBlogPage = entry.data.layout === 'blog';
-const isSplashTemplate = entry.data.template === 'splash';
 
 // 获取所有博客文章并按日期排序
 const blogPosts = await Astro.glob('../../content/blog/**/*.md');
@@ -19,10 +17,7 @@ const sortedPosts = blogPosts
 ---
 
 {isHomePage ? (
-  <div class="splash-with-nav">
-    <Nav />
-    <HomePage entry={entry} />
-  </div>
+  <HomePage entry={entry} />
 ) : isBlogPage ? (
   <DefaultPage entry={entry}>
     <CardGrid>
@@ -80,82 +75,9 @@ const sortedPosts = blogPosts
     childList: true,
     subtree: true
   });
-
-  // 处理汉堡菜单点击事件
-  document.addEventListener('DOMContentLoaded', () => {
-    const menuButton = document.querySelector('.sl-header-menu-button');
-    const navMenu = document.querySelector('.sl-nav');
-    
-    if (menuButton && navMenu) {
-      menuButton.addEventListener('click', () => {
-        menuButton.classList.toggle('active');
-        navMenu.classList.toggle('active');
-      });
-    }
-  });
 </script>
 
 <style>
-  .splash-with-nav {
-    position: relative;
-  }
-
-  .sl-header {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 1rem;
-  }
-
-  .sl-header-content {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .sl-header-right {
-    display: flex;
-    align-items: center;
-  }
-
-  .sl-header-menu-button {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 24px;
-    height: 18px;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
-
-  .sl-header-menu-button span {
-    width: 100%;
-    height: 2px;
-    background-color: var(--sl-color-text);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-  }
-
-  .sl-header-menu-button.active span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-
-  .sl-header-menu-button.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .sl-header-menu-button.active span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-
-  @media (max-width: 768px) {
-    .sl-header-menu-button {
-      display: flex;
-    }
-  }
-
   .home-page {
     margin: 0;
     padding: 0;
