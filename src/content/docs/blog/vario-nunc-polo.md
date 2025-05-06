@@ -2,6 +2,7 @@
 title: Vario nunc polo
 date: 2020-12-12
 lastUpdated: 2021-12-30
+thumbnail: /images/Sustainability%20Report%20Website%20(1).webp
 tags:
   - Placeholder
 authors:
