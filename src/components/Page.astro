@@ -1,5 +1,5 @@
 ---
-import { Card, CardGrid, Nav } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
 import DefaultPage from '@astrojs/starlight/components/DefaultPage.astro';
 import HomePage from '@astrojs/starlight/components/HomePage.astro';
 import { getEntryBySlug } from '@astrojs/starlight/content';
@@ -8,7 +8,6 @@ import { getImage } from '@astrojs/image';
 const { entry } = Astro.props;
 const isHomePage = entry.data.layout === 'home';
 const isBlogPage = entry.data.layout === 'blog';
-const isSplashTemplate = entry.data.template === 'splash';
 
 // 获取所有博客文章并按日期排序
 const blogPosts = await Astro.glob('../../content/blog/**/*.md');
@@ -18,10 +17,7 @@ const sortedPosts = blogPosts
 ---
 
 {isHomePage ? (
-  <div class="splash-with-nav">
-    <Nav />
-    <HomePage entry={entry} />
-  </div>
+  <HomePage entry={entry} />
 ) : isBlogPage ? (
   <DefaultPage entry={entry}>
     <CardGrid>
@@ -82,22 +78,6 @@ const sortedPosts = blogPosts
 </script>
 
 <style>
-  .splash-with-nav {
-    position: relative;
-  }
-
-  /* 确保导航栏在所有页面上都显示 */
-  :global(.sl-nav) {
-    display: flex !important;
-  }
-  
-  /* 在移动设备上显示汉堡菜单 */
-  @media (max-width: 768px) {
-    :global(.sl-header-menu-button) {
-      display: flex !important;
-    }
-  }
-
   .home-page {
     margin: 0;
     padding: 0;
