@@ -16,15 +16,6 @@ hero:
           style="max-width: 100%; height: auto;"
         />`);
       </script>
-      <script>
-        // 在页面加载时更新图片
-        document.addEventListener('DOMContentLoaded', () => {
-          const img = document.getElementById('index-image');
-          if (img) {
-            img.src = `https://api.canjie.ggff.net/api?t=${Date.now()}`;
-          }
-        });
-      </script>
   actions:
     - text: Example Guide
       link: /guides/example/
