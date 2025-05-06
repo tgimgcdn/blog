@@ -1,96 +1,190 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
-import starlight from '@astrojs/starlight';
-import starlightBlog from 'starlight-blog'
-import starlightImageZoom from 'starlight-image-zoom'
-import starlightThemeFlexoki from 'starlight-theme-flexoki'
-import { visit } from 'unist-util-visit'
+---
+// 外链跳转组件
+---
 
-// 自定义 Markdown 处理器
-function processMarkdownLinks() {
-	return {
-		name: 'process-markdown-links',
-		hooks: {
-			'astro:config:setup': ({ updateConfig }) => {
-				updateConfig({
-					markdown: {
-						remarkPlugins: [
-							function() {
-								return function(tree) {
-									// 遍历所有节点
-									visit(tree, 'link', (node) => {
-										try {
-											const url = new URL(node.url);
-											// 如果是外部链接
-											if (url.protocol.startsWith('http')) {
-												// 将链接替换为重定向链接，使用base64编码
-												const encodedUrl = btoa(node.url);
-												node.url = `/link?url=${encodedUrl}`;
-											}
-										} catch (e) {
-											// 如果URL解析失败，保持原样
-										}
-									});
-								};
-							}
-						]
-					}
-				});
-			}
-		}
-	};
-}
+<div class="link-redirect">
+  <div class="redirect-container">
+    <div class="icon-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="warning-icon">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    </div>
+    <h1>您即将离开本站</h1>
+    <p id="target-domain">正在加载目标网站信息...</p>
+    <p class="warning">本站不对外部网站的内容负责，请注意保护您的个人信息安全！</p>
+    <div class="button-group">
+      <button id="confirm-redirect" class="confirm">确认继续</button>
+      <button id="cancel-redirect" class="cancel">返回上一页</button>
+    </div>
+  </div>
+</div>
 
-// https://astro.build/config
-export default defineConfig({
-	site: 'https://canjie.ggff.net',
-	integrations: [
-		starlight({
-			plugins: [
-				starlightImageZoom(),
-				starlightBlog({
-					authors: {
-						cmssky: {
-							name: 'cmssky',
-							picture: 'https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg',
-							url: 'https://canjie.org',
-						},
-					},
-					prevNextLinksOrder: 'reverse-chronological',
-					prefix: 'blog'
-				}),
-				starlightThemeFlexoki()
-			],
-			title: 'My Docs',
-			components: {
-				Footer: './src/components/Footer.astro',
-				Page: './src/components/Page.astro',
-			},
-			sidebar: [
-				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
-				},
-				{
-					label: '博客',
-					items: [
-						{ label: '文章归档', link: '/archives/' },
-					],
-				},
-			],
-			// 添加需要隐藏在侧边栏和搜索结果中的页面
-			pagefind: {
-				excludeSelectors: ['[data-pagefind-ignore]'],
-			},
-		}),
-		processMarkdownLinks(),
-	],
-});
+<style>
+  /* 外链页面的样式 */
+  .link-redirect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    width: 100%;
+    padding: 2rem;
+  }
 
+  .redirect-container {
+    background-color: var(--sl-color-bg);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .icon-wrapper {
+    background-color: var(--sl-color-accent-low);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .warning-icon {
+    width: 40px;
+    height: 40px;
+    color: var(--sl-color-accent);
+  }
+
+  h1 {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    color: var(--sl-color-text);
+  }
+  
+  p {
+    margin-bottom: 1rem;
+    color: var(--sl-color-text);
+  }
+
+  #target-domain {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--sl-color-accent);
+    word-break: break-all;
+  }
+  
+  .warning {
+    margin-bottom: 2rem;
+    color: var(--sl-color-text-accent);
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  button {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    border-radius: 99px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .confirm {
+    background-color: var(--sl-color-accent);
+    color: white;
+  }
+
+  .confirm:hover {
+    background-color: var(--sl-color-accent-high);
+    transform: translateY(-2px);
+  }
+
+  .cancel {
+    background-color: var(--sl-color-gray-5);
+    color: var(--sl-color-text);
+  }
+
+  .cancel:hover {
+    background-color: var(--sl-color-gray-4);
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 480px) {
+    .button-group {
+      flex-direction: row;
+      width: 100%;
+    }
+    
+    button {
+      width: 100%;
+      height: 44px;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 从URL获取目标链接
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedUrl = urlParams.get('url');
+    
+    if (!encodedUrl) {
+      window.location.href = '/';
+      return;
+    }
+
+    // 显示目标域名
+    const targetDomainElement = document.getElementById('target-domain');
+    try {
+      // 解码base64 URL
+      const decodedUrl = atob(encodedUrl);
+      const url = new URL(decodedUrl);
+      targetDomainElement.textContent = '即将前往: ' + url.hostname;
+    } catch (e) {
+      targetDomainElement.textContent = '链接格式无效';
+      return;
+    }
+    
+    // 设置按钮行为
+    const confirmButton = document.getElementById('confirm-redirect');
+    confirmButton.addEventListener('click', function() {
+      try {
+        // 解码base64 URL并跳转
+        const decodedUrl = atob(encodedUrl);
+        window.location.href = decodedUrl;
+      } catch (e) {
+        window.history.back();
+      }
+    });
+    
+    const cancelButton = document.getElementById('cancel-redirect');
+    cancelButton.addEventListener('click', function() {
+      window.history.back();
+    });
+  });
+</script> 
