@@ -7,19 +7,19 @@ template: splash
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('docs', (entry) => entry.id.startsWith('blog/'));
-const categories = new Map();
+const categories = {};
 
 // 收集所有分类
-for (const post of posts) {
+posts.forEach((post) => {
   const category = post.data.category || '未分类';
-  if (!categories.has(category)) {
-    categories.set(category, []);
+  if (!categories[category]) {
+    categories[category] = [];
   }
-  categories.get(category).push(post);
-}
+  categories[category].push(post);
+});
 
 // 转换为数组并排序
-const sortedCategories = Array.from(categories.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCompare(b[0]));
 ---
 
 <div class="categories-container">
