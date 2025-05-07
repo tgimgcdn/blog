@@ -2,6 +2,9 @@
 title: 分类文章
 description: 查看分类下的所有文章
 template: splash
+---
+
+import CategoryList from '../../../components/CategoryList.astro';
 
 export async function getStaticPaths() {
   // 从 starlightBlog 获取所有文章
@@ -23,8 +26,5 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.props;
----
-
-import CategoryList from '../../../components/CategoryList.astro';
 
 <CategoryList category={category} /> 
