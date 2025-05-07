@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 // 指定文章目录和分页文件目录
 const BLOG_DIR = path.join(__dirname, '../content/docs/blog');
 const PAGE_DIR = path.join(__dirname, '../content/docs/page');
+const DIST_DIR = path.join(__dirname, '../../dist');
 
 // 每页显示的文章数量
 const POSTS_PER_PAGE = 9;
@@ -19,21 +20,23 @@ if (!fs.existsSync(PAGE_DIR)) {
   fs.mkdirSync(PAGE_DIR, { recursive: true });
 }
 
-// 读取博客文章目录，获取文章数量
+// 从构建后的文件中读取文章数量
 function countBlogPosts() {
   try {
-    // 读取博客目录中的所有文件
-    const files = fs.readdirSync(BLOG_DIR);
+    // 读取 dist 目录下的所有 HTML 文件
+    const files = fs.readdirSync(DIST_DIR);
+    const blogFiles = files.filter(file => 
+      file.startsWith('blog/') && file.endsWith('.html') && 
+      !file.includes('index.html') && 
+      !file.includes('authors/') && 
+      !file.includes('tags/')
+    );
     
-    // 计算实际的博客文章数（排除非 .md 和 .mdx 文件）
-    const blogPostCount = files.filter(file => 
-      file.endsWith('.md') || file.endsWith('.mdx')
-    ).length;
-    
-    console.log(`找到 ${blogPostCount} 篇博客文章`);
+    const blogPostCount = blogFiles.length;
+    console.log(`从构建文件中找到 ${blogPostCount} 篇博客文章`);
     return blogPostCount;
   } catch (error) {
-    console.error('读取博客目录出错:', error);
+    console.error('读取构建文件出错:', error);
     return 0;
   }
 }
