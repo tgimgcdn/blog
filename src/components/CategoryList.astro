@@ -20,10 +20,14 @@ const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCo
 <div class="categories-container">
   {sortedCategories.map(([category, posts]) => (
     <div class="category-section">
-      <h2>{category}</h2>
+      <h2>
+        <a href={`/categories/${encodeURIComponent(category)}`} class="category-link">
+          {category}
+        </a>
+      </h2>
       <div class="posts-grid">
         {posts.map((post) => (
-          <a href={post.slug} class="post-card">
+          <a href={`/blog/${post.slug}`} class="post-card">
             <h3>{post.data.title}</h3>
             <p>{post.data.description}</p>
             <div class="post-meta">
@@ -54,6 +58,16 @@ const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCo
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .category-link {
+    color: var(--sl-color-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .category-link:hover {
+    color: var(--sl-color-accent);
   }
 
   .posts-grid {
