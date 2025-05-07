@@ -51,13 +51,22 @@ function formatDate(dateString: string) {
             <ul>
               {postsByYearAndMonth[year][month].map(post => (
                 <li>
-                  <span class="archive-date">{formatDate(post.createdAt)}</span>
-                  <a href={post.href}>{post.title}</a>
-                  {post.entry.data.tags && (
-                    <span class="archive-tags">
-                      {post.entry.data.tags.map((tag: string) => `#${tag}`).join(' ')}
-                    </span>
-                  )}
+                  <div class="post-content">
+                    <div class="post-main">
+                      <span class="archive-date">{formatDate(post.createdAt)}</span>
+                      <a href={post.href} class="post-title">{post.title}</a>
+                    </div>
+                    {post.entry.data.tags && (
+                      <div class="archive-tags">
+                        {Array.isArray(post.entry.data.tags) 
+                          ? post.entry.data.tags.map((tag: string) => (
+                              <a href={`/blog/tags/${tag.toLowerCase()}`} class="tag">#{tag}</a>
+                            ))
+                          : <a href={`/blog/tags/${post.entry.data.tags.toLowerCase()}`} class="tag">#{post.entry.data.tags}</a>
+                        }
+                      </div>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -71,6 +80,9 @@ function formatDate(dateString: string) {
 <style>
 .archive-page {
   font-family: var(--sl-font);
+  max-width: var(--sl-content-width);
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
 .archive-year {
@@ -82,25 +94,57 @@ function formatDate(dateString: string) {
   margin-bottom: 1.5rem;
 }
 
+.post-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.post-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .archive-date {
-  display: inline-block;
+  font-family: monospace;
   min-width: 4rem;
-  margin-right: 0.5rem;
-  color: var(--sl-color-gray-3);
+  color: var(--sl-color-text-accent);
+}
+
+.post-title {
+  text-decoration: none;
+  color: var(--sl-color-text);
+  transition: color 0.2s;
+}
+
+.post-title:hover {
+  color: var(--sl-color-accent);
 }
 
 .archive-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: 5rem;
+}
+
+.tag {
   font-size: 0.85rem;
   color: var(--sl-color-text-accent);
-  white-space: normal;
-  display: inline-block;
-  margin-left: 0.5rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.tag:hover {
+  color: var(--sl-color-accent);
 }
 
 h2 {
   border-bottom: 1px solid var(--sl-color-gray-5);
   padding-bottom: 0.5rem;
   margin-top: 2.5rem;
+  color: var(--sl-color-accent);
 }
 
 h3 {
@@ -118,11 +162,19 @@ li {
   line-height: 1.5;
 }
 
-a {
-  text-decoration: none;
-}
+@media (max-width: 768px) {
+  .post-main {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 
-a:hover {
-  text-decoration: underline;
+  .archive-date {
+    min-width: 3.5rem;
+  }
+
+  .archive-tags {
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
 }
 </style> 
