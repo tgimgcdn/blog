@@ -49,9 +49,11 @@ const sortedPosts = blogPosts
       try {
         const url = new URL(link.href);
         // 检查是否是外部链接且不是子域名
-        if (url.hostname !== currentDomain && 
-            !url.hostname.endsWith('.' + currentDomain) && 
-            url.protocol.startsWith('http')) {
+        const isSubdomain = url.hostname === currentDomain || 
+                          url.hostname.endsWith('.' + currentDomain) ||
+                          currentDomain.endsWith('.' + url.hostname);
+        
+        if (!isSubdomain && url.protocol.startsWith('http')) {
           // 使用base64编码URL
           const encodedUrl = btoa(link.href);
           link.href = `/link?url=${encodedUrl}`;
