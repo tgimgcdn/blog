@@ -70,20 +70,22 @@ const monthNames = {
                 <div class="posts-list">
                   {posts.map(post => (
                     <div class="post-item">
-                      <a href={post.href} class="post-link">
-                        <span class="post-date">{String(month).padStart(2, '0')}-{String(post.day).padStart(2, '0')}</span>
-                        <span class="post-title">{post.entry?.data?.title}</span>
+                      <div class="post-content">
+                        <a href={post.href} class="post-link">
+                          <span class="post-date">{String(month).padStart(2, '0')}-{String(post.day).padStart(2, '0')}</span>
+                          <span class="post-title">{post.entry?.data?.title}</span>
+                        </a>
                         {post.entry?.data?.tags && (
                           <div class="post-tags">
                             {Array.isArray(post.entry.data.tags) 
                               ? post.entry.data.tags.map(tag => (
-                                  <span class="tag">#{tag}</span>
+                                  <a href={`/blog/tags/${tag.toLowerCase()}`} class="tag">#{tag}</a>
                                 ))
-                              : <span class="tag">#{post.entry.data.tags}</span>
+                              : <a href={`/blog/tags/${post.entry.data.tags.toLowerCase()}`} class="tag">#{post.entry.data.tags}</a>
                             }
                           </div>
                         )}
-                      </a>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -152,10 +154,16 @@ const monthNames = {
     transform: translateX(5px);
   }
 
+  .post-content {
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .post-link {
     display: flex;
     align-items: center;
-    padding: 0.75rem 1rem;
     text-decoration: none;
     color: var(--sl-color-text);
     gap: 1rem;
@@ -165,6 +173,7 @@ const monthNames = {
     font-family: monospace;
     color: var(--sl-color-text-accent);
     min-width: 60px;
+    flex-shrink: 0;
   }
 
   .post-title {
@@ -172,14 +181,21 @@ const monthNames = {
   }
 
   .post-tags {
-    display: inline-flex;
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
-    margin-left: 0.5rem;
+    margin-left: 4.5rem;
   }
 
   .tag {
     font-size: 0.8rem;
     color: var(--sl-color-text-accent);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .tag:hover {
+    color: var(--sl-color-accent);
   }
 
   @media (max-width: 768px) {
@@ -192,8 +208,19 @@ const monthNames = {
     .month-title {
       font-size: 1rem;
     }
+    .post-content {
+      padding: 0.75rem;
+    }
     .post-link {
       flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .post-date {
+      min-width: 50px;
+    }
+    .post-tags {
+      margin-left: 0;
+      margin-top: 0.25rem;
     }
   }
 </style> 
