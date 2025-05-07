@@ -41,24 +41,12 @@ const sortedPosts = blogPosts
   </DefaultPage>
 )}
 
-<style>
+<style is:inline>
+  /* 关键 CSS - 内联到 HTML 中 */
   .content-title {
     font-size: 2rem;
     margin: 2rem 0;
     color: var(--sl-color-text);
-  }
-  
-  .home-page {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-  
-  .hero {
-    background-color: var(--sl-color-bg-accent);
-    padding: 4rem 0;
-    text-align: center;
-    margin-bottom: 2rem;
   }
   
   .hero h2 {
@@ -71,6 +59,22 @@ const sortedPosts = blogPosts
     font-size: 1.5rem;
     margin-bottom: 2rem;
     color: var(--sl-color-gray-1);
+  }
+</style>
+
+<style>
+  /* 非关键 CSS - 异步加载 */
+  .home-page {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .hero {
+    background-color: var(--sl-color-bg-accent);
+    padding: 4rem 0;
+    text-align: center;
+    margin-bottom: 2rem;
   }
   
   .container {
@@ -180,4 +184,14 @@ const sortedPosts = blogPosts
     color: var(--sl-color-white);
     transform: translateY(-2px);
   }
-</style> 
+</style>
+
+<script>
+  // 异步加载非关键 CSS
+  document.addEventListener('DOMContentLoaded', () => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/_astro/Page.css';
+    document.head.appendChild(link);
+  });
+</script> 
