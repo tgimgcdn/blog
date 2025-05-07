@@ -22,6 +22,15 @@ featured: true
 
 [首页](https://canjie.ggff.net) 
 
+url
+https://cdn.canjie.org/AgAD2RUAAmga0VQ.webp
+
+html
+<img src="https://cdn.canjie.org/AgAD2RUAAmga0VQ.webp" alt="AgAD2RUAAmga0VQ.webp" title="AgAD2RUAAmga0VQ.webp" />
+
+bbcode
+[img]https://cdn.canjie.org/AgAD2RUAAmga0VQ.webp[/img]
+
 Lorem markdownum, numen adducere Parthaoniae versa mirabere mea. Magnum utque, et senserat ferendum disiectisque sub coniunx et stolidi telum; duabus.
 
 > Crebri pantherarum talis sed etiamnum habet: modo transire. Cum Xanthos rura per iter erat tunc **insanos tibi** ignorant cum inde fulgebant, dicentem certamina **temptabat iam inpleratque**. Enim figuram aliter, semper curru mihi est.
