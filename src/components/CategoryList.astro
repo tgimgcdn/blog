@@ -71,7 +71,7 @@ const monthNames = {
                   {posts.map(post => (
                     <div class="post-item">
                       <a href={post.href} class="post-link">
-                        <span class="post-date">{String(post.day).padStart(2, '0')}-{String(month).padStart(2, '0')}</span>
+                        <span class="post-date">{String(month).padStart(2, '0')}-{String(post.day).padStart(2, '0')}</span>
                         <span class="post-title">{post.entry?.data?.title}</span>
                         {post.entry?.data?.tags && (
                           <div class="post-tags">
