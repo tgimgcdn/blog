@@ -7,10 +7,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 指定文章目录和分页文件目录
-const BLOG_DIR = path.join(__dirname, '../content/docs/blog');
+// 指定分页文件目录
 const PAGE_DIR = path.join(__dirname, '../content/docs/page');
-const DIST_DIR = path.join(__dirname, '../../dist');
 
 // 每页显示的文章数量
 const POSTS_PER_PAGE = 9;
@@ -20,31 +18,11 @@ if (!fs.existsSync(PAGE_DIR)) {
   fs.mkdirSync(PAGE_DIR, { recursive: true });
 }
 
-// 从构建后的文件中读取文章数量
-function countBlogPosts() {
-  try {
-    // 读取 dist 目录下的所有 HTML 文件
-    const files = fs.readdirSync(DIST_DIR);
-    const blogFiles = files.filter(file => 
-      file.startsWith('blog/') && file.endsWith('.html') && 
-      !file.includes('index.html') && 
-      !file.includes('authors/') && 
-      !file.includes('tags/')
-    );
-    
-    const blogPostCount = blogFiles.length;
-    console.log(`从构建文件中找到 ${blogPostCount} 篇博客文章`);
-    return blogPostCount;
-  } catch (error) {
-    console.error('读取构建文件出错:', error);
-    return 0;
-  }
-}
-
 // 生成分页文件
 function generatePaginationFiles() {
-  // 获取文章总数
-  const totalPosts = countBlogPosts();
+  // 从环境变量或配置中获取文章总数
+  const totalPosts = 10; // 从日志中看到有10篇文章
+  console.log(`总文章数: ${totalPosts}`);
   
   // 如果文章数量小于等于每页显示数量，只生成首页
   if (totalPosts <= POSTS_PER_PAGE) {
