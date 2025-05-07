@@ -82,7 +82,7 @@ function processTagForUrl(tag) {
 }
 
 // 默认缩略图
-const defaultThumbnail = "/social-card.webp";
+const defaultThumbnail = "/Business Event Website.jpg";
 ---
 
 <main class="grid-container">
@@ -113,7 +113,9 @@ const defaultThumbnail = "/social-card.webp";
             </a>
             <p class="excerpt" style="flex: 1 0 auto; min-height: 2.8em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
             <div class="meta">
-              <span class="category">{post.entry?.data?.category || '未分类'}</span>
+              <a href={`/categories/${encodeURIComponent(post.entry?.data?.category || '未分类')}`} class="category">
+                {post.entry?.data?.category || '未分类'}
+              </a>
               <time class="date">{formatDate(post.entry?.data?.pubDate || post.entry?.data?.date || new Date())}</time>
             </div>
             {post.entry?.data?.tags && (
