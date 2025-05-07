@@ -5,37 +5,54 @@ const { category } = Astro.props;
 // 从 starlightBlog 获取文章数据
 const starlightBlog = Astro.locals?.starlightBlog;
 
-// 获取所有文章并按日期排序
-const posts = starlightBlog?.posts
-  ?.filter(post => {
-    // 如果没有指定分类，显示所有文章
-    if (!category) return true;
-    // 否则只显示指定分类的文章
-    return post.entry?.data?.category === category;
-  })
-  .sort((a, b) => {
+// 获取所有文章并按分类组织
+const postsByCategory = starlightBlog?.posts?.reduce((acc, post) => {
+  const postCategory = post.entry?.data?.category || '未分类';
+  if (!acc[postCategory]) {
+    acc[postCategory] = [];
+  }
+  acc[postCategory].push(post);
+  return acc;
+}, {}) || {};
+
+// 对每个分类的文章按日期排序
+Object.keys(postsByCategory).forEach(category => {
+  postsByCategory[category].sort((a, b) => {
     const dateA = new Date(a.entry?.data?.pubDate || 0);
     const dateB = new Date(b.entry?.data?.pubDate || 0);
     return dateB.getTime() - dateA.getTime();
-  }) || [];
+  });
+});
+
+// 如果指定了特定分类，只显示该分类的文章
+const categoriesToShow = category ? { [category]: postsByCategory[category] || [] } : postsByCategory;
 ---
 
 <div class="categories-container">
-  <div class="posts-list">
-    {posts.map(post => (
-      <div class="post-card">
-        <a href={post.href} class="post-link">
-          <h3 class="post-title">{post.entry?.data?.title}</h3>
-          <p class="post-excerpt">{post.entry?.data?.description || ''}</p>
-          <div class="post-meta">
-            <time class="post-date">
-              {new Date(post.entry?.data?.pubDate || 0).toLocaleDateString('zh-CN')}
-            </time>
+  {Object.entries(categoriesToShow).map(([cat, posts]) => (
+    <div class="category-section">
+      <h2 class="category-title">{cat === 'tech' ? '技术文章' : cat === 'life' ? '生活随笔' : '未分类文章'}</h2>
+      <div class="posts-list">
+        {posts.map(post => (
+          <div class="post-item">
+            <a href={post.href} class="post-link">
+              {post.entry?.data?.title}
+              {post.entry?.data?.tags && (
+                <div class="post-tags">
+                  {Array.isArray(post.entry.data.tags) 
+                    ? post.entry.data.tags.map(tag => (
+                        <span class="tag">#{tag}</span>
+                      ))
+                    : <span class="tag">#{post.entry.data.tags}</span>
+                  }
+                </div>
+              )}
+            </a>
           </div>
-        </a>
+        ))}
       </div>
-    ))}
-  </div>
+    </div>
+  ))}
 </div>
 
 <style>
@@ -45,60 +62,56 @@ const posts = starlightBlog?.posts
     padding: 2rem 1rem;
   }
 
-  .posts-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+  .category-section {
+    margin-bottom: 3rem;
   }
 
-  .post-card {
+  .category-title {
+    font-size: 1.5rem;
+    color: var(--sl-color-accent);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--sl-color-accent-low);
+  }
+
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .post-item {
     background: var(--sl-color-bg);
     border-radius: 0.5rem;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s;
   }
 
-  .post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  .post-item:hover {
+    transform: translateX(5px);
   }
 
   .post-link {
     display: block;
-    padding: 1.5rem;
+    padding: 1rem;
     text-decoration: none;
     color: var(--sl-color-text);
   }
 
-  .post-title {
-    font-size: 1.25rem;
-    margin: 0 0 0.75rem;
-    color: var(--sl-color-text);
+  .post-tags {
+    display: inline-flex;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
   }
 
-  .post-excerpt {
-    font-size: 0.9rem;
-    color: var(--sl-color-text-accent);
-    margin: 0 0 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .post-meta {
+  .tag {
     font-size: 0.8rem;
-    color: var(--sl-color-gray-3);
-  }
-
-  .post-date {
-    display: inline-block;
+    color: var(--sl-color-text-accent);
   }
 
   @media (max-width: 768px) {
-    .posts-list {
-      grid-template-columns: 1fr;
+    .category-title {
+      font-size: 1.25rem;
     }
   }
 </style> 
