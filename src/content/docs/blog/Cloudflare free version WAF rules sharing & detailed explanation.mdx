@@ -3,7 +3,8 @@ title: "Cloudflare免费版WAF规则分享&详解"
 excerpt: "本文分享适用于Cloudflare免费版的WAF防护规则和配置，以最少的规则达到最佳的防护效果。"
 date: 2024-05-01
 lastUpdated: 2025-04-30
-thumbnail: /images/Cloudflare free version WAF rules sharing & detailed explanation.jpg
+category: tech
+thumbnail: https://cdn.canjie.org/AgAD4BgAAmga2VQ.webp
 tags:
   - "Cloudflare"
   - "WAF"
@@ -15,7 +16,7 @@ tags:
 
 （贴一张WAF拦截恶意请求的图，短时间的300000000次请求足以击垮99.99%的无防护站点）
 
-之前出过两期关于Cloudflare WAF帖子，其中一篇标题为[《基于Cloudflare Pro和 Snippets 的WAF防护规则》](https://www.nodeseek.com/post-221850-1) 自发布后的130天以来，单帖浏览量接近4k，收藏量200+，应该算是NodeSeek上关于Cloudflare WAF规则制定比较热门的贴文了。这期的教程主要针对Cloudflare免费用户，尽可能地以最少的规则达到较好的效果（受限于CF免费版的部分功能限制，部分Cloudflare Pro及以上套餐的功能无法启用，所以此教程只能说尽力达到最好的效果）。
+之前出过两期关于Cloudflare WAF帖子，其中一篇标题为[《基于Cloudflare Pro和 Snippets 的WAF防护规则》](https://canjie.org/blog/waf-defense-rules-based-on-cloudflare-pro-and-snippets/) 自发布后的130天以来，单帖浏览量接近4k，收藏量200+，应该算是NodeSeek上关于Cloudflare WAF规则制定比较热门的贴文了。这期的教程主要针对Cloudflare免费用户，尽可能地以最少的规则达到较好的效果（受限于CF免费版的部分功能限制，部分Cloudflare Pro及以上套餐的功能无法启用，所以此教程只能说尽力达到最好的效果）。
 
 本教程或者说这次分享主要包括以下四点：
 
@@ -24,7 +25,7 @@ tags:
 3. 如遇无法抵挡的攻击，自动开盾。
 4. Invisible Turnstile的运用。
 
-> 在阅读这篇帖子之前，推荐提前阅读 [《基于Cloudflare Pro和 Snippets 的WAF防护规则》](https://www.nodeseek.com/post-221850-1) ，里面提到的 **对搜索引擎等友好爬虫进行过白以及开启托管规则集，并进行微调** 将在不会在这篇帖子里重述。
+> 在阅读这篇帖子之前，推荐提前阅读 [《基于Cloudflare Pro和 Snippets 的WAF防护规则》](https://canjie.ggff.net/blog/waf-defense-rules-based-on-cloudflare-pro-and-snippets/) ，里面提到的 **对搜索引擎等友好爬虫进行过白以及开启托管规则集，并进行微调** 将在不会在这篇帖子里重述。
 
 正文部分
 
@@ -38,7 +39,7 @@ tags:
 
 对应WAF规则，策略Block，表达式如下
 
-```waf
+```text
 (http.user_agent eq "")
 ```
 
@@ -53,7 +54,7 @@ tags:
 
 对应WAF规则，策略Block或Challenge，表达式如下
 
-```waf
+```text
 (not starts_with(http.user_agent, "Mozilla/5.0 (")) or (http.user_agent eq "Mozilla/5.0") or (http.user_agent eq "Mozilla/5.0 (compatible)")
 ```
 
@@ -69,7 +70,7 @@ Mozilla/5.0 (compatible; CensysInspect/1.1; +https://about.censys.io/)
 
 > 注：应用这条WAF规则前需确保已经对搜索引擎等友好爬虫进行过白
 
-```waf
+```text
 (not starts_with(http.user_agent, "Mozilla/5.0 (")) or (http.user_agent eq "Mozilla/5.0") or (http.user_agent eq "Mozilla/5.0 (compatible)") or (http.user_agent contains "http") or (http.user_agent contains "bot")
 ```
 
@@ -79,7 +80,7 @@ Mozilla/5.0 (compatible; CensysInspect/1.1; +https://about.censys.io/)
 
 对应WAF规则，策略Challenge，表达式如下
 
-```waf
+```text
 (not len(http.request.headers["accept-encoding"]) > 0) or (not len(http.request.headers["accept-language"]) > 0)
 ```
 
@@ -87,7 +88,7 @@ Mozilla/5.0 (compatible; CensysInspect/1.1; +https://about.censys.io/)
 
 假设访客多来自于中国大陆，则Accept-Language大概率包含zh，我们可以对Accept-Language不包含zh的请求进行质询（可能会有一定的误报率），表达式如下
 
-```waf
+```text
 (not any(http.request.headers["accept-language"][*] contains "zh"))
 ```
 
@@ -95,7 +96,7 @@ Mozilla/5.0 (compatible; CensysInspect/1.1; +https://about.censys.io/)
 
 WAF规则策略Challenge，表达式如下，仅供参考，误报率趋近于0
 
-```waf
+```text
 (any(http.request.headers["accept-encoding"][*] eq "identity")) or (any(http.request.headers["x-requested-with"][*] eq "XMLHttpRequest")) or (len(http.request.headers["x-cache"]) > 0) or (len(http.request.headers["cdn-loopcount"]) > 0) or (len(http.request.headers["trailer"]) > 0 and not http.user_agent contains "Firefox") or (len(http.request.headers["x-frame-options"]) > 0) or (len(http.request.headers["accept-charset"]) > 0) or (http.user_agent contains "Firefox" and len(http.request.headers["sec-ch-ua"]) > 0)
 ```
 
@@ -111,7 +112,7 @@ ali-cdn-real-ip
 
 WAF规则策略Challenge，表达式如下，可能存在一定的误报率（极少数浏览器插件会传递伪造的IP请求头）
 
-```waf
+```text
 (any(http.request.headers["accept-encoding"][*] eq "x-real-ip")) or (any(http.request.headers["accept-encoding"][*] eq "x-forwarded-for")) or (any(http.request.headers["accept-encoding"][*] eq "x-forwarded-host")) or (any(http.request.headers["accept-encoding"][*] eq "cloudfront-viewer-address")) or (any(http.request.headers["accept-encoding"][*] eq "ali-cdn-real-ip"))
 ```
 
@@ -121,19 +122,19 @@ WAF规则策略Challenge，表达式如下，可能存在一定的误报率（�
 
 激进版
 
-```waf
+```text
 (ip.src.asnum in {14061 213230 132203 60068 30058 396982 8075 24940 16276 16509 31898 44477 202561 47583 51167}) or (ip.src.country in {"BD" "BR" "CO" "IN" "ID" "PH" "RU" "TR" "UA" "VN" "NL"})
 ```
 
 缓和版
 
-```waf
+```text
 (ip.src.asnum in {14061 213230 132203 60068 30058 396982 8075 24940 16276 16509 31898 44477 202561 47583 51167} and not any(http.request.headers["accept-language"][*] contains "zh")) or (ip.src.country in {"BD" "BR" "CO" "IN" "ID" "PH" "RU" "TR" "UA" "VN" "NL"} and not any(http.request.headers["accept-language"][*] contains "zh"))
 ```
 
 2. WAF规则策略Block，表达式如下（​**强烈推荐启用**​）
 
-```waf
+```text
 (ip.src.asnum in {200373 203020 64267 54252 397630}) or (ip.src.country in {"T1"})
 ```
 
@@ -203,7 +204,7 @@ OP的诉求是图床接入了CF，但有恶意的自动化注册，OP想对注�
 
 ---
 
-之前在 [https://www.nodeseek.com/post-221850-1](https://www.nodeseek.com/post-221850-1) 分享过一个基于CF Snippets写的302 跳转 人机验证，这次分享一个Lua版，可以直接部署在Nginx或者Openresty上。
+之前在 [参界说](https://canjie.org/blog/human-machine-verification-extension-based-on-cloudflare-302-verification-js-verification-image-verification-code-hcaptcha-etc/) 分享过一个基于CF Snippets写的302 跳转 人机验证，这次分享一个Lua版，可以直接部署在Nginx或者Openresty上。
 
 前提，进行Cloudflare面板，Transform Rules创建两个请求头，分别是u-bot和u-auth，注意是**Set dynamic**
 u-bot 为 `to_string(cf.client.bot)`
