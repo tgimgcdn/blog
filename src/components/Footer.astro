@@ -6,26 +6,30 @@ import { Icon } from '@astrojs/starlight/components';
   <div class="sl-footer-content">
     <p class="copyright">©2023 - 2025 By 参界随笔</p>
     <div class="sl-footer-links">
-      <a href="https://astro.build" class="sl-footer-link">
-        <Icon name="astro" />
-        <span>Astro</span>
-      </a>
-      <a href="https://github.com/withastro/starlight" class="sl-footer-link">
-        <Icon name="github" />
-        <span>GitHub</span>
-      </a>
-      <a href="/sitemap-index.xml" class="sl-footer-link">
-        <Icon name="seti:xml" />
-        <span>Sitemap</span>
-      </a>
-      <a href="/blog/rss.xml" class="sl-footer-link">
-        <Icon name="rss" />
-        <span>RSS</span>
-      </a>
-      <a href="/archives/" class="sl-footer-link">
-        <Icon name="document" />
-        <span>Archives</span>
-      </a>
+      <div class="link-row">
+        <a href="https://astro.build" class="sl-footer-link">
+          <Icon name="astro" />
+          <span>Astro</span>
+        </a>
+        <a href="https://github.com/withastro/starlight" class="sl-footer-link">
+          <Icon name="github" />
+          <span>GitHub</span>
+        </a>
+      </div>
+      <div class="link-row">
+        <a href="/sitemap-index.xml" class="sl-footer-link">
+          <Icon name="seti:xml" />
+          <span>Sitemap</span>
+        </a>
+        <a href="/blog/rss.xml" class="sl-footer-link">
+          <Icon name="rss" />
+          <span>RSS</span>
+        </a>
+        <a href="/archives/" class="sl-footer-link">
+          <Icon name="document" />
+          <span>Archives</span>
+        </a>
+      </div>
     </div>
   </div>
 </footer>
@@ -199,6 +203,12 @@ import { Icon } from '@astrojs/starlight/components';
     justify-content: center;
   }
 
+  .link-row {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
   .sl-footer-link {
     display: flex;
     align-items: center;
@@ -281,38 +291,16 @@ import { Icon } from '@astrojs/starlight/components';
   /* 移动设备适配 */
   @media (max-width: 768px) {
     .sl-footer-links {
-      display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 1rem;
-      width: 100%;
+    }
+
+    .link-row {
+      gap: 1rem;
     }
 
     .sl-footer-link {
       font-size: 0.9rem;
-    }
-
-    /* 创建两行布局 */
-    .sl-footer-links {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      width: 100%;
-      max-width: 300px;
-      justify-items: center;
-    }
-
-    /* 第一行：前两个链接 */
-    .sl-footer-links a:nth-child(1),
-    .sl-footer-links a:nth-child(2) {
-      grid-column: span 1;
-    }
-
-    /* 第二行：后三个链接 */
-    .sl-footer-links a:nth-child(3),
-    .sl-footer-links a:nth-child(4),
-    .sl-footer-links a:nth-child(5) {
-      grid-column: span 1;
     }
   }
 </style> 
