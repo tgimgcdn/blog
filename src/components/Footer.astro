@@ -4,21 +4,24 @@ import { Icon } from '@astrojs/starlight/components';
 
 <footer class="sl-footer">
   <div class="sl-footer-content">
-    <p class="copyright">©2023 - 2025 By 参界随笔</p>
-<div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-  本站已稳定运行 <span id="run-days"></span> 天
-</div>
+    <div class="copyright-row">
+      <p class="copyright">©2023 - 2025 By 参界随笔</p>
+      <div class="run-days">
+        本站已稳定运行 <span id="run-days"></span> 天
+      </div>
+    </div>
 
-<script>
-  const startDate = new Date('2023-01-01'); // 改成你的上线日期
-  const now = new Date();
-  const diffTime = Math.abs(now.getTime() - startDate.getTime());
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const runDaysElement = document.getElementById('run-days');
-  if (runDaysElement) {
-    runDaysElement.textContent = String(diffDays);
-  }
-</script>
+    <script>
+      const startDate = new Date('2023-01-01'); // 改成你的上线日期
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - startDate.getTime());
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const runDaysElement = document.getElementById('run-days');
+      if (runDaysElement) {
+        runDaysElement.textContent = String(diffDays);
+      }
+    </script>
+
     <div class="sl-footer-links">
       <div class="link-row">
         <a href="https://astro.build" class="sl-footer-link">
@@ -207,8 +210,20 @@ import { Icon } from '@astrojs/starlight/components';
     text-align: center;
   }
 
+  .copyright-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+  }
+
   .copyright {
     margin: 0;
+  }
+
+  .run-days {
+    color: var(--sl-color-text-accent);
+    font-size: 0.9rem;
   }
 
   .sl-footer-links {
@@ -304,6 +319,11 @@ import { Icon } from '@astrojs/starlight/components';
   
   /* 移动设备适配 */
   @media (max-width: 768px) {
+    .copyright-row {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
     .sl-footer-links {
       flex-direction: column;
       gap: 1rem;
