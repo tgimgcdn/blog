@@ -34,8 +34,7 @@ function countBlogPosts() {
     return blogPostCount;
   } catch (error) {
     console.error('读取博客目录出错:', error);
-    // 如果出错，至少生成两页
-    return 18; // 确保至少有2页（9篇文章/页）
+    return 0;
   }
 }
 
@@ -43,6 +42,13 @@ function countBlogPosts() {
 function generatePaginationFiles() {
   // 获取文章总数
   const totalPosts = countBlogPosts();
+  
+  // 如果文章数量小于等于每页显示数量，只生成首页
+  if (totalPosts <= POSTS_PER_PAGE) {
+    console.log('文章数量不足一页，只生成首页');
+    generateIndexPage();
+    return;
+  }
   
   // 计算总页数
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
@@ -54,6 +60,26 @@ function generatePaginationFiles() {
 title: 博客文章列表 - 第${i}页
 description: 所有博客文章的第${i}页
 template: splash
+head:
+  - tag: script
+    attrs:
+      type: text/javascript
+    content: |
+      document.addEventListener('DOMContentLoaded', function() {
+        // 查找页面上的所有标题元素
+        const titleElements = document.querySelectorAll('.content-title, .page-title, h1');
+        // 遍历并应用居中样式
+        titleElements.forEach(function(el) {
+          el.style.textAlign = 'center';
+          el.style.width = '100%';
+          el.style.display = 'block';
+          // 如果标题在容器中，也调整容器样式
+          if (el.parentElement) {
+            el.parentElement.style.textAlign = 'center';
+            el.parentElement.style.width = '100%';
+          }
+        });
+      });
 ---
 
 import HomePage from '../../../components/HomePage.astro';
@@ -71,11 +97,38 @@ import HomePage from '../../../components/HomePage.astro';
     }
   }
   
-  // 生成索引页面 (page/index.mdx) - 用于处理 /page/ 路径
+  // 生成索引页面
+  generateIndexPage();
+  
+  console.log('分页页面生成完成！');
+}
+
+// 生成索引页面
+function generateIndexPage() {
   const indexContent = `---
 title: 博客文章列表
 description: 所有博客文章
 template: splash
+head:
+  - tag: script
+    attrs:
+      type: text/javascript
+    content: |
+      document.addEventListener('DOMContentLoaded', function() {
+        // 查找页面上的所有标题元素
+        const titleElements = document.querySelectorAll('.content-title, .page-title, h1');
+        // 遍历并应用居中样式
+        titleElements.forEach(function(el) {
+          el.style.textAlign = 'center';
+          el.style.width = '100%';
+          el.style.display = 'block';
+          // 如果标题在容器中，也调整容器样式
+          if (el.parentElement) {
+            el.parentElement.style.textAlign = 'center';
+            el.parentElement.style.width = '100%';
+          }
+        });
+      });
 ---
 
 import HomePage from '../../../components/HomePage.astro';
@@ -91,9 +144,24 @@ import HomePage from '../../../components/HomePage.astro';
   } catch (error) {
     console.error('生成索引页面时出错:', error);
   }
-  
-  console.log('分页页面生成完成！');
+}
+
+// 清理旧的分页文件
+function cleanupOldPages() {
+  try {
+    const files = fs.readdirSync(PAGE_DIR);
+    files.forEach(file => {
+      if (file !== 'index.mdx' && file.endsWith('.mdx')) {
+        const filePath = path.join(PAGE_DIR, file);
+        fs.unlinkSync(filePath);
+        console.log(`删除旧的分页文件: ${filePath}`);
+      }
+    });
+  } catch (error) {
+    console.error('清理旧的分页文件时出错:', error);
+  }
 }
 
 // 执行生成
-generatePaginationFiles(); 
+cleanupOldPages(); // 先清理旧文件
+generatePaginationFiles(); // 然后生成新文件 
