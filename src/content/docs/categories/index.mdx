@@ -1,0 +1,106 @@
+---
+title: 文章分类
+description: 按分类浏览文章
+template: splash
+---
+
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('docs', (entry) => entry.id.startsWith('blog/'));
+const categories = new Map();
+
+// 收集所有分类
+posts.forEach((post) => {
+  const category = post.data.category || '未分类';
+  if (!categories.has(category)) {
+    categories.set(category, []);
+  }
+  categories.get(category).push(post);
+});
+
+// 转换为数组并排序
+const sortedCategories = Array.from(categories.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+---
+
+<div class="categories-container">
+  {sortedCategories.map(([category, posts]) => (
+    <div class="category-section">
+      <h2>{category}</h2>
+      <div class="posts-grid">
+        {posts.map((post) => (
+          <a href={post.slug} class="post-card">
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
+            <div class="post-meta">
+              <time datetime={post.data.pubDate?.toISOString()}>
+                {post.data.pubDate?.toLocaleDateString()}
+              </time>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .categories-container {
+    max-width: var(--sl-content-width);
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .category-section {
+    margin-bottom: 3rem;
+  }
+
+  .category-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .post-card {
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--sl-color-text);
+    transition: all 0.2s ease;
+  }
+
+  .post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .post-card p {
+    margin: 0 0 1rem;
+    color: var(--sl-color-text-accent);
+    font-size: 0.9rem;
+  }
+
+  .post-meta {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style> 
