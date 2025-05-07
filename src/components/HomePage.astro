@@ -82,7 +82,7 @@ function processTagForUrl(tag) {
 }
 
 // 默认缩略图
-const defaultThumbnail = "/social-card.webp";
+const defaultThumbnail = "/Business Event Website.jpg";
 ---
 
 <main class="grid-container">
@@ -106,8 +106,8 @@ const defaultThumbnail = "/social-card.webp";
           </a>
           <div class="content" style="padding: 1rem; display: flex; flex-direction: column; flex: 1 1 auto;">
             <a href={post.href} class="title-link">
-              <h3 class="title" title={post.title} style="line-height: 1.5; margin-top: 0; margin-bottom: 0.5rem;">
-                {post.entry?.data?.featured && <span class="featured-star">⭐</span>}
+              <h3 class="title" title={post.title} style="line-height: 1.5; margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem;">
+                {post.entry?.data?.featured && <span class="featured-star" aria-label="精选文章">⭐</span>}
                 {post.title || '无标题文章'}
               </h3>
             </a>
