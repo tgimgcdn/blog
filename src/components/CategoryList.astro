@@ -37,21 +37,11 @@ const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCo
 <div class="categories-container">
   {sortedCategories.map(([category, posts]) => (
     <div class="category-section">
-      <h2>
-        <a href={`/categories/${encodeURIComponent(category)}`} class="category-link">
-          {category}
-        </a>
-      </h2>
-      <div class="posts-grid">
+      <h2>{category}</h2>
+      <div class="posts-list">
         {posts.map((post) => (
-          <a href={post.href} class="post-card">
-            <h3>{post.title}</h3>
-            <p>{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
-            <div class="post-meta">
-              <time datetime={post.entry?.data?.pubDate?.toISOString()}>
-                {post.entry?.data?.pubDate?.toLocaleDateString()}
-              </time>
-            </div>
+          <a href={post.href} class="post-link">
+            {post.title}
           </a>
         ))}
       </div>
@@ -77,56 +67,28 @@ const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCo
     border-bottom: 1px solid var(--sl-color-gray-5);
   }
 
-  .category-link {
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .post-link {
     color: var(--sl-color-text);
     text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .category-link:hover {
-    color: var(--sl-color-accent);
-  }
-
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .post-card {
-    background: var(--sl-color-bg);
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    text-decoration: none;
-    color: var(--sl-color-text);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
     transition: all 0.2s ease;
   }
 
-  .post-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .post-card h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.2rem;
-  }
-
-  .post-card p {
-    margin: 0 0 1rem;
-    color: var(--sl-color-text-accent);
-    font-size: 0.9rem;
-  }
-
-  .post-meta {
-    font-size: 0.8rem;
-    color: var(--sl-color-gray-3);
+  .post-link:hover {
+    background-color: var(--sl-color-accent-low);
+    color: var(--sl-color-accent);
   }
 
   @media (max-width: 768px) {
-    .posts-grid {
-      grid-template-columns: 1fr;
+    .posts-list {
+      gap: 0.25rem;
     }
   }
 </style> 
