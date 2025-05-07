@@ -11,20 +11,24 @@ function processMarkdownLinks() {
 	return {
 		name: 'process-markdown-links',
 		hooks: {
-			'astro:config:setup': ({ updateConfig }) => {
+			'astro:config:setup': ({ updateConfig, config }) => {
 				updateConfig({
 					markdown: {
 						remarkPlugins: [
 							function() {
 								return function(tree) {
+									// 获取站点域名
+									const siteUrl = new URL(config.site);
+									const siteHostname = siteUrl.hostname;
+									
 									// 遍历所有节点
 									visit(tree, 'link', (node) => {
 										try {
 											const url = new URL(node.url);
 											// 检查是否是本域名或子域名
-											const isSameDomain = url.hostname === 'canjie.ggff.net' || 
-															  url.hostname.endsWith('.canjie.ggff.net') ||
-															  'canjie.ggff.net'.endsWith('.' + url.hostname);
+											const isSameDomain = url.hostname === siteHostname || 
+															  url.hostname.endsWith('.' + siteHostname) ||
+															  siteHostname.endsWith('.' + url.hostname);
 											
 											// 如果不是本域名或子域名，且是http链接，则进行中转
 											if (!isSameDomain && url.protocol.startsWith('http')) {
