@@ -4,19 +4,18 @@ description: 查看分类下的所有文章
 template: splash
 ---
 
+import { getCollection } from 'astro:content';
 import CategoryList from '../../../components/CategoryList.astro';
 
 export async function getStaticPaths() {
-  // 从 starlightBlog 获取所有文章
-  const starlightBlog = Astro.locals?.starlightBlog;
+  const posts = await getCollection('docs');
   const categories = new Set();
   
-  if (starlightBlog?.posts) {
-    starlightBlog.posts.forEach(post => {
-      const category = post.entry?.data?.category || '未分类';
-      categories.add(category);
-    });
-  }
+  // 收集所有分类
+  posts.forEach(post => {
+    const category = post.data.category || '未分类';
+    categories.add(category);
+  });
   
   // 为每个分类生成路径
   return Array.from(categories).map(category => ({
