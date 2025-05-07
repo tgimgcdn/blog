@@ -280,26 +280,14 @@ import { Icon } from '@astrojs/starlight/components';
   
   /* 移动设备适配 */
   @media (max-width: 768px) {
-    #back-to-top-container {
-      bottom: 20px;
-      right: 20px;
-    }
-    
-    #back-to-top-button {
-      width: 40px;
-      height: 40px;
-    }
-    
-    #back-to-top-button svg {
-      width: 20px;
-      height: 20px;
-    }
-    
     .sl-footer-links {
+      display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 1rem;
+      width: 100%;
     }
-    
+
     .sl-footer-link {
       font-size: 0.9rem;
     }
@@ -311,13 +299,20 @@ import { Icon } from '@astrojs/starlight/components';
       gap: 1rem;
       width: 100%;
       max-width: 300px;
+      justify-items: center;
     }
 
-    /* 让最后三个链接占据整行 */
+    /* 第一行：前两个链接 */
+    .sl-footer-links a:nth-child(1),
+    .sl-footer-links a:nth-child(2) {
+      grid-column: span 1;
+    }
+
+    /* 第二行：后三个链接 */
     .sl-footer-links a:nth-child(3),
     .sl-footer-links a:nth-child(4),
     .sl-footer-links a:nth-child(5) {
-      grid-column: span 2;
+      grid-column: span 1;
     }
   }
 </style> 
