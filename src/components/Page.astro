@@ -20,6 +20,7 @@ const sortedPosts = blogPosts
   <HomePage entry={entry} />
 ) : isBlogPage ? (
   <DefaultPage entry={entry}>
+    <h2 class="content-title">{entry.data.title}</h2>
     <CardGrid>
       {sortedPosts.map((post) => (
         <Card
@@ -35,11 +36,18 @@ const sortedPosts = blogPosts
   </DefaultPage>
 ) : (
   <DefaultPage entry={entry}>
+    <h2 class="content-title">{entry.data.title}</h2>
     <slot />
   </DefaultPage>
 )}
 
 <style>
+  .content-title {
+    font-size: 2rem;
+    margin: 2rem 0;
+    color: var(--sl-color-text);
+  }
+  
   .home-page {
     margin: 0;
     padding: 0;
@@ -53,7 +61,7 @@ const sortedPosts = blogPosts
     margin-bottom: 2rem;
   }
   
-  .hero h1 {
+  .hero h2 {
     font-size: 3rem;
     margin: 0 0 1rem;
     color: var(--sl-color-white);
