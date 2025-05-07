@@ -48,7 +48,10 @@ const sortedPosts = blogPosts
     links.forEach(link => {
       try {
         const url = new URL(link.href);
-        if (url.hostname !== currentDomain && url.protocol.startsWith('http')) {
+        // 检查是否是外部链接且不是子域名
+        if (url.hostname !== currentDomain && 
+            !url.hostname.endsWith('.' + currentDomain) && 
+            url.protocol.startsWith('http')) {
           // 使用base64编码URL
           const encodedUrl = btoa(link.href);
           link.href = `/link?url=${encodedUrl}`;
