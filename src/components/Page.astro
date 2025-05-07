@@ -60,6 +60,22 @@ const sortedPosts = blogPosts
     margin-bottom: 2rem;
     color: var(--sl-color-gray-1);
   }
+
+  /* 移动端关键样式 */
+  @media (max-width: 768px) {
+    .content-title {
+      font-size: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .hero h2 {
+      font-size: 2rem;
+    }
+    
+    .tagline {
+      font-size: 1.2rem;
+    }
+  }
 </style>
 
 <style>
@@ -184,14 +200,51 @@ const sortedPosts = blogPosts
     color: var(--sl-color-white);
     transform: translateY(-2px);
   }
+
+  /* 移动端非关键样式 */
+  @media (max-width: 768px) {
+    .hero {
+      padding: 2rem 0;
+    }
+    
+    .container {
+      padding: 0 0.5rem;
+    }
+    
+    .actions {
+      gap: 0.5rem;
+    }
+    
+    .action {
+      padding: 0.4rem 1rem;
+    }
+    
+    .card-meta {
+      font-size: 0.8rem;
+    }
+    
+    .tag {
+      font-size: 0.75rem;
+    }
+  }
 </style>
 
 <script>
   // 异步加载非关键 CSS
-  document.addEventListener('DOMContentLoaded', () => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadNonCriticalCSS);
+  } else {
+    loadNonCriticalCSS();
+  }
+
+  function loadNonCriticalCSS() {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = '/_astro/Page.css';
+    link.media = 'print';
+    link.onload = function() {
+      link.media = 'all';
+    };
     document.head.appendChild(link);
-  });
+  }
 </script> 
