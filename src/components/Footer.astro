@@ -5,6 +5,20 @@ import { Icon } from '@astrojs/starlight/components';
 <footer class="sl-footer">
   <div class="sl-footer-content">
     <p class="copyright">©2023 - 2025 By 参界随笔</p>
+<div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+  本站已稳定运行 <span id="run-days"></span> 天
+</div>
+
+<script>
+  const startDate = new Date('2023-01-01'); // 改成你的上线日期
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - startDate.getTime());
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const runDaysElement = document.getElementById('run-days');
+  if (runDaysElement) {
+    runDaysElement.textContent = String(diffDays);
+  }
+</script>
     <div class="sl-footer-links">
       <div class="link-row">
         <a href="https://astro.build" class="sl-footer-link">
