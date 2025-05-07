@@ -1,12 +1,29 @@
 ---
-import { getCollection } from 'astro:content';
+// 从 starlightBlog 获取文章数据
+const starlightBlog = Astro.locals?.starlightBlog;
+let posts = [];
 
-const posts = await getCollection('docs', (entry) => entry.id.startsWith('blog/'));
+if (starlightBlog && starlightBlog.posts) {
+  posts = starlightBlog.posts;
+  
+  // 修复链接：确保每篇文章都有正确的href
+  posts = posts.map(post => {
+    if (!post.href || post.href.includes('undefined')) {
+      const blogPath = post.entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
+      return {
+        ...post,
+        href: `/blog/${post.entry.slug || blogPath}`
+      };
+    }
+    return post;
+  });
+}
+
 const categories = {};
 
 // 收集所有分类
 for (const post of posts) {
-  const category = post.data.category || '未分类';
+  const category = post.entry?.data?.category || '未分类';
   if (!categories[category]) {
     categories[category] = [];
   }
@@ -27,12 +44,12 @@ const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCo
       </h2>
       <div class="posts-grid">
         {posts.map((post) => (
-          <a href={`/blog/${post.slug}`} class="post-card">
-            <h3>{post.data.title}</h3>
-            <p>{post.data.description}</p>
+          <a href={post.href} class="post-card">
+            <h3>{post.title}</h3>
+            <p>{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
             <div class="post-meta">
-              <time datetime={post.data.pubDate?.toISOString()}>
-                {post.data.pubDate?.toLocaleDateString()}
+              <time datetime={post.entry?.data?.pubDate?.toISOString()}>
+                {post.entry?.data?.pubDate?.toLocaleDateString()}
               </time>
             </div>
           </a>
