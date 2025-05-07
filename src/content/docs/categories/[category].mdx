@@ -1,0 +1,9 @@
+---
+title: 分类：{params.category}
+description: 查看 {params.category} 分类下的所有文章
+template: splash
+---
+
+import CategoryList from '../../../components/CategoryList.astro';
+
+<CategoryList category={params.category} /> 
