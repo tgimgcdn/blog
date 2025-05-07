@@ -88,24 +88,42 @@ const sortedPosts = blogPosts
     width: 100% !important;
     padding: 4rem 0 !important;
     margin: 0 !important;
+    max-width: none !important;
   }
 
-  :global(.sl-hero-title) {
+  :global(h1[data-page-title]) {
     text-align: center !important;
     width: 100% !important;
     display: block !important;
     font-size: 3rem !important;
-    margin: 0 0 1rem !important;
+    margin: 0 auto !important;
     color: var(--sl-color-white) !important;
+    max-width: none !important;
   }
 
-  :global(.sl-hero-tagline) {
+  :global(.tagline) {
     text-align: center !important;
     width: 100% !important;
     display: block !important;
     font-size: 1.5rem !important;
-    margin: 0 !important;
+    margin: 1rem auto 0 !important;
     color: var(--sl-color-gray-1) !important;
+    max-width: none !important;
+  }
+
+  /* 移除所有可能限制宽度的容器样式 */
+  :global(.sl-hero > *) {
+    max-width: none !important;
+    width: 100% !important;
+  }
+
+  :global(.sl-hero-content) {
+    max-width: none !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .home-page {
@@ -119,18 +137,24 @@ const sortedPosts = blogPosts
     padding: 4rem 0;
     text-align: center;
     margin-bottom: 2rem;
+    width: 100%;
+    max-width: none;
   }
   
   .hero h1 {
     font-size: 3rem;
-    margin: 0 0 1rem;
+    margin: 0 auto;
     color: var(--sl-color-white);
+    width: 100%;
+    text-align: center;
   }
   
   .tagline {
     font-size: 1.5rem;
-    margin-bottom: 2rem;
+    margin: 1rem auto 0;
     color: var(--sl-color-gray-1);
+    width: 100%;
+    text-align: center;
   }
   
   .container {
