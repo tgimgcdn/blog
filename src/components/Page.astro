@@ -48,12 +48,13 @@ const sortedPosts = blogPosts
     links.forEach(link => {
       try {
         const url = new URL(link.href);
-        // 检查是否是外部链接且不是子域名
-        const isSubdomain = url.hostname === currentDomain || 
-                          url.hostname.endsWith('.' + currentDomain) ||
-                          currentDomain.endsWith('.' + url.hostname);
+        // 检查是否是本域名或子域名
+        const isSameDomain = url.hostname === currentDomain || 
+                           url.hostname.endsWith('.' + currentDomain) ||
+                           currentDomain.endsWith('.' + url.hostname);
         
-        if (!isSubdomain && url.protocol.startsWith('http')) {
+        // 如果不是本域名或子域名，且是http链接，则进行中转
+        if (!isSameDomain && url.protocol.startsWith('http')) {
           // 使用base64编码URL
           const encodedUrl = btoa(link.href);
           link.href = `/link?url=${encodedUrl}`;
