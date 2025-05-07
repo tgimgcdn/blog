@@ -1,4 +1,7 @@
 ---
+// 从 props 获取分类
+const { category } = Astro.props;
+
 // 从 starlightBlog 获取文章数据
 const starlightBlog = Astro.locals?.starlightBlog;
 let posts = [];
@@ -19,34 +22,27 @@ if (starlightBlog && starlightBlog.posts) {
   });
 }
 
-const categories = {};
-
-// 收集所有分类
-for (const post of posts) {
-  const category = post.entry?.data?.category || '未分类';
-  if (!categories[category]) {
-    categories[category] = [];
-  }
-  categories[category].push(post);
+// 如果指定了分类，只显示该分类的文章
+if (category) {
+  posts = posts.filter(post => (post.entry?.data?.category || '未分类') === category);
 }
 
-// 转换为数组并排序
-const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCompare(b[0]));
+// 按日期排序
+posts.sort((a, b) => {
+  const dateA = a.entry?.data?.pubDate || a.entry?.data?.date;
+  const dateB = b.entry?.data?.pubDate || b.entry?.data?.date;
+  return new Date(dateB || 0).getTime() - new Date(dateA || 0).getTime();
+});
 ---
 
 <div class="categories-container">
-  {sortedCategories.map(([category, posts]) => (
-    <div class="category-section">
-      <h2>{category}</h2>
-      <div class="posts-list">
-        {posts.map((post) => (
-          <a href={post.href} class="post-link">
-            {post.title}
-          </a>
-        ))}
-      </div>
-    </div>
-  ))}
+  <div class="posts-list">
+    {posts.map((post) => (
+      <a href={post.href} class="post-link">
+        {post.title}
+      </a>
+    ))}
+  </div>
 </div>
 
 <style>
@@ -54,17 +50,6 @@ const sortedCategories = Object.entries(categories).sort((a, b) => a[0].localeCo
     max-width: var(--sl-content-width);
     margin: 0 auto;
     padding: 2rem 1rem;
-  }
-
-  .category-section {
-    margin-bottom: 3rem;
-  }
-
-  .category-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--sl-color-gray-5);
   }
 
   .posts-list {
