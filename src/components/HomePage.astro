@@ -106,10 +106,10 @@ const defaultThumbnail = "/Business Event Website.jpg";
           </a>
           <div class="content" style="padding: 1rem; display: flex; flex-direction: column; flex: 1 1 auto;">
             <a href={post.href} class="title-link">
-              <h3 class="title" title={post.title} style="line-height: 1.5; margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem;">
+              <h2 class="title" title={post.title} style="line-height: 1.5; margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem;">
                 {post.entry?.data?.featured && <span class="featured-star" aria-label="精选文章">⭐</span>}
                 {post.title || '无标题文章'}
-              </h3>
+              </h2>
             </a>
             <p class="excerpt" style="flex: 1 0 auto; min-height: 2.8em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
             <div class="meta">
