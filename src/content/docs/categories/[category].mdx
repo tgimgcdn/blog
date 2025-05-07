@@ -1,4 +1,8 @@
 ---
+title: 分类文章
+description: 查看分类下的所有文章
+template: splash
+
 export async function getStaticPaths() {
   // 从 starlightBlog 获取所有文章
   const starlightBlog = Astro.locals?.starlightBlog;
