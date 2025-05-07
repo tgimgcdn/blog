@@ -78,6 +78,36 @@ const sortedPosts = blogPosts
 </script>
 
 <style>
+  /* 全局样式 */
+  :global(.sl-hero) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    padding: 4rem 0 !important;
+    margin: 0 !important;
+  }
+
+  :global(.sl-hero-title) {
+    text-align: center !important;
+    width: 100% !important;
+    display: block !important;
+    font-size: 3rem !important;
+    margin: 0 0 1rem !important;
+    color: var(--sl-color-white) !important;
+  }
+
+  :global(.sl-hero-tagline) {
+    text-align: center !important;
+    width: 100% !important;
+    display: block !important;
+    font-size: 1.5rem !important;
+    margin: 0 !important;
+    color: var(--sl-color-gray-1) !important;
+  }
+
   .home-page {
     margin: 0;
     padding: 0;
