@@ -303,5 +303,21 @@ import { Icon } from '@astrojs/starlight/components';
     .sl-footer-link {
       font-size: 0.9rem;
     }
+
+    /* 创建两行布局 */
+    .sl-footer-links {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    /* 让最后三个链接占据整行 */
+    .sl-footer-links a:nth-child(3),
+    .sl-footer-links a:nth-child(4),
+    .sl-footer-links a:nth-child(5) {
+      grid-column: span 2;
+    }
   }
 </style> 
