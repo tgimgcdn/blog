@@ -21,8 +21,13 @@ function processMarkdownLinks() {
 									visit(tree, 'link', (node) => {
 										try {
 											const url = new URL(node.url);
-											// 如果是外部链接
-											if (url.protocol.startsWith('http')) {
+											// 检查是否是本域名或子域名
+											const isSameDomain = url.hostname === 'canjie.ggff.net' || 
+															  url.hostname.endsWith('.canjie.ggff.net') ||
+															  'canjie.ggff.net'.endsWith('.' + url.hostname);
+											
+											// 如果不是本域名或子域名，且是http链接，则进行中转
+											if (!isSameDomain && url.protocol.startsWith('http')) {
 												// 将链接替换为重定向链接，使用base64编码
 												const encodedUrl = btoa(node.url);
 												node.url = `/link?url=${encodedUrl}`;
