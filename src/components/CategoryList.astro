@@ -4,76 +4,61 @@ const { category } = Astro.props;
 
 // 从 starlightBlog 获取文章数据
 const starlightBlog = Astro.locals?.starlightBlog;
-let posts = [];
 
-if (starlightBlog && starlightBlog.posts) {
-  posts = starlightBlog.posts;
-  
-  // 修复链接：确保每篇文章都有正确的href
-  posts = posts.map(post => {
-    if (!post.href || post.href.includes('undefined')) {
-      const blogPath = post.entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
-      return {
-        ...post,
-        href: `/blog/${post.entry.slug || blogPath}`
-      };
-    }
-    return post;
-  });
-}
-
-// 如果指定了分类，只显示该分类的文章
-if (category) {
-  posts = posts.filter(post => (post.entry?.data?.category || '未分类') === category);
-}
-
-// 按日期排序
-posts.sort((a, b) => {
-  const dateA = a.entry?.data?.pubDate || a.entry?.data?.date;
-  const dateB = b.entry?.data?.pubDate || b.entry?.data?.date;
-  return new Date(dateB || 0).getTime() - new Date(dateA || 0).getTime();
-});
+// 获取所有文章并按日期排序
+const posts = starlightBlog?.posts
+  ?.filter(post => post.entry?.data?.category === category)
+  .sort((a, b) => {
+    const dateA = new Date(a.entry?.data?.pubDate || 0);
+    const dateB = new Date(b.entry?.data?.pubDate || 0);
+    return dateB.getTime() - dateA.getTime();
+  }) || [];
 ---
 
-<div class="categories-container">
-  <div class="posts-list">
-    {posts.map((post) => (
-      <a href={post.href} class="post-link">
-        {post.title}
-      </a>
+<div class="category-posts">
+  <h2>{category === 'tech' ? '技术文章' : category === 'life' ? '生活随笔' : '未分类文章'}</h2>
+  <ul class="posts-list">
+    {posts.map(post => (
+      <li>
+        <a href={post.href} class="post-link">
+          {post.entry?.data?.title}
+        </a>
+      </li>
     ))}
-  </div>
+  </ul>
 </div>
 
 <style>
-  .categories-container {
-    max-width: var(--sl-content-width);
+  .category-posts {
+    max-width: 800px;
     margin: 0 auto;
     padding: 2rem 1rem;
   }
 
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--sl-color-accent-high);
+  }
+
   .posts-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
 
   .post-link {
-    color: var(--sl-color-text);
+    display: block;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--sl-color-text-1);
     text-decoration: none;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     transition: all 0.2s ease;
   }
 
   .post-link:hover {
     background-color: var(--sl-color-accent-low);
-    color: var(--sl-color-accent);
-  }
-
-  @media (max-width: 768px) {
-    .posts-list {
-      gap: 0.25rem;
-    }
+    color: var(--sl-color-accent-high);
   }
 </style> 
