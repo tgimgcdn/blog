@@ -6,7 +6,7 @@ export default {
   plugins: [pluginLineNumbers()],
 
   // 配置代码高亮的主题
-  theme: 'dracula',  // 你可以选择其他主题，如 'github', 'monokai', 'solarized' 等
+  themes: ['solarized-dark', 'solarized-light'], // 你可以选择其他主题，如 'github', 'dracula', 'monokai', 'solarized' 等
   
   // 配置代码块字体大小
   fontSize: '14px',  // 设置字体大小，可以根据你的需求调整
