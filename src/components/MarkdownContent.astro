@@ -1,34 +1,8 @@
 ---
 // src/components/MarkdownContent.astro
-// 这个组件结合了starlight-blog和starlight-image-zoom的功能
 import StarlightBlog from 'starlight-blog/overrides/MarkdownContent.astro';
 import StarlightImageZoom from 'starlight-image-zoom/components/ImageZoom.astro';
 ---
 
-<StarlightBlog>
-  <div class="starlight-image-zoom-wrapper">
-    <StarlightImageZoom />
-  </div>
-  <slot />
-</StarlightBlog>
-
-<style>
-  .starlight-image-zoom-wrapper {
-    position: relative;
-    z-index: 1;
-  }
-</style>
-
-<!-- 确保处理Markdown生成的链接 -->
-<script is:inline>
-  // 确保在内容渲染后处理外链
-  document.addEventListener('DOMContentLoaded', function() {
-    // 给外链处理函数一些时间处理内容
-    setTimeout(function() {
-      if (window.handleExternalLinks) {
-        console.log('[Markdown处理] 调用外链处理函数处理Markdown生成的链接');
-        window.handleExternalLinks();
-      }
-    }, 500);
-  });
-</script> 
+<StarlightImageZoom />
+<StarlightBlog><slot /></StarlightBlog>
