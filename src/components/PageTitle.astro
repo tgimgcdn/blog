@@ -4,4 +4,11 @@ const { entry } = Astro.props;
 const is404Page = entry?.id === '404' || entry?.slug === '404';
 ---
 
-{!is404Page && <Default {...Astro.props} />} 
+{!is404Page && <Default {...Astro.props} />}
+
+<style>
+  /* 全局隐藏 PageTitle 组件 */
+  :global(.sl-page-title) {
+    display: none !important;
+  }
+</style> 
