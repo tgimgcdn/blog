@@ -20,16 +20,8 @@ if (!fs.existsSync(PAGE_DIR)) {
 
 // 生成分页文件
 function generatePaginationFiles() {
-  // 从环境变量或配置中获取文章总数
-  const totalPosts = 10; // 从日志中看到有10篇文章
-  console.log(`总文章数: ${totalPosts}`);
-  
-  // 如果文章数量小于等于每页显示数量，只生成首页
-  if (totalPosts <= POSTS_PER_PAGE) {
-    console.log('文章数量不足一页，只生成首页');
-    generateIndexPage();
-    return;
-  }
+  // 获取文章总数
+  const totalPosts = countBlogPosts();
   
   // 计算总页数
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
