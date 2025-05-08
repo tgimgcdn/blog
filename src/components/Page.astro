@@ -76,6 +76,73 @@ const sortedPosts = blogPosts
       font-size: 1.2rem;
     }
   }
+
+  /* 卡片网格关键样式 */
+  .custom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .grid-item {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: var(--sl-color-bg);
+  }
+
+  .thumbnail {
+    height: 180px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--sl-color-text);
+  }
+
+  .excerpt {
+    font-size: 0.9rem;
+    color: var(--sl-color-text-accent);
+    margin: 0.5rem 0;
+  }
+
+  /* 移动端卡片网格样式 */
+  @media (max-width: 768px) {
+    .custom-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .thumbnail {
+      height: 160px;
+    }
+
+    .content {
+      padding: 0.75rem;
+    }
+
+    .title {
+      font-size: 1rem;
+    }
+
+    .excerpt {
+      font-size: 0.85rem;
+    }
+  }
 </style>
 
 <style>
@@ -135,12 +202,6 @@ const sortedPosts = blogPosts
   
   .secondary:hover {
     background-color: var(--sl-color-gray-6);
-  }
-  
-  h2 {
-    margin: 3rem 0 2rem;
-    text-align: center;
-    font-size: 2rem;
   }
   
   .card-meta {
