@@ -5,8 +5,6 @@ import starlightBlog from 'starlight-blog'
 import starlightImageZoom from 'starlight-image-zoom'
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 import { visit } from 'unist-util-visit'
-import remarkMath from 'remark-math'
-import rehypeKatex from 'rehype-katex'
 
 // 自定义 Markdown 处理器
 function processMarkdownLinks() {
@@ -17,7 +15,6 @@ function processMarkdownLinks() {
 				updateConfig({
 					markdown: {
 						remarkPlugins: [
-							remarkMath,
 							function() {
 								return function(tree) {
 									// 获取站点域名
@@ -45,9 +42,6 @@ function processMarkdownLinks() {
 									});
 								};
 							}
-						],
-						rehypePlugins: [
-							rehypeKatex
 						]
 					}
 				});
@@ -62,6 +56,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			plugins: [
+				starlightImageZoom(),
 				starlightBlog({
 					authors: {
 						cmssky: {
@@ -73,7 +68,6 @@ export default defineConfig({
 					prevNextLinksOrder: 'reverse-chronological',
 					prefix: 'blog'
 				}),
-				starlightImageZoom(),
 				starlightThemeFlexoki()
 			],
 			title: '参界说',
@@ -83,6 +77,7 @@ export default defineConfig({
 				MarkdownContent: './src/components/MarkdownContent.astro',
 			},
 			sidebar: [
+				
 				{
 					label: '博客',
 					items: [
@@ -94,16 +89,6 @@ export default defineConfig({
 			pagefind: {
 				excludeSelectors: ['[data-pagefind-ignore]'],
 			},
-			// 添加 KaTeX 支持
-			head: [
-				{
-					tag: 'link',
-					attrs: {
-						rel: 'stylesheet',
-						href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
-					},
-				},
-			],
 		}),
 		processMarkdownLinks(),
 	],
