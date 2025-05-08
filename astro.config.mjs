@@ -5,6 +5,7 @@ import starlightBlog from 'starlight-blog'
 import starlightImageZoom from 'starlight-image-zoom'
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 import { visit } from 'unist-util-visit'
+import starlightGiscus from 'starlight-giscus'
 
 // 自定义 Markdown 处理器
 function processMarkdownLinks() {
@@ -57,6 +58,21 @@ export default defineConfig({
 		starlight({
 			plugins: [
 				starlightImageZoom(),
+				starlightGiscus({
+					data-repo="tgimgcdn/blog"
+                                        data-repo-id="R_kgDOOjxhOw"
+                                        data-category="General"
+                                        data-category-id="DIC_kwDOOjxhO84Cp6EN"
+                                        data-mapping="pathname"
+                                        data-strict="0"
+                                        data-reactions-enabled="1"
+                                        data-emit-metadata="0"
+                                        data-input-position="bottom"
+                                        data-theme="preferred_color_scheme"
+                                        data-lang="zh-CN"
+                                        data-loading="lazy"
+                                        crossorigin="anonymous"
+                                }),
 				starlightBlog({
 					authors: {
 						cmssky: {
