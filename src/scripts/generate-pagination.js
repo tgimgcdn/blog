@@ -20,7 +20,7 @@ if (!fs.existsSync(PAGE_DIR)) {
 
 // 计算博客文章总数
 function countBlogPosts() {
-  const blogDir = path.join(__dirname, '../content/blog');
+  const blogDir = path.join(__dirname, '../content/docs//blog');
   if (!fs.existsSync(blogDir)) {
     console.log('博客目录不存在');
     return 0;
