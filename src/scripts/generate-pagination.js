@@ -18,6 +18,24 @@ if (!fs.existsSync(PAGE_DIR)) {
   fs.mkdirSync(PAGE_DIR, { recursive: true });
 }
 
+// 计算博客文章总数
+function countBlogPosts() {
+  const blogDir = path.join(__dirname, '../content/blog');
+  if (!fs.existsSync(blogDir)) {
+    console.log('博客目录不存在');
+    return 0;
+  }
+  
+  try {
+    const files = fs.readdirSync(blogDir);
+    // 只计算 .md 和 .mdx 文件
+    return files.filter(file => file.endsWith('.md') || file.endsWith('.mdx')).length;
+  } catch (error) {
+    console.error('读取博客目录时出错:', error);
+    return 0;
+  }
+}
+
 // 生成分页文件
 function generatePaginationFiles() {
   // 获取文章总数
