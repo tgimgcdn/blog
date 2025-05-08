@@ -90,6 +90,7 @@ function generateIndexPage() {
   const indexContent = `---
 title: 博客文章列表
 description: 所有博客文章
+giscus: false
 template: splash
 head:
   - tag: script
