@@ -6,9 +6,18 @@ import StarlightImageZoom from 'starlight-image-zoom/components/ImageZoom.astro'
 ---
 
 <StarlightBlog>
-  <StarlightImageZoom />
+  <div class="starlight-image-zoom-wrapper">
+    <StarlightImageZoom />
+  </div>
   <slot />
 </StarlightBlog>
+
+<style>
+  .starlight-image-zoom-wrapper {
+    position: relative;
+    z-index: 1;
+  }
+</style>
 
 <!-- 确保处理Markdown生成的链接 -->
 <script is:inline>
