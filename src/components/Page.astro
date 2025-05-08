@@ -310,17 +310,29 @@ const sortedPosts = blogPosts
   }
 
   // 初始化 KaTeX
-  document.addEventListener('DOMContentLoaded', function() {
-    if (window.renderMathInElement) {
-      window.renderMathInElement(document.body, {
+  function initKaTeX() {
+    // 确保 KaTeX 脚本已加载
+    if (typeof katex !== 'undefined' && typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.body, {
         delimiters: [
           {left: '$$', right: '$$', display: true},
           {left: '$', right: '$', display: false},
           {left: '\\(', right: '\\)', display: false},
           {left: '\\[', right: '\\]', display: true}
         ],
-        throwOnError: false
+        throwOnError: false,
+        trust: true
       });
+    } else {
+      // 如果 KaTeX 还没加载完成，等待加载
+      setTimeout(initKaTeX, 100);
     }
-  });
+  }
+
+  // 在页面加载完成后初始化 KaTeX
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initKaTeX);
+  } else {
+    initKaTeX();
+  }
 </script> 
