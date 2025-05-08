@@ -1,7 +1,7 @@
 ---
 import Default from '@astrojs/starlight/components/PageTitle.astro';
 const { entry } = Astro.props;
-const is404Page = entry?.id === '404';
+const is404Page = entry?.id === '404' || entry?.slug === '404';
 ---
 
 {!is404Page && <Default {...Astro.props} />} 
