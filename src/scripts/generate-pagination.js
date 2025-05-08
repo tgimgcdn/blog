@@ -70,7 +70,6 @@ function generatePaginationFiles() {
     const pageContent = `---
 title: 博客文章列表 - 第${i}页
 description: 所有博客文章的第${i}页
-giscus: false
 template: splash
 head:
   - tag: script
@@ -120,7 +119,6 @@ function generateIndexPage() {
   const indexContent = `---
 title: 博客文章列表
 description: 所有博客文章
-giscus: false
 template: splash
 head:
   - tag: script
