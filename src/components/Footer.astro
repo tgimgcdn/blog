@@ -10,14 +10,36 @@ import { Icon } from '@astrojs/starlight/components';
     </div>
 
     <script>
-      const startDate = new Date('2023-01-01'); // 改成你的上线日期
-      const now = new Date();
-      const diffTime = Math.abs(now.getTime() - startDate.getTime());
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      const runDaysElement = document.getElementById('run-days');
-      if (runDaysElement) {
-        runDaysElement.textContent = String(diffDays);
+      function getBeijingTime() {
+        const now = new Date();
+        // 获取UTC时间
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        // 转换为北京时间 (UTC+8)
+        return new Date(utc + (3600000 * 8));
       }
+
+      function updateRunDays() {
+        const startDate = new Date('2023-01-01T00:00:00+08:00'); // 使用北京时间
+        const now = getBeijingTime();
+        const diffTime = Math.abs(now.getTime() - startDate.getTime());
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const runDaysElement = document.getElementById('run-days');
+        if (runDaysElement) {
+          runDaysElement.textContent = String(diffDays);
+        }
+      }
+
+      // 初始更新
+      updateRunDays();
+
+      // 每分钟检查一次是否需要更新天数
+      setInterval(() => {
+        const now = getBeijingTime();
+        // 如果是午夜（0点）到0点1分之间，更新天数
+        if (now.getHours() === 0 && now.getMinutes() === 0) {
+          updateRunDays();
+        }
+      }, 60000); // 每分钟检查一次
     </script>
 
     <div class="sl-footer-links">
