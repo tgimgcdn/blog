@@ -5,6 +5,8 @@ import starlightBlog from 'starlight-blog'
 import starlightImageZoom from 'starlight-image-zoom'
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 import { visit } from 'unist-util-visit'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 
 // 自定义 Markdown 处理器
 function processMarkdownLinks() {
@@ -15,6 +17,7 @@ function processMarkdownLinks() {
 				updateConfig({
 					markdown: {
 						remarkPlugins: [
+							remarkMath,
 							function() {
 								return function(tree) {
 									// 获取站点域名
@@ -42,6 +45,9 @@ function processMarkdownLinks() {
 									});
 								};
 							}
+						],
+						rehypePlugins: [
+							rehypeKatex
 						]
 					}
 				});
@@ -95,18 +101,6 @@ export default defineConfig({
 					attrs: {
 						rel: 'stylesheet',
 						href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
-					},
-				},
-				{
-					tag: 'script',
-					attrs: {
-						src: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js',
-					},
-				},
-				{
-					tag: 'script',
-					attrs: {
-						src: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js',
 					},
 				},
 			],
