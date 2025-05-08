@@ -15,7 +15,7 @@ export const collections = {
           featured: z.boolean().optional(),
           category: z.string().optional(),
           tags: z.union([z.string(), z.array(z.string())]).optional(),
-          giscus: z.boolean().optional().default(true),
+          giscus: z.boolean().optional().default(false),
         });
       }
     })
