@@ -1,8 +1,7 @@
 ---
 import Default from '@astrojs/starlight/components/PageTitle.astro';
-const { entry } = Astro.props;
-const is404Page = entry?.id === '404' || entry?.slug === '404';
+const is404Page = Astro.locals.starlightRoute.id === '404';
 ---
 
 {/* 如果是 404 页面，不渲染任何内容 */}
-{!is404Page && <Default {...Astro.props} />} 
+{!is404Page && <Default><slot /></Default>} 
