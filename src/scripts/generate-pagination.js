@@ -20,16 +20,36 @@ if (!fs.existsSync(PAGE_DIR)) {
 
 // 计算博客文章总数
 function countBlogPosts() {
-  const blogDir = path.join(__dirname, '../content/docs//blog');
+  const blogDir = path.join(__dirname, '../content/docs/blog');
   if (!fs.existsSync(blogDir)) {
     console.log('博客目录不存在');
     return 0;
   }
   
+  let totalPosts = 0;
+  
+  // 递归遍历目录
+  function traverseDirectory(dir) {
+    const files = fs.readdirSync(dir);
+    
+    for (const file of files) {
+      const fullPath = path.join(dir, file);
+      const stat = fs.statSync(fullPath);
+      
+      if (stat.isDirectory()) {
+        // 如果是目录，递归遍历
+        traverseDirectory(fullPath);
+      } else if (stat.isFile() && (file.endsWith('.md') || file.endsWith('.mdx'))) {
+        // 如果是 .md 或 .mdx 文件，计数加1
+        totalPosts++;
+      }
+    }
+  }
+  
   try {
-    const files = fs.readdirSync(blogDir);
-    // 只计算 .md 和 .mdx 文件
-    return files.filter(file => file.endsWith('.md') || file.endsWith('.mdx')).length;
+    traverseDirectory(blogDir);
+    console.log(`找到 ${totalPosts} 篇博客文章`);
+    return totalPosts;
   } catch (error) {
     console.error('读取博客目录时出错:', error);
     return 0;
