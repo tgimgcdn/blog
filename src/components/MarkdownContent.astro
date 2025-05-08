@@ -1,12 +1,14 @@
 ---
 // src/components/MarkdownContent.astro
 // 这个组件结合了starlight-blog和starlight-image-zoom的功能
-import StarlightBlog from 'starlight-blog/components/MarkdownContent.astro';
+import StarlightBlog from 'starlight-blog/overrides/MarkdownContent.astro';
 import StarlightImageZoom from 'starlight-image-zoom/components/ImageZoom.astro';
 ---
 
-<StarlightImageZoom />
-<StarlightBlog><slot /></StarlightBlog>
+<StarlightBlog>
+  <StarlightImageZoom />
+  <slot />
+</StarlightBlog>
 
 <!-- 确保处理Markdown生成的链接 -->
 <script is:inline>
