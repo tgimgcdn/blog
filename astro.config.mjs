@@ -59,20 +59,20 @@ export default defineConfig({
 			plugins: [
 				starlightImageZoom(),
 				starlightGiscus({
-					data-repo="tgimgcdn/blog"
-                                        data-repo-id="R_kgDOOjxhOw"
-                                        data-category="General"
-                                        data-category-id="DIC_kwDOOjxhO84Cp6EN"
-                                        data-mapping="pathname"
-                                        data-strict="0"
-                                        data-reactions-enabled="1"
-                                        data-emit-metadata="0"
-                                        data-input-position="bottom"
-                                        data-theme="preferred_color_scheme"
-                                        data-lang="zh-CN"
-                                        data-loading="lazy"
-                                        crossorigin="anonymous"
-                                }),
+					repo: 'tgimgcdn/blog',
+					repoId: 'R_kgDOOjxhOw',
+					category: 'General',
+					categoryId: 'DIC_kwDOOjxhO84Cp6EN',
+					mapping: 'pathname',
+					strict: '0',
+					reactionsEnabled: '1',
+					emitMetadata: '0',
+					inputPosition: 'bottom',
+					theme: 'preferred_color_scheme',
+					lang: 'zh-CN',
+					loading: 'lazy',
+					crossorigin: 'anonymous'
+				}),
 				starlightBlog({
 					authors: {
 						cmssky: {
@@ -93,7 +93,6 @@ export default defineConfig({
 				MarkdownContent: './src/components/MarkdownContent.astro',
 			},
 			sidebar: [
-				
 				{
 					label: '博客',
 					items: [
