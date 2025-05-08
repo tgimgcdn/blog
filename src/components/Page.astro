@@ -291,13 +291,6 @@ const sortedPosts = blogPosts
 </style>
 
 <script>
-  // 异步加载非关键 CSS
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadNonCriticalCSS);
-  } else {
-    loadNonCriticalCSS();
-  }
-
   function loadNonCriticalCSS() {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -309,40 +302,10 @@ const sortedPosts = blogPosts
     document.head.appendChild(link);
   }
 
-  // 初始化 KaTeX
-  function initKaTeX() {
-    console.log('Checking KaTeX availability...');
-    console.log('window.katex:', typeof window.katex);
-    console.log('window.renderMathInElement:', typeof window.renderMathInElement);
-    
-    // 确保 KaTeX 脚本已加载
-    if (typeof window.katex !== 'undefined' && typeof window.renderMathInElement !== 'undefined') {
-      console.log('KaTeX found, initializing...');
-      try {
-        window.renderMathInElement(document.body, {
-          delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false},
-            {left: '\\(', right: '\\)', display: false},
-            {left: '\\[', right: '\\]', display: true}
-          ],
-          throwOnError: false,
-          trust: true
-        });
-        console.log('KaTeX initialized successfully');
-      } catch (error) {
-        console.error('Error initializing KaTeX:', error);
-      }
-    } else {
-      console.log('KaTeX not loaded yet, retrying in 1 second...');
-      // 如果 KaTeX 还没加载完成，等待加载
-      setTimeout(initKaTeX, 1000);
-    }
+  // 异步加载非关键 CSS
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadNonCriticalCSS);
+  } else {
+    loadNonCriticalCSS();
   }
-
-  // 等待所有脚本加载完成后再初始化 KaTeX
-  window.addEventListener('load', function() {
-    console.log('Window loaded, waiting 1 second before initializing KaTeX...');
-    setTimeout(initKaTeX, 1000);
-  });
 </script> 
