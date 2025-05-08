@@ -56,7 +56,6 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			plugins: [
-				starlightImageZoom(),
 				starlightBlog({
 					authors: {
 						cmssky: {
@@ -68,6 +67,7 @@ export default defineConfig({
 					prevNextLinksOrder: 'reverse-chronological',
 					prefix: 'blog'
 				}),
+				starlightImageZoom(),
 				starlightThemeFlexoki()
 			],
 			title: '参界说',
@@ -77,7 +77,6 @@ export default defineConfig({
 				MarkdownContent: './src/components/MarkdownContent.astro',
 			},
 			sidebar: [
-				
 				{
 					label: '博客',
 					items: [
@@ -89,6 +88,30 @@ export default defineConfig({
 			pagefind: {
 				excludeSelectors: ['[data-pagefind-ignore]'],
 			},
+			// 添加 KaTeX 支持
+			head: [
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'stylesheet',
+						href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
+					},
+				},
+				{
+					tag: 'script',
+					attrs: {
+						defer: true,
+						src: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js',
+					},
+				},
+				{
+					tag: 'script',
+					attrs: {
+						defer: true,
+						src: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js',
+					},
+				},
+			],
 		}),
 		processMarkdownLinks(),
 	],
