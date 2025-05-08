@@ -1,6 +1,7 @@
 ---
 title: "测试Markdown之md版"
 excerpt: "本文将对Markdown代码在md文件里面的渲染进行测试。"
+giscus: true
 date: 2024-05-01
 lastUpdated: 2025-04-30
 category: tech
