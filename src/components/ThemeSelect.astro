@@ -2,11 +2,14 @@
 import Default from '@astrojs/starlight/components/ThemeSelect.astro';
 ---
 
-<label class="theme-switch" for="theme-toggle">
-  <input type="checkbox" id="theme-toggle" />
-  <div class="slider">
-    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="5" />
+<button id="theme-toggle" aria-label="切换主题">
+  <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+    <mask class="moon" id="moon-mask">
+      <rect x="0" y="0" width="100%" height="100%" fill="white" />
+      <circle cx="24" cy="10" r="6" fill="black" />
+    </mask>
+    <circle class="sun" cx="12" cy="12" r="6" mask="url(#moon-mask)" fill="currentColor" />
+    <g class="sun-beams" stroke="currentColor">
       <line x1="12" y1="1" x2="12" y2="3" />
       <line x1="12" y1="21" x2="12" y2="23" />
       <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
@@ -15,98 +18,100 @@ import Default from '@astrojs/starlight/components/ThemeSelect.astro';
       <line x1="21" y1="12" x2="23" y2="12" />
       <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-    </svg>
-    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-    </svg>
-  </div>
-</label>
+    </g>
+  </svg>
+</button>
 
 <script>
-  // 检查本地存储中的主题设置
-  const theme = localStorage.getItem('theme') || 'light';
-  const checkbox = document.getElementById('theme-toggle');
-  
-  // 设置初始状态
-  if (theme === 'dark') {
+  const theme = (() => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  })();
+
+  if (theme === 'light') {
+    document.documentElement.classList.remove('dark');
+  } else {
     document.documentElement.classList.add('dark');
-    checkbox.checked = true;
   }
 
-  // 监听复选框变化
-  checkbox.addEventListener('change', (e) => {
-    if (e.target.checked) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  });
+  window.localStorage.setItem('theme', theme);
+
+  const handleToggleClick = () => {
+    const element = document.documentElement;
+    element.classList.toggle('dark');
+
+    const isDark = element.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
+
+  document.getElementById('theme-toggle')?.addEventListener('click', handleToggleClick);
 </script>
 
 <style>
-  .theme-switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 40px;
+  #theme-toggle {
     cursor: pointer;
-  }
-
-  .theme-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    position: absolute;
-  }
-
-  .slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: transparent;
-    transition: .4s;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .slider:hover {
-    background-color: var(--sl-color-gray-5);
-  }
-
-  .sun, .moon {
-    width: 20px;
-    height: 20px;
+    border: 0;
+    opacity: 0.8;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: none;
     color: var(--sl-color-text);
-    transition: .4s;
+    transition: opacity 0.2s ease;
   }
 
-  .moon {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-
-  input:checked + .slider .sun {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-
-  input:checked + .slider .moon {
+  #theme-toggle:hover {
     opacity: 1;
-    transform: translateX(0);
   }
 
-  /* 动画效果 */
-  .slider .sun, .slider .moon {
-    transition: all 0.3s ease-in-out;
+  .sun-and-moon {
+    display: block;
   }
 
-  input:checked + .slider {
-    background-color: var(--sl-color-gray-5);
+  .sun-and-moon > .sun {
+    transform-origin: center;
+    transition: transform 0.5s cubic-bezier(0.5, 0, 0.25, 1.25);
+  }
+
+  .sun-and-moon > .sun-beams {
+    stroke-width: 2px;
+    transform-origin: center;
+    transition: transform 0.5s cubic-bezier(0.5, 0, 0.25, 1.25), opacity 0.5s cubic-bezier(0.5, 0, 0.25, 1.25);
+  }
+
+  .dark .sun-and-moon > .sun {
+    transform: scale(1.75);
+  }
+
+  .dark .sun-and-moon > .sun-beams {
+    transform: rotateZ(-25deg);
+    opacity: 0;
+  }
+
+  .dark .sun-and-moon > .moon > circle {
+    transform: translateX(-7px);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sun-and-moon > .sun {
+      transition: transform 0.5s cubic-bezier(0.5, 0, 0.25, 1.25);
+    }
+
+    .sun-and-moon > .sun-beams {
+      transition: transform 0.5s cubic-bezier(0.5, 0, 0.25, 1.25), opacity 0.5s cubic-bezier(0.5, 0, 0.25, 1.25);
+    }
+
+    .dark .sun-and-moon > .sun {
+      transform: scale(1.75);
+    }
+
+    .dark .sun-and-moon > .sun-beams {
+      transform: rotateZ(-25deg);
+      opacity: 0;
+    }
   }
 </style> 
