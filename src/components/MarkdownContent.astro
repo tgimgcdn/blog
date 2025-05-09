@@ -12,10 +12,9 @@ import Comments from 'starlight-giscus/components/Comments.astro';
   <Comments />
 </StarlightBlog>
 
-<!-- 确保处理Markdown生成的链接 -->
-<script is:inline>
+<script>
   // 确保在内容渲染后处理外链
-  document.addEventListener('DOMContentLoaded', function() {
+  function init() {
     // 给外链处理函数一些时间处理内容
     setTimeout(function() {
       if (window.handleExternalLinks) {
@@ -70,5 +69,12 @@ import Comments from 'starlight-giscus/components/Comments.astro';
 
     // 开始等待 Giscus iframe
     waitForGiscus();
-  });
+  }
+
+  // 确保在 DOM 加载完成后再执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 </script> 
