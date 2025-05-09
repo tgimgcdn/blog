@@ -7,27 +7,22 @@ import { Icon } from '@astrojs/starlight/components';
   <Icon name="moon" class="moon" />
 </button>
 
-<script>
-  // 等待 DOM 加载完成
-  function initThemeToggle() {
-    const themeToggle = document.getElementById('theme-toggle');
-    if (!themeToggle) {
-      return;
+<script is:inline>
+  // 使用立即执行函数避免全局变量污染
+  (function() {
+    // 获取当前主题
+    function getCurrentTheme() {
+      return document.documentElement.getAttribute('data-theme') || 'light';
     }
 
-    // 获取当前主题
-    const getCurrentTheme = () => {
-      return document.documentElement.getAttribute('data-theme') || 'light';
-    };
-
     // 设置主题
-    const setTheme = (theme) => {
+    function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('starlight-theme', theme);
       
       // 强制更新图标状态
-      const sun = themeToggle.querySelector('.sun');
-      const moon = themeToggle.querySelector('.moon');
+      const sun = document.querySelector('#theme-toggle .sun');
+      const moon = document.querySelector('#theme-toggle .moon');
       if (sun && moon) {
         if (theme === 'dark') {
           sun.style.display = 'none';
@@ -37,34 +32,52 @@ import { Icon } from '@astrojs/starlight/components';
           moon.style.display = 'none';
         }
       }
-    };
+    }
 
     // 切换主题
-    const toggleTheme = () => {
+    function toggleTheme() {
       const currentTheme = getCurrentTheme();
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       setTheme(newTheme);
-    };
-
-    // 初始化主题
-    const savedTheme = localStorage.getItem('starlight-theme');
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
     }
 
-    // 添加点击事件监听器
-    themeToggle.addEventListener('click', toggleTheme);
-  }
+    // 初始化主题
+    function initTheme() {
+      const savedTheme = localStorage.getItem('starlight-theme');
+      if (savedTheme) {
+        setTheme(savedTheme);
+      } else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(prefersDark ? 'dark' : 'light');
+      }
+    }
 
-  // 确保在 DOM 加载完成后再执行
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initThemeToggle);
-  } else {
-    initThemeToggle();
-  }
+    // 等待 DOM 加载完成
+    function waitForElement(selector, callback, maxAttempts = 10) {
+      let attempts = 0;
+      
+      function checkElement() {
+        const element = document.querySelector(selector);
+        if (element) {
+          callback(element);
+        } else if (attempts < maxAttempts) {
+          attempts++;
+          setTimeout(checkElement, 100);
+        }
+      }
+      
+      checkElement();
+    }
+
+    // 初始化
+    waitForElement('#theme-toggle', function(themeToggle) {
+      // 初始化主题
+      initTheme();
+      
+      // 添加点击事件监听器
+      themeToggle.addEventListener('click', toggleTheme);
+    });
+  })();
 </script>
 
 <style>
