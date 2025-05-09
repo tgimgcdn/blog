@@ -29,8 +29,23 @@ import { Icon } from '@astrojs/starlight/components';
     
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
+      // 添加点击事件监听器
       themeToggle.addEventListener('click', toggleTheme);
+      
+      // 添加触摸事件监听器
+      themeToggle.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // 防止触发其他事件
+        toggleTheme();
+      }, { passive: false });
+      
+      // 确保按钮可点击
+      themeToggle.style.pointerEvents = 'auto';
+      themeToggle.style.cursor = 'pointer';
+      
       isInitialized = true;
+      console.log('主题切换按钮已初始化');
+    } else {
+      console.log('未找到主题切换按钮');
     }
   }
 
@@ -38,16 +53,21 @@ import { Icon } from '@astrojs/starlight/components';
   initTheme();
 
   // 使用多种方式确保主题切换按钮被正确初始化
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeThemeToggle);
-  } else {
-    initializeThemeToggle();
+  function tryInitialize() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeThemeToggle);
+    } else {
+      initializeThemeToggle();
+    }
   }
+
+  // 立即尝试初始化
+  tryInitialize();
 
   // 使用 MutationObserver 作为备份方案
   const observer = new MutationObserver(() => {
     if (!isInitialized) {
-      initializeThemeToggle();
+      tryInitialize();
     }
   });
 
@@ -81,9 +101,12 @@ import { Icon } from '@astrojs/starlight/components';
     position: relative;
     z-index: 1000;
     pointer-events: auto !important;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
-  #theme-toggle:hover {
+  #theme-toggle:hover,
+  #theme-toggle:active {
     background-color: var(--sl-color-gray-2);
   }
 
@@ -116,6 +139,8 @@ import { Icon } from '@astrojs/starlight/components';
       width: 2.25rem;
       height: 2.25rem;
       padding: 0.4rem;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     #theme-toggle .sun,
