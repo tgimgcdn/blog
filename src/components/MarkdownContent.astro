@@ -144,12 +144,21 @@ const enableComments = entry?.data?.giscus !== false;
     }
   }
 
-  // 确保在 DOM 加载完成后再执行
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  // 确保在 DOM 完全加载后再执行
+  function waitForDOM() {
+    return new Promise((resolve) => {
+      if (document.readyState === 'complete') {
+        resolve();
+      } else {
+        window.addEventListener('load', resolve);
+      }
+    });
   }
+
+  // 初始化
+  waitForDOM().then(() => {
+    setTimeout(init, 100); // 添加小延迟确保 DOM 完全准备好
+  });
 </script>
 
 <style>
