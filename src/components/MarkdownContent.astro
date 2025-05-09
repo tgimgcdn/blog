@@ -28,8 +28,16 @@ const enableComments = entry?.data?.giscus !== false;
         return;
       }
 
+      // 先检查 iframe 是否存在
+      const giscusFrame = document.querySelector('iframe.giscus-frame');
+      if (!giscusFrame) {
+        console.log('[Giscus] iframe 不存在，跳过事件监听');
+        resolve(null);
+        return;
+      }
+
       // 监听 Giscus 的加载事件
-      window.addEventListener('message', function giscusListener(event) {
+      const giscusListener = (event) => {
         if (event.origin !== 'https://giscus.app') return;
         if (!(typeof event.data === 'object' && event.data.giscus)) return;
 
@@ -37,26 +45,29 @@ const enableComments = entry?.data?.giscus !== false;
         if (event.data.giscus.loadingState === 'ready') {
           console.log('[Giscus] 加载完成');
           window.removeEventListener('message', giscusListener);
-          const giscusFrame = document.querySelector('iframe.giscus-frame');
-          if (giscusFrame) {
-            resolve(giscusFrame);
+          const frame = document.querySelector('iframe.giscus-frame');
+          if (frame) {
+            resolve(frame);
           }
         } else if (event.data.giscus.loadingState === 'error') {
           console.log('[Giscus] 加载出错，可能是新文章还没有评论');
           window.removeEventListener('message', giscusListener);
           resolve(null);
         }
-      });
+      };
+
+      // 添加事件监听器
+      window.addEventListener('message', giscusListener);
 
       // 设置超时检查
       let attempts = 0;
       const maxAttempts = 10;
       const checkInterval = setInterval(() => {
-        const giscusFrame = document.querySelector('iframe.giscus-frame');
-        if (giscusFrame) {
+        const frame = document.querySelector('iframe.giscus-frame');
+        if (frame) {
           console.log('[Giscus] iframe 已加载');
           clearInterval(checkInterval);
-          resolve(giscusFrame);
+          resolve(frame);
         } else if (++attempts >= maxAttempts) {
           console.log('[Giscus] 加载超时');
           clearInterval(checkInterval);
