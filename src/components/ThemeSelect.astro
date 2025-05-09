@@ -21,6 +21,19 @@ import { Icon } from '@astrojs/starlight/components';
     const setTheme = (theme) => {
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('starlight-theme', theme);
+      
+      // 强制更新图标状态
+      const sun = themeToggle.querySelector('.sun');
+      const moon = themeToggle.querySelector('.moon');
+      if (sun && moon) {
+        if (theme === 'dark') {
+          sun.style.display = 'none';
+          moon.style.display = 'block';
+        } else {
+          sun.style.display = 'block';
+          moon.style.display = 'none';
+        }
+      }
     };
 
     // 切换主题
@@ -55,6 +68,8 @@ import { Icon } from '@astrojs/starlight/components';
     color: var(--sl-color-text);
     transition: opacity 0.2s ease;
     position: relative;
+    width: 24px;
+    height: 24px;
   }
 
   #theme-toggle:hover {
@@ -70,23 +85,11 @@ import { Icon } from '@astrojs/starlight/components';
   }
 
   .sun {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    display: block;
   }
 
   .moon {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-
-  [data-theme="dark"] .sun {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-
-  [data-theme="dark"] .moon {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    display: none;
   }
 
   @media (prefers-reduced-motion: no-preference) {
