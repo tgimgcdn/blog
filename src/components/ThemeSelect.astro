@@ -10,6 +10,8 @@ import { Icon } from '@astrojs/starlight/components';
 <script is:inline>
   // 使用立即执行函数避免全局变量污染
   (function() {
+    let isInitialized = false;
+
     // 获取当前主题
     function getCurrentTheme() {
       return document.documentElement.getAttribute('data-theme') || 'light';
@@ -52,55 +54,53 @@ import { Icon } from '@astrojs/starlight/components';
       }
     }
 
-    // 等待 DOM 加载完成
-    function waitForElement(selector, callback, maxAttempts = 10) {
-      let attempts = 0;
-      
-      function checkElement() {
-        const element = document.querySelector(selector);
-        if (element) {
-          callback(element);
-        } else if (attempts < maxAttempts) {
-          attempts++;
-          setTimeout(checkElement, 100);
-        }
-      }
-      
-      checkElement();
-    }
-
     // 初始化主题切换按钮
     function initThemeToggle() {
+      if (isInitialized) return;
+
       const themeToggle = document.getElementById('theme-toggle');
       if (!themeToggle) {
-        console.log('[主题切换] 未找到主题切换按钮，将在 DOM 加载完成后重试');
+        console.log('[主题切换] 未找到主题切换按钮');
         return;
       }
+
+      // 移除可能存在的旧事件监听器
+      const newThemeToggle = themeToggle.cloneNode(true);
+      themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
 
       // 初始化主题
       initTheme();
       
       // 添加点击事件监听器
-      themeToggle.addEventListener('click', toggleTheme);
+      newThemeToggle.addEventListener('click', toggleTheme);
+      isInitialized = true;
+      console.log('[主题切换] 初始化完成');
     }
+
+    // 使用 MutationObserver 监听 DOM 变化
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList' || mutation.type === 'subtree') {
+          initThemeToggle();
+        }
+      }
+    });
+
+    // 开始观察整个文档
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    });
 
     // 确保在 DOM 加载完成后再执行
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initThemeToggle);
     } else {
-      // 如果 DOM 已经加载完成，直接执行
       initThemeToggle();
     }
 
     // 作为备份，确保在 window 加载完成后一定会执行
-    window.addEventListener('load', function() {
-      const themeToggle = document.getElementById('theme-toggle');
-      if (themeToggle && !themeToggle.hasAttribute('data-initialized')) {
-        themeToggle.setAttribute('data-initialized', 'true');
-        initTheme();
-        themeToggle.addEventListener('click', toggleTheme);
-      }
-    });
+    window.addEventListener('load', initThemeToggle);
   })();
 </script>
 
