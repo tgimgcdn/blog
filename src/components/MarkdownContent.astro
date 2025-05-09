@@ -24,34 +24,51 @@ import Comments from 'starlight-giscus/components/Comments.astro';
       }
     }, 500);
 
-    // 监听主题变化
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-theme') {
-          const theme = document.documentElement.getAttribute('data-theme');
-          console.log('[主题切换] 检测到主题变化:', theme);
-          
-          const giscusFrame = document.querySelector('iframe.giscus-frame');
-          if (giscusFrame) {
-            console.log('[主题切换] 找到 Giscus iframe，发送主题更新消息');
-            giscusFrame.contentWindow.postMessage({
-              giscus: {
-                setConfig: {
-                  theme: theme === 'dark' ? 'dark_dimmed' : 'light'
-                }
-              }
-            }, 'https://giscus.app');
-          } else {
-            console.log('[主题切换] 未找到 Giscus iframe');
-          }
-        }
-      });
-    });
+    // 等待 Giscus iframe 加载完成
+    function waitForGiscus() {
+      const giscusFrame = document.querySelector('iframe.giscus-frame');
+      if (giscusFrame) {
+        console.log('[Giscus] iframe 已加载');
+        setupThemeObserver();
+      } else {
+        console.log('[Giscus] 等待 iframe 加载...');
+        setTimeout(waitForGiscus, 1000);
+      }
+    }
 
-    // 开始观察 document 的主题属性变化
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
+    // 设置主题观察器
+    function setupThemeObserver() {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'data-theme') {
+            const theme = document.documentElement.getAttribute('data-theme');
+            console.log('[主题切换] 检测到主题变化:', theme);
+            
+            const giscusFrame = document.querySelector('iframe.giscus-frame');
+            if (giscusFrame) {
+              console.log('[主题切换] 找到 Giscus iframe，发送主题更新消息');
+              giscusFrame.contentWindow.postMessage({
+                giscus: {
+                  setConfig: {
+                    theme: theme === 'dark' ? 'dark_dimmed' : 'light'
+                  }
+                }
+              }, 'https://giscus.app');
+            } else {
+              console.log('[主题切换] 未找到 Giscus iframe');
+            }
+          }
+        });
+      });
+
+      // 开始观察 document 的主题属性变化
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
+    }
+
+    // 开始等待 Giscus iframe
+    waitForGiscus();
   });
 </script> 
