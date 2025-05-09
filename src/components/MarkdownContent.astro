@@ -12,111 +12,16 @@ import Comments from 'starlight-giscus/components/Comments.astro';
   <Comments />
 </StarlightBlog>
 
-<script>
-  // 等待 Giscus iframe 加载
-  function waitForGiscus() {
-    return new Promise((resolve) => {
-      // 如果已经存在 iframe，直接返回
-      const existingFrame = document.querySelector('iframe.giscus-frame');
-      if (existingFrame) {
-        console.log('[Giscus] iframe 已存在');
-        resolve(existingFrame);
-        return;
-      }
-
-      // 监听 Giscus 的加载事件
-      window.addEventListener('message', function giscusListener(event) {
-        if (event.origin !== 'https://giscus.app') return;
-        if (!(typeof event.data === 'object' && event.data.giscus)) return;
-
-        if (event.data.giscus.loadingState === 'ready') {
-          console.log('[Giscus] 加载完成');
-          window.removeEventListener('message', giscusListener);
-          const giscusFrame = document.querySelector('iframe.giscus-frame');
-          if (giscusFrame) {
-            resolve(giscusFrame);
-          }
-        }
-      });
-
-      // 设置超时检查
-      let attempts = 0;
-      const maxAttempts = 10;
-      const checkInterval = setInterval(() => {
-        const giscusFrame = document.querySelector('iframe.giscus-frame');
-        if (giscusFrame) {
-          console.log('[Giscus] iframe 已加载');
-          clearInterval(checkInterval);
-          resolve(giscusFrame);
-        } else if (++attempts >= maxAttempts) {
-          console.log('[Giscus] 加载超时');
-          clearInterval(checkInterval);
-          resolve(null);
-        }
-      }, 1000);
-    });
-  }
-
-  // 设置主题观察器
-  function setupThemeObserver(giscusFrame) {
-    if (!giscusFrame) {
-      console.log('[主题切换] Giscus iframe 未找到，无法设置主题观察器');
-      return;
-    }
-
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-theme') {
-          const theme = document.documentElement.getAttribute('data-theme');
-          console.log('[主题切换] 检测到主题变化:', theme);
-          
-          try {
-            giscusFrame.contentWindow.postMessage({
-              giscus: {
-                setConfig: {
-                  theme: theme === 'dark' ? 'dark_dimmed' : 'light'
-                }
-              }
-            }, 'https://giscus.app');
-            console.log('[主题切换] 主题更新消息已发送');
-          } catch (error) {
-            console.error('[主题切换] 发送消息失败:', error);
-          }
-        }
-      });
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-  }
-
-  // 主函数
-  async function init() {
-    try {
-      // 等待 Giscus iframe 加载
-      const giscusFrame = await waitForGiscus();
-      
-      // 设置主题观察器
-      if (giscusFrame) {
-        setupThemeObserver(giscusFrame);
-      }
-
-      // 处理外链
-      if (typeof window.handleExternalLinks === 'function') {
+<!-- 确保处理Markdown生成的链接 -->
+<script is:inline>
+  // 确保在内容渲染后处理外链
+  document.addEventListener('DOMContentLoaded', function() {
+    // 给外链处理函数一些时间处理内容
+    setTimeout(function() {
+      if (window.handleExternalLinks) {
         console.log('[Markdown处理] 调用外链处理函数处理Markdown生成的链接');
         window.handleExternalLinks();
       }
-    } catch (error) {
-      console.error('[初始化错误]', error);
-    }
-  }
-
-  // 确保在 DOM 加载完成后再执行
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+    }, 500);
+  });
 </script> 
