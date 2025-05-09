@@ -4,4 +4,24 @@ const is404Page = Astro.locals.starlightRoute.id === '404';
 ---
 
 {/* 如果是 404 页面，不渲染任何内容 */}
-{!is404Page && <Default><slot /></Default>} 
+{!is404Page && (
+  <Default>
+    <div class="centered-title">
+      <slot />
+    </div>
+  </Default>
+)}
+
+<style>
+  .centered-title {
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
+  
+  /* 确保父容器也是居中的 */
+  :global(.sl-page-title) {
+    text-align: center;
+    width: 100%;
+  }
+</style> 
