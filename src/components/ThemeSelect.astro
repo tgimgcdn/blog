@@ -65,14 +65,20 @@ import { Icon } from '@astrojs/starlight/components';
         return;
       }
 
-      // 移除旧的事件监听器
-      const newThemeToggle = themeToggle.cloneNode(true);
-      themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+      try {
+        // 移除旧的事件监听器
+        const newThemeToggle = themeToggle.cloneNode(true);
+        if (themeToggle.parentNode) {
+          themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+        }
 
-      // 添加新的事件监听器
-      newThemeToggle.addEventListener('click', toggleTheme);
-      console.log('[主题切换] 主题切换按钮初始化完成');
-      isInitialized = true;
+        // 添加新的事件监听器
+        newThemeToggle.addEventListener('click', toggleTheme);
+        console.log('[主题切换] 主题切换按钮初始化完成');
+        isInitialized = true;
+      } catch (error) {
+        console.error('[主题切换] 初始化失败:', error);
+      }
     }
 
     // 设置 DOM 观察器
@@ -100,21 +106,25 @@ import { Icon } from '@astrojs/starlight/components';
 
     // 主初始化函数
     function init() {
-      // 初始化主题
-      initTheme();
+      try {
+        // 初始化主题
+        initTheme();
 
-      // 尝试立即初始化主题切换按钮
-      initThemeToggle();
+        // 尝试立即初始化主题切换按钮
+        initThemeToggle();
 
-      // 设置 DOM 观察器
-      setupThemeToggleObserver();
+        // 设置 DOM 观察器
+        setupThemeToggleObserver();
 
-      // 监听系统主题变化
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('starlight-theme')) {
-          setTheme(e.matches ? 'dark' : 'light');
-        }
-      });
+        // 监听系统主题变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (!localStorage.getItem('starlight-theme')) {
+            setTheme(e.matches ? 'dark' : 'light');
+          }
+        });
+      } catch (error) {
+        console.error('[主题切换] 初始化失败:', error);
+      }
     }
 
     // 确保在 DOM 加载完成后再执行
