@@ -1,26 +1,22 @@
 ---
-import Default from '@astrojs/starlight/components/PageTitle.astro';
-const is404Page = Astro.locals.starlightRoute.id === '404';
+const { id } = Astro.props;
+const is404Page = id === '404';
 ---
 
 {!is404Page && (
-  <Default>
-    <div class="centered-title">
-      <slot />
-    </div>
-  </Default>
+  <h1 class="page-title">
+    <slot />
+  </h1>
 )}
 
 <style>
-  .sl-page-title {
-    text-align: center;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .centered-title {
-    text-align: center;
-    width: 100%;
-    margin: 0 auto;
+  .page-title {
+    text-align: center !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    font-size: var(--sl-text-h1);
+    line-height: var(--sl-line-height-headings);
+    font-weight: 600;
+    color: var(--sl-color-text);
   }
 </style> 
