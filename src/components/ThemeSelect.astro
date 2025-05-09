@@ -24,12 +24,19 @@ import { Icon } from '@astrojs/starlight/components';
   // 初始化主题
   initTheme();
 
-  // 等待 DOM 加载完成后设置事件监听器
-  document.addEventListener('DOMContentLoaded', function() {
+  // 使用 MutationObserver 来确保主题切换按钮始终可用
+  const observer = new MutationObserver((mutations) => {
     const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
+    if (themeToggle && !themeToggle.hasAttribute('data-initialized')) {
+      themeToggle.setAttribute('data-initialized', 'true');
       themeToggle.addEventListener('click', toggleTheme);
     }
+  });
+
+  // 开始观察 DOM 变化
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
   });
 
   // 监听系统主题变化
