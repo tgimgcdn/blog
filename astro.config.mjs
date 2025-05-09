@@ -83,6 +83,7 @@ export default defineConfig({
 					},
 					prevNextLinksOrder: 'reverse-chronological',
 					prefix: 'blog'
+					navigation: 'none'
 				}),
 				starlightThemeFlexoki()
 			],
