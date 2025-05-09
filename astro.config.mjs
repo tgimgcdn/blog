@@ -82,7 +82,7 @@ export default defineConfig({
 						},
 					},
 					prevNextLinksOrder: 'reverse-chronological',
-					prefix: 'blog'
+					prefix: 'blog',
 					navigation: 'none'
 				}),
 				starlightThemeFlexoki()
