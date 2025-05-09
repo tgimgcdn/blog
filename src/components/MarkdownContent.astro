@@ -17,10 +17,12 @@ const enableComments = entry?.data?.giscus !== false;
   {enableComments && <div id="giscus-container"><Comments /></div>}
 </StarlightBlog>
 
-<button id="theme-toggle" aria-label="切换主题">
-  <Icon name="sun" class="sun" />
-  <Icon name="moon" class="moon" />
-</button>
+<div class="theme-toggle-container">
+  <button id="theme-toggle" aria-label="切换主题">
+    <Icon name="sun" class="sun" />
+    <Icon name="moon" class="moon" />
+  </button>
+</div>
 
 <script>
   // 主题切换相关函数
@@ -231,6 +233,14 @@ const enableComments = entry?.data?.giscus !== false;
     color: var(--sl-color-text-accent);
   }
 
+  /* 主题切换按钮容器 */
+  .theme-toggle-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 999;
+  }
+
   /* 主题切换按钮样式 */
   #theme-toggle {
     cursor: pointer;
@@ -238,16 +248,22 @@ const enableComments = entry?.data?.giscus !== false;
     opacity: 0.8;
     padding: 0.5rem;
     border-radius: 0.5rem;
-    background: none;
+    background: var(--sl-color-bg);
     color: var(--sl-color-text);
-    transition: opacity 0.2s ease;
+    transition: all 0.2s ease;
     position: relative;
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   #theme-toggle:hover {
     opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
   .sun, .moon {
@@ -256,6 +272,8 @@ const enableComments = entry?.data?.giscus !== false;
     left: 50%;
     transform: translate(-50%, -50%);
     transition: all 0.3s ease;
+    width: 20px;
+    height: 20px;
   }
 
   .sun {
@@ -269,6 +287,24 @@ const enableComments = entry?.data?.giscus !== false;
   @media (prefers-reduced-motion: no-preference) {
     .sun, .moon {
       transition: all 0.3s cubic-bezier(0.5, 0, 0.25, 1.25);
+    }
+  }
+
+  /* 移动端适配 */
+  @media (max-width: 768px) {
+    .theme-toggle-container {
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+
+    #theme-toggle {
+      width: 36px;
+      height: 36px;
+    }
+
+    .sun, .moon {
+      width: 18px;
+      height: 18px;
     }
   }
 </style> 
