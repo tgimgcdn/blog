@@ -8,6 +8,9 @@ import { Icon } from '@astrojs/starlight/components';
 </button>
 
 <script>
+  // 确保主题切换按钮的初始化只执行一次
+  let isInitialized = false;
+
   function initTheme() {
     const savedTheme = localStorage.getItem('starlight-theme');
     const theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -21,19 +24,33 @@ import { Icon } from '@astrojs/starlight/components';
     localStorage.setItem('starlight-theme', newTheme);
   }
 
+  function initializeThemeToggle() {
+    if (isInitialized) return;
+    
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+      isInitialized = true;
+    }
+  }
+
   // 初始化主题
   initTheme();
 
-  // 使用 MutationObserver 来确保主题切换按钮始终可用
-  const observer = new MutationObserver((mutations) => {
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle && !themeToggle.hasAttribute('data-initialized')) {
-      themeToggle.setAttribute('data-initialized', 'true');
-      themeToggle.addEventListener('click', toggleTheme);
+  // 使用多种方式确保主题切换按钮被正确初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeThemeToggle);
+  } else {
+    initializeThemeToggle();
+  }
+
+  // 使用 MutationObserver 作为备份方案
+  const observer = new MutationObserver(() => {
+    if (!isInitialized) {
+      initializeThemeToggle();
     }
   });
 
-  // 开始观察 DOM 变化
   observer.observe(document.body, {
     childList: true,
     subtree: true
