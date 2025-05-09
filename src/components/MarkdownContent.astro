@@ -167,11 +167,28 @@ const enableComments = entry?.data?.giscus !== false;
     console.log('[主题切换] 初始化完成');
   }
 
+  // 监听 DOM 变化，确保主题切换按钮始终可用
+  function setupThemeToggleObserver() {
+    const observer = new MutationObserver((mutations) => {
+      const themeToggle = document.getElementById('theme-toggle');
+      if (!themeToggle) {
+        console.log('[主题切换] 按钮丢失，重新初始化');
+        initThemeToggle();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
   // 主函数
   async function init() {
     try {
       // 初始化主题切换
       initThemeToggle();
+      setupThemeToggleObserver();
 
       // 使用 Intersection Observer 监听评论区域
       const giscusContainer = document.getElementById('giscus-container');
