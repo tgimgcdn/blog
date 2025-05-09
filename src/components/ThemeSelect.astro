@@ -69,13 +69,37 @@ import { Icon } from '@astrojs/starlight/components';
       checkElement();
     }
 
-    // 初始化
-    waitForElement('#theme-toggle', function(themeToggle) {
+    // 初始化主题切换按钮
+    function initThemeToggle() {
+      const themeToggle = document.getElementById('theme-toggle');
+      if (!themeToggle) {
+        console.log('[主题切换] 未找到主题切换按钮，将在 DOM 加载完成后重试');
+        return;
+      }
+
       // 初始化主题
       initTheme();
       
       // 添加点击事件监听器
       themeToggle.addEventListener('click', toggleTheme);
+    }
+
+    // 确保在 DOM 加载完成后再执行
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initThemeToggle);
+    } else {
+      // 如果 DOM 已经加载完成，直接执行
+      initThemeToggle();
+    }
+
+    // 作为备份，确保在 window 加载完成后一定会执行
+    window.addEventListener('load', function() {
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle && !themeToggle.hasAttribute('data-initialized')) {
+        themeToggle.setAttribute('data-initialized', 'true');
+        initTheme();
+        themeToggle.addEventListener('click', toggleTheme);
+      }
     });
   })();
 </script>
