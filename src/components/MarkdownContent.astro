@@ -13,7 +13,7 @@ const enableComments = entry?.data?.giscus !== false;
 <StarlightImageZoom />
 <StarlightBlog>
   <slot />
-  {enableComments && <Comments />}
+  {enableComments && <div id="giscus-container"><Comments /></div>}
 </StarlightBlog>
 
 <script>
@@ -25,14 +25,6 @@ const enableComments = entry?.data?.giscus !== false;
       if (existingFrame) {
         console.log('[Giscus] iframe 已存在');
         resolve(existingFrame);
-        return;
-      }
-
-      // 先检查 iframe 是否存在
-      const giscusFrame = document.querySelector('iframe.giscus-frame');
-      if (!giscusFrame) {
-        console.log('[Giscus] iframe 不存在，跳过事件监听');
-        resolve(null);
         return;
       }
 
@@ -115,26 +107,38 @@ const enableComments = entry?.data?.giscus !== false;
   // 主函数
   async function init() {
     try {
-      // 检查是否存在 Giscus iframe
-      const giscusFrame = document.querySelector('iframe.giscus-frame');
-      if (!giscusFrame) {
-        console.log('[初始化] 未找到 Giscus iframe，跳过初始化');
+      // 使用 Intersection Observer 监听评论区域
+      const giscusContainer = document.getElementById('giscus-container');
+      if (!giscusContainer) {
+        console.log('[初始化] 未找到评论容器，跳过初始化');
         return;
       }
 
-      // 等待 Giscus iframe 加载
-      const frame = await waitForGiscus();
-      
-      // 设置主题观察器
-      if (frame) {
-        setupThemeObserver(frame);
-      }
+      const observer = new IntersectionObserver(async (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          console.log('[Giscus] 评论区域进入视图');
+          observer.disconnect(); // 停止观察
 
-      // 处理外链
-      if (typeof window.handleExternalLinks === 'function') {
-        console.log('[Markdown处理] 调用外链处理函数处理Markdown生成的链接');
-        window.handleExternalLinks();
-      }
+          // 等待 Giscus iframe 加载
+          const frame = await waitForGiscus();
+          
+          // 设置主题观察器
+          if (frame) {
+            setupThemeObserver(frame);
+          }
+
+          // 处理外链
+          if (typeof window.handleExternalLinks === 'function') {
+            console.log('[Markdown处理] 调用外链处理函数处理Markdown生成的链接');
+            window.handleExternalLinks();
+          }
+        }
+      }, {
+        rootMargin: '100px' // 提前 100px 开始加载
+      });
+
+      observer.observe(giscusContainer);
     } catch (error) {
       console.error('[初始化错误]', error);
     }
