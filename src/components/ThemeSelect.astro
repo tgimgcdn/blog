@@ -11,6 +11,7 @@ import { Icon } from '@astrojs/starlight/components';
   // 使用立即执行函数避免全局变量污染
   (function() {
     let isInitialized = false;
+    let themeToggleObserver = null;
 
     // 获取当前主题
     function getCurrentTheme() {
@@ -64,84 +65,97 @@ import { Icon } from '@astrojs/starlight/components';
         return;
       }
 
-      // 移除可能存在的旧事件监听器
+      // 移除旧的事件监听器
       const newThemeToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
 
-      // 初始化主题
-      initTheme();
-      
-      // 添加点击事件监听器
+      // 添加新的事件监听器
       newThemeToggle.addEventListener('click', toggleTheme);
+      console.log('[主题切换] 主题切换按钮初始化完成');
       isInitialized = true;
-      console.log('[主题切换] 初始化完成');
     }
 
-    // 使用 MutationObserver 监听 DOM 变化
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === 'childList' || mutation.type === 'subtree') {
-          initThemeToggle();
-        }
+    // 设置 DOM 观察器
+    function setupThemeToggleObserver() {
+      if (themeToggleObserver) {
+        themeToggleObserver.disconnect();
       }
-    });
 
-    // 开始观察整个文档
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true
-    });
+      themeToggleObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.type === 'childList' || mutation.type === 'subtree') {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle && !isInitialized) {
+              initThemeToggle();
+            }
+          }
+        }
+      });
+
+      themeToggleObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    }
+
+    // 主初始化函数
+    function init() {
+      // 初始化主题
+      initTheme();
+
+      // 尝试立即初始化主题切换按钮
+      initThemeToggle();
+
+      // 设置 DOM 观察器
+      setupThemeToggleObserver();
+
+      // 监听系统主题变化
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('starlight-theme')) {
+          setTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+    }
 
     // 确保在 DOM 加载完成后再执行
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initThemeToggle);
+      document.addEventListener('DOMContentLoaded', init);
     } else {
-      initThemeToggle();
+      init();
     }
-
-    // 作为备份，确保在 window 加载完成后一定会执行
-    window.addEventListener('load', initThemeToggle);
   })();
 </script>
 
 <style>
   #theme-toggle {
-    cursor: pointer;
-    border: 0;
-    opacity: 0.8;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
     background: none;
-    color: var(--sl-color-text);
-    transition: opacity 0.2s ease;
-    position: relative;
-    width: 24px;
-    height: 24px;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--sl-color-text-2);
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
   }
 
   #theme-toggle:hover {
-    opacity: 1;
+    background-color: var(--sl-color-gray-2);
   }
 
-  .sun, .moon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: all 0.3s ease;
+  #theme-toggle .sun,
+  #theme-toggle .moon {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
-  .sun {
-    display: block;
-  }
-
-  .moon {
+  #theme-toggle .moon {
     display: none;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .sun, .moon {
-      transition: all 0.3s cubic-bezier(0.5, 0, 0.25, 1.25);
-    }
+  [data-theme='dark'] #theme-toggle .sun {
+    display: none;
+  }
+
+  [data-theme='dark'] #theme-toggle .moon {
+    display: block;
   }
 </style> 
