@@ -13,9 +13,17 @@ const is404Page = Astro.locals.starlightRoute.id === '404';
   :global(.sl-page-title) {
     text-align: center !important;
     width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
   }
 
   :global(.sl-page-title h1) {
+    text-align: center !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  :global(.sl-page-title h1 > *) {
     text-align: center !important;
     width: 100% !important;
   }
