@@ -13,44 +13,64 @@ import Comments from 'starlight-giscus/components/Comments.astro';
 </StarlightBlog>
 
 <script>
-  // 等待 DOM 加载完成
-  function waitForDOM() {
-    return new Promise((resolve) => {
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', resolve);
-      } else {
-        resolve();
-      }
-    });
-  }
-
   // 等待 Giscus iframe 加载
   function waitForGiscus() {
     return new Promise((resolve) => {
-      const checkGiscus = () => {
+      // 如果已经存在 iframe，直接返回
+      const existingFrame = document.querySelector('iframe.giscus-frame');
+      if (existingFrame) {
+        console.log('[Giscus] iframe 已存在');
+        resolve(existingFrame);
+        return;
+      }
+
+      // 监听 Giscus 的加载事件
+      window.addEventListener('message', function giscusListener(event) {
+        if (event.origin !== 'https://giscus.app') return;
+        if (!(typeof event.data === 'object' && event.data.giscus)) return;
+
+        if (event.data.giscus.loadingState === 'ready') {
+          console.log('[Giscus] 加载完成');
+          window.removeEventListener('message', giscusListener);
+          const giscusFrame = document.querySelector('iframe.giscus-frame');
+          if (giscusFrame) {
+            resolve(giscusFrame);
+          }
+        }
+      });
+
+      // 设置超时检查
+      let attempts = 0;
+      const maxAttempts = 10;
+      const checkInterval = setInterval(() => {
         const giscusFrame = document.querySelector('iframe.giscus-frame');
         if (giscusFrame) {
           console.log('[Giscus] iframe 已加载');
+          clearInterval(checkInterval);
           resolve(giscusFrame);
-        } else {
-          console.log('[Giscus] 等待 iframe 加载...');
-          setTimeout(checkGiscus, 1000);
+        } else if (++attempts >= maxAttempts) {
+          console.log('[Giscus] 加载超时');
+          clearInterval(checkInterval);
+          resolve(null);
         }
-      };
-      checkGiscus();
+      }, 1000);
     });
   }
 
   // 设置主题观察器
   function setupThemeObserver(giscusFrame) {
+    if (!giscusFrame) {
+      console.log('[主题切换] Giscus iframe 未找到，无法设置主题观察器');
+      return;
+    }
+
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === 'data-theme') {
           const theme = document.documentElement.getAttribute('data-theme');
           console.log('[主题切换] 检测到主题变化:', theme);
           
-          if (giscusFrame && giscusFrame.contentWindow) {
-            console.log('[主题切换] 找到 Giscus iframe，发送主题更新消息');
+          try {
             giscusFrame.contentWindow.postMessage({
               giscus: {
                 setConfig: {
@@ -58,8 +78,9 @@ import Comments from 'starlight-giscus/components/Comments.astro';
                 }
               }
             }, 'https://giscus.app');
-          } else {
-            console.log('[主题切换] 未找到 Giscus iframe 或 contentWindow');
+            console.log('[主题切换] 主题更新消息已发送');
+          } catch (error) {
+            console.error('[主题切换] 发送消息失败:', error);
           }
         }
       });
@@ -74,23 +95,28 @@ import Comments from 'starlight-giscus/components/Comments.astro';
   // 主函数
   async function init() {
     try {
-      // 等待 DOM 加载完成
-      await waitForDOM();
+      // 等待 Giscus iframe 加载
+      const giscusFrame = await waitForGiscus();
       
+      // 设置主题观察器
+      if (giscusFrame) {
+        setupThemeObserver(giscusFrame);
+      }
+
       // 处理外链
-      if (window.handleExternalLinks) {
+      if (typeof window.handleExternalLinks === 'function') {
         console.log('[Markdown处理] 调用外链处理函数处理Markdown生成的链接');
         window.handleExternalLinks();
       }
-
-      // 等待 Giscus iframe 加载并设置主题观察器
-      const giscusFrame = await waitForGiscus();
-      setupThemeObserver(giscusFrame);
     } catch (error) {
       console.error('[初始化错误]', error);
     }
   }
 
-  // 启动初始化
-  init();
+  // 确保在 DOM 加载完成后再执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 </script> 
