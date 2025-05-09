@@ -7,133 +7,37 @@ import { Icon } from '@astrojs/starlight/components';
   <Icon name="moon" class="moon" />
 </button>
 
-<script is:inline>
-  // 使用立即执行函数避免全局变量污染
-  (function() {
-    let isInitialized = false;
-    let themeToggleObserver = null;
+<script>
+  function initTheme() {
+    const savedTheme = localStorage.getItem('starlight-theme');
+    const theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  }
 
-    // 获取当前主题
-    function getCurrentTheme() {
-      return document.documentElement.getAttribute('data-theme') || 'light';
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('starlight-theme', newTheme);
+  }
+
+  // 初始化主题
+  initTheme();
+
+  // 等待 DOM 加载完成后设置事件监听器
+  document.addEventListener('DOMContentLoaded', function() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
     }
+  });
 
-    // 设置主题
-    function setTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('starlight-theme', theme);
-      
-      // 强制更新图标状态
-      const sun = document.querySelector('#theme-toggle .sun');
-      const moon = document.querySelector('#theme-toggle .moon');
-      if (sun && moon) {
-        if (theme === 'dark') {
-          sun.style.display = 'none';
-          moon.style.display = 'block';
-        } else {
-          sun.style.display = 'block';
-          moon.style.display = 'none';
-        }
-      }
+  // 监听系统主题变化
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('starlight-theme')) {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
     }
-
-    // 切换主题
-    function toggleTheme() {
-      const currentTheme = getCurrentTheme();
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      setTheme(newTheme);
-    }
-
-    // 初始化主题
-    function initTheme() {
-      const savedTheme = localStorage.getItem('starlight-theme');
-      if (savedTheme) {
-        setTheme(savedTheme);
-      } else {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setTheme(prefersDark ? 'dark' : 'light');
-      }
-    }
-
-    // 初始化主题切换按钮
-    function initThemeToggle() {
-      if (isInitialized) return;
-
-      const themeToggle = document.getElementById('theme-toggle');
-      if (!themeToggle) {
-        console.log('[主题切换] 未找到主题切换按钮');
-        return;
-      }
-
-      try {
-        // 移除旧的事件监听器
-        const newThemeToggle = themeToggle.cloneNode(true);
-        if (themeToggle.parentNode) {
-          themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
-        }
-
-        // 添加新的事件监听器
-        newThemeToggle.addEventListener('click', toggleTheme);
-        console.log('[主题切换] 主题切换按钮初始化完成');
-        isInitialized = true;
-      } catch (error) {
-        console.error('[主题切换] 初始化失败:', error);
-      }
-    }
-
-    // 设置 DOM 观察器
-    function setupThemeToggleObserver() {
-      if (themeToggleObserver) {
-        themeToggleObserver.disconnect();
-      }
-
-      themeToggleObserver = new MutationObserver((mutations) => {
-        for (const mutation of mutations) {
-          if (mutation.type === 'childList' || mutation.type === 'subtree') {
-            const themeToggle = document.getElementById('theme-toggle');
-            if (themeToggle && !isInitialized) {
-              initThemeToggle();
-            }
-          }
-        }
-      });
-
-      themeToggleObserver.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
-    }
-
-    // 主初始化函数
-    function init() {
-      try {
-        // 初始化主题
-        initTheme();
-
-        // 尝试立即初始化主题切换按钮
-        initThemeToggle();
-
-        // 设置 DOM 观察器
-        setupThemeToggleObserver();
-
-        // 监听系统主题变化
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          if (!localStorage.getItem('starlight-theme')) {
-            setTheme(e.matches ? 'dark' : 'light');
-          }
-        });
-      } catch (error) {
-        console.error('[主题切换] 初始化失败:', error);
-      }
-    }
-
-    // 确保在 DOM 加载完成后再执行
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
-  })();
+  });
 </script>
 
 <style>
@@ -141,10 +45,18 @@ import { Icon } from '@astrojs/starlight/components';
     background: none;
     border: none;
     padding: 0.5rem;
-    cursor: pointer;
+    cursor: pointer !important;
     color: var(--sl-color-text-2);
     border-radius: 0.5rem;
     transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    position: relative;
+    z-index: 1000;
+    pointer-events: auto !important;
   }
 
   #theme-toggle:hover {
@@ -155,6 +67,11 @@ import { Icon } from '@astrojs/starlight/components';
   #theme-toggle .moon {
     width: 1.5rem;
     height: 1.5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
   }
 
   #theme-toggle .moon {
@@ -167,5 +84,20 @@ import { Icon } from '@astrojs/starlight/components';
 
   [data-theme='dark'] #theme-toggle .moon {
     display: block;
+  }
+
+  /* 移动端样式 */
+  @media (max-width: 768px) {
+    #theme-toggle {
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: 0.4rem;
+    }
+
+    #theme-toggle .sun,
+    #theme-toggle .moon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
   }
 </style> 
