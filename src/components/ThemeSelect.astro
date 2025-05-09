@@ -8,9 +8,12 @@ import { Icon } from '@astrojs/starlight/components';
 </button>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  // 等待 DOM 加载完成
+  function initThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');
-    if (!themeToggle) return;
+    if (!themeToggle) {
+      return;
+    }
 
     // 获取当前主题
     const getCurrentTheme = () => {
@@ -54,7 +57,14 @@ import { Icon } from '@astrojs/starlight/components';
 
     // 添加点击事件监听器
     themeToggle.addEventListener('click', toggleTheme);
-  });
+  }
+
+  // 确保在 DOM 加载完成后再执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeToggle);
+  } else {
+    initThemeToggle();
+  }
 </script>
 
 <style>
