@@ -68,7 +68,7 @@ export default defineConfig({
 					reactionsEnabled: '1',
 					emitMetadata: '0',
 					inputPosition: 'bottom',
-					theme: 'preferred_color_scheme',
+					theme: 'auto',
 					lang: 'zh-CN',
 					loading: 'lazy',
 					crossorigin: 'anonymous'
