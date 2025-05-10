@@ -188,9 +188,8 @@ console.log(Object.keys(obj));
   <source src="https://cdn3.0163.eu.org/1251?%E7%AC%AC1%E9%9B%86_%E9%A3%9E%E5%8D%87%E4%BB%99%E7%95%8C-%E6%A1%91%E6%A2%93%E8%AE%B2%E6%95%85%E4%BA%8B-216451217-100.ogg" type="video/ogg">
 </video>
 
-完全居中-用块级包裹 + text-align center
-<div style="text-align: center;">
-  <video controls style="max-width: 100%; height: auto;">
-    <source src="https://cdn3.0163.eu.org/1251?%E7%AC%AC1%E9%9B%86_%E9%A3%9E%E5%8D%87%E4%BB%99%E7%95%8C-%E6%A1%91%E6%A2%93%E8%AE%B2%E6%95%85%E4%BA%8B-216451217-100.ogg" type="video/ogg">
-  </video>
-</div>
+完全居中-强制块级 + 居中
+<video controls style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
+  <source src="https://cdn3.0163.eu.org/1251?%E7%AC%AC1%E9%9B%86_%E9%A3%9E%E5%8D%87%E4%BB%99%E7%95%8C-%E6%A1%91%E6%A2%93%E8%AE%B2%E6%95%85%E4%BA%8B-216451217-100.ogg" type="video/ogg">
+</video>
+
