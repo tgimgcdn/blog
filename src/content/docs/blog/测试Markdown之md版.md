@@ -246,9 +246,11 @@ CSS 媒体查询（media query）
 
 Tailwind 写法
 
-<video controls class="block mx-auto max-w-full sm:max-w-[300px] md:max-w-[400px] lg:max-w-[500px] h-auto">
-  <source src=[https://cdn3.0163.eu.org/958?%EA%B3%A0%EC%96%91%EC%9D%B4%EA%B7%80%ED%95%98%EA%B3%A0%20%EB%9A%9C%EB%9A%9C%EB%9A%9C%EB%9A%9C%20%EC%95%84%EC%9B%83%EC%86%A1%20%EC%9D%B4%EC%98%88%EB%B9%88%20%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94%20Lee%20Yebin%20Cheerleader.mp4" type="video/mp4">
-</video>
+<iframe src="https://cdn3.0163.eu.org/player?id=1248"
+  class="block mx-auto w-full max-w-full aspect-[9/16] sm:max-w-[300px] md:max-w-[400px]" 
+  frameborder="0" allowfullscreen>
+</iframe>
+
 
   
 - Ogg-第1集_飞升仙界-桑梓讲故事-216451217-100
