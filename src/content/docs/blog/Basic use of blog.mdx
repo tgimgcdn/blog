@@ -119,21 +119,21 @@ import CategoryList from '../../../components/CategoryList.astro';
 
 <CategoryList category="tech" /> 
 ```
-如果上述工作您都准备好了，那么恭喜您，您可以开始编写您的第一篇博客文章了，比如您创建了一个life的分类，那么您可以在改文件夹里面创建一个mdx文件，作为您的第一篇博客文章。
+如果上述工作您都准备好了，那么恭喜您，您可以开始编写您的第一篇博客文章了，比如您创建了一个life的分类，那么您可以在该文件夹里面创建一个mdx文件，作为您的第一篇博客文章。
 <FileTree>
 - src/
   - content/
     - docs/
       - blog/
-        -**life/**
-          -**My first blog.mdx**
+        - **life/**
+          - **我的第一篇博客.mdx**
       - categories/
         - index.mdx
         - **life.mdx**
 </FileTree>
-My first blog.mdx的内容如下,必填的选项我都已经高亮标注：
+我的第一篇博客.mdx的内容如下,必填的选项我都已经高亮标注：
 ```md "title: " "date: "
-//src/content/docs/blog/life/My first blog.mdx
+//src/content/docs/blog/life/我的第一篇博客.mdx
 ---
 title: "我的第一篇博客" 
 excerpt: "这是我的第一篇博客，欢迎您的到来！"
@@ -144,13 +144,14 @@ category: life
 thumbnail: https://cdn.canjie.org/AgAD4BgAAmga2VQ.webp
 tags:
   - "博客"
+  - "Blog"
 ---
 这是我的第一篇博客，欢迎您的到来！
 This is my first blog, welcome!
 ```
 备注:
 ```md "title: " "date: "
-//src/content/docs/blog/life/My first blog.mdx
+//src/content/docs/blog/life/我的第一篇博客.mdx
 ---
 title: "我的第一篇博客"                                           //必填项，博客标题，会在您的博客url中出现，例如: https://yourdomain.com/blog/life/我的第一篇博客
 excerpt: "这是我的第一篇博客，欢迎您的到来！"                       //选填项，博客摘录，介绍博客的大致内容，支持基本的 Markdown 格式，不需要可以删除该行
