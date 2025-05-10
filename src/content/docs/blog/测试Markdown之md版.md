@@ -174,8 +174,6 @@ console.log(Object.keys(obj));
 - Mp4 고양이귀하고%20뚜뚜뚜뚜%20아웃송%20이예빈%20치어리더%20Lee%20Yebin%20Cheerleader
 <video controls>
   <source src="https://cdn3.0163.eu.org/958?%EA%B3%A0%EC%96%91%EC%9D%B4%EA%B7%80%ED%95%98%EA%B3%A0%20%EB%9A%9C%EB%9A%9C%EB%9A%9C%EB%9A%9C%20%EC%95%84%EC%9B%83%EC%86%A1%20%EC%9D%B4%EC%98%88%EB%B9%88%20%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94%20Lee%20Yebin%20Cheerleader.mp4" type="video/mp4">
-
-  您的浏览器不支持 video 标签。
 </video>
 
 完全居中-用块级包裹 + text-align center
@@ -188,7 +186,6 @@ console.log(Object.keys(obj));
 - Ogg-第1集_飞升仙界-桑梓讲故事-216451217-100
 <video controls>
   <source src="https://cdn3.0163.eu.org/1251?%E7%AC%AC1%E9%9B%86_%E9%A3%9E%E5%8D%87%E4%BB%99%E7%95%8C-%E6%A1%91%E6%A2%93%E8%AE%B2%E6%95%85%E4%BA%8B-216451217-100.ogg" type="video/ogg">
-  您的浏览器不支持 video 标签。
 </video>
 
 完全居中-用块级包裹 + text-align center
