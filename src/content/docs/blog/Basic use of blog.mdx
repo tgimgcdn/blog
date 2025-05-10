@@ -16,8 +16,43 @@ import { FileTree } from '@astrojs/starlight/components';
 
 ## 项目结构
 
+### 无备注版
 <FileTree>
+- astro.config.mjs
+- package.json
+- src/
+  - components/
+    - BlogArchive.astro
+    - CategoryList.astro
+    - ExternalLinkRedirect.astro
+    - Footer.astro
+    - Head.astro
+    - HomePage.astro
+    - MarkdownContent.astro
+    - Page.astro
+    - PageTitle.astro
+    - ThemeSelect.astro
+  - content/
+    - docs/
+      - 404.mdx
+      - blog/
+      - categories/
+        - index.mdx
+        - tech.mdx
+      - index.mdx
+      - link.mdx
+      - page/
+        - index.mdx
+  - pages/
+    - api/
+      - redirect.js
+  - scripts/
+    - generate-pagination.js
+  - content.config.ts
+</FileTree>
+### 有备注版
 
+<FileTree>
 - astro.config.mjs                // Astro 的主配置文件，定义了项目的基本设置、集成和插件
 - package.json                    // 项目依赖管理文件，定义了项目依赖、脚本命令和基本信息
 - src/
@@ -49,5 +84,4 @@ import { FileTree } from '@astrojs/starlight/components';
   - scripts/
     - generate-pagination.js     // 分页生成脚本，自动生成分页页面
   - content.config.ts           // 内容集合配置文件，定义内容的数据结构
-
 </FileTree>
