@@ -151,10 +151,10 @@ console.log(Object.keys(obj));
 ### iframe
 
 - 倚天屠龙记
-<iframe src="https://cdn3.0163.eu.org/player?id=129" frameborder="0" allowfullscreen style="width: 100%; height: auto;"></iframe>
+<iframe src="https://cdn3.0163.eu.org/player?id=129" width="640" height="360" frameborder="0" allowfullscreen></iframe>
   
 - 成为昏君后我读心百官
-<iframe src="https://cdn3.0163.eu.org/player?id=1248" frameborder="0" allowfullscreen style="width: 100%; height: auto;"></iframe>
+<iframe src="https://cdn3.0163.eu.org/player?id=1248" width="640" height="360" frameborder="0" allowfullscreen></iframe>
 
 ### 直接引用
 
