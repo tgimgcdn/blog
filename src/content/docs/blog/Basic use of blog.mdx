@@ -53,8 +53,8 @@ import { FileTree } from '@astrojs/starlight/components';
 ### 有备注版
 
 <FileTree>
-- astro.config.mjs                // Astro 的主配置文件，定义了项目的基本设置、集成和插件
-- package.json                    // 项目依赖管理文件，定义了项目依赖、脚本命令和基本信息
+- astro.config.mjs  // Astro 的主配置文件，定义了项目的基本设置、集成和插件
+- package.json      // 项目依赖管理文件，定义了项目依赖、脚本命令和基本信息
 - src/
   - components/
     - BlogArchive.astro           // 博客归档页面组件，用于展示按时间归档的文章列表
@@ -84,4 +84,14 @@ import { FileTree } from '@astrojs/starlight/components';
   - scripts/
     - generate-pagination.js     // 分页生成脚本，自动生成分页页面
   - content.config.ts           // 内容集合配置文件，定义内容的数据结构
+</FileTree>
+
+## 编写博客
+博客文章位于blog目录，您可以将您编写的mdx或者md文件上传到这个目录，如果需要创建分类，也是在blog目录下创建新的文件夹，比如我就在blog目录下面创建了一个tech的文件夹，所有的技术类的文章都放置在这个文件夹里面。
+<FileTree>
+- src/
+  - content/
+    - docs/
+      - **blog/**
+        - tech/
 </FileTree>
