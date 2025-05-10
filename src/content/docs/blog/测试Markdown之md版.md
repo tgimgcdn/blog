@@ -160,6 +160,7 @@ console.log(Object.keys(obj));
 </div>
   
 - 成为昏君后我读心百官 9:16
+#### 直接使用 电脑端画面大手机端合适
 <div style="position: relative; width: 100%; padding-bottom: 177.78%; height: 0; overflow: hidden;">
   <iframe src="https://cdn3.0163.eu.org/player?id=1248"
     frameborder="0"
@@ -168,20 +169,87 @@ console.log(Object.keys(obj));
   </iframe>
 </div>
 
+#### 缩小电脑端画面保持手机端画面
+
+##### 方案 1：纯 CSS 写法
+<iframe src="https://cdn3.0163.eu.org/player?id=1248" class="responsive-iframe" frameborder="0" allowfullscreen></iframe>
+
+<style>
+.responsive-iframe {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16; /* 保证 9:16 比例 */
+}
+
+@media (min-width: 768px) {
+  .responsive-iframe {
+    width: 300px; /* 电脑上宽度限制为 300px */
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-iframe {
+    width: 400px; /* 大屏电脑限制为 400px */
+  }
+}
+</style>
+
+
+##### 方案 2：Tailwind 写法（推荐）
+<iframe src="https://cdn3.0163.eu.org/player?id=1248"
+  class="block mx-auto w-full aspect-[9/16] sm:w-[300px] md:w-[400px]" 
+  frameborder="0" allowfullscreen>
+</iframe>
+
 
 ### 直接引用
 
-- Mp4 고양이귀하고%20뚜뚜뚜뚜%20아웃송%20이예빈%20치어리더%20Lee%20Yebin%20Cheerleader
+#### Mp4 고양이귀하고%20뚜뚜뚜뚜%20아웃송%20이예빈%20치어리더%20Lee%20Yebin%20Cheerleader
+##### 直接使用
 <video controls>
   <source src="https://cdn3.0163.eu.org/958?%EA%B3%A0%EC%96%91%EC%9D%B4%EA%B7%80%ED%95%98%EA%B3%A0%20%EB%9A%9C%EB%9A%9C%EB%9A%9C%EB%9A%9C%20%EC%95%84%EC%9B%83%EC%86%A1%20%EC%9D%B4%EC%98%88%EB%B9%88%20%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94%20Lee%20Yebin%20Cheerleader.mp4" type="video/mp4">
 </video>
 
-完全居中-用块级包裹 + text-align center
+##### 完全居中-用块级包裹 + text-align center
 <div style="text-align: center;">
   <video controls style="max-width: 100%; height: auto;">
     <source src="https://cdn3.0163.eu.org/958?%EA%B3%A0%EC%96%91%EC%9D%B4%EA%B7%80%ED%95%98%EA%B3%A0%20%EB%9A%9C%EB%9A%9C%EB%9A%9C%EB%9A%9C%20%EC%95%84%EC%9B%83%EC%86%A1%20%EC%9D%B4%EC%98%88%EB%B9%88%20%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94%20Lee%20Yebin%20Cheerleader.mp4" type="video/mp4">
   </video>
 </div>
+
+##### 缩小电脑端画面保持手机端不变
+
+CSS 媒体查询（media query）
+
+<video controls class="responsive-video">
+  <source src="https://cdn3.0163.eu.org/958?%EA%B3%A0%EC%96%91%EC%9D%B4%EA%B7%80%ED%95%98%EA%B3%A0%20%EB%9A%9C%EB%9A%9C%EB%9A%9C%EB%9A%9C%20%EC%95%84%EC%9B%83%EC%86%A1%20%EC%9D%B4%EC%98%88%EB%B9%88%20%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94%20Lee%20Yebin%20Cheerleader.mp4" type="video/mp4">
+</video>
+
+<style>
+.responsive-video {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  /* 电脑端（大于768px）缩小宽度 */
+  .responsive-video {
+    max-width: 300px; /* 你可以调成400px或500px看效果 */
+  }
+}
+</style>
+
+
+Tailwind 写法
+
+<video controls class="block mx-auto max-w-full sm:max-w-[300px] md:max-w-[400px] lg:max-w-[500px] h-auto">
+  <source src=[https://cdn3.0163.eu.org/958?%EA%B3%A0%EC%96%91%EC%9D%B4%EA%B7%80%ED%95%98%EA%B3%A0%20%EB%9A%9C%EB%9A%9C%EB%9A%9C%EB%9A%9C%20%EC%95%84%EC%9B%83%EC%86%A1%20%EC%9D%B4%EC%98%88%EB%B9%88%20%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94%20Lee%20Yebin%20Cheerleader.mp4" type="video/mp4">
+</video>
+
   
 - Ogg-第1集_飞升仙界-桑梓讲故事-216451217-100
 <video controls>
