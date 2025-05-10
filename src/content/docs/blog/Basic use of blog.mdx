@@ -53,37 +53,37 @@ import { FileTree } from '@astrojs/starlight/components';
 ### 有备注版
 
 <FileTree>
-- astro.config.mjs  // Astro 的主配置文件，定义了项目的基本设置、集成和插件
-- package.json      // 项目依赖管理文件，定义了项目依赖、脚本命令和基本信息
+- astro.config.mjs                // Astro 的主配置文件，定义了项目的基本设置、集成和插件
+- package.json                    // 项目依赖管理文件，定义了项目依赖、脚本命令和基本信息
 - src/
   - components/
     - BlogArchive.astro           // 博客归档页面组件，用于展示按时间归档的文章列表
     - CategoryList.astro          // 分类列表组件，用于展示按分类组织的文章
     - ExternalLinkRedirect.astro  // 外部链接重定向组件，处理外部链接的跳转确认
-    - Footer.astro               // 网站底部组件，包含版权信息和运行天数统计
-    - Head.astro                 // 页面头部组件，处理全局脚本和元数据
-    - HomePage.astro             // 首页组件，展示博客文章列表和分页
-    - MarkdownContent.astro      // Markdown 内容渲染组件，处理文章内容的展示
-    - Page.astro                 // 页面布局组件，定义页面的基本结构
-    - PageTitle.astro            // 页面标题组件，处理页面标题的显示
-    - ThemeSelect.astro          // 主题切换组件，处理深色/浅色主题的切换
+    - Footer.astro                // 网站底部组件，包含版权信息和运行天数统计
+    - Head.astro                  // 页面头部组件，处理全局脚本和元数据
+    - HomePage.astro              // 首页组件，展示博客文章列表和分页
+    - MarkdownContent.astro       // Markdown 内容渲染组件，处理文章内容的展示
+    - Page.astro                  // 页面布局组件，定义页面的基本结构
+    - PageTitle.astro             // 页面标题组件，处理页面标题的显示
+    - ThemeSelect.astro           // 主题切换组件，处理深色/浅色主题的切换
   - content/
     - docs/
-      - 404.mdx                  // 404 错误页面，自定义的未找到页面
-      - blog/                    // 博客文章目录，存放所有博客文章
+      - 404.mdx                   // 404 错误页面，自定义的未找到页面
+      - blog/                     // 博客文章目录，存放所有博客文章
       - categories/
-        - index.mdx             // 分类页面，展示所有文章分类
-        - tech.mdx              // 技术文章分类页面
-      - index.mdx               // 网站首页内容
-      - link.mdx                // 外部链接确认页面
+        - index.mdx               // 分类页面，展示所有文章分类
+        - tech.mdx                // 技术文章分类页面
+      - index.mdx                 // 网站首页内容
+      - link.mdx                  // 外部链接确认页面
       - page/
-        - index.mdx             // 分页首页
+        - index.mdx               // 分页首页
   - pages/
     - api/
-      - redirect.js             // 重定向 API 处理程序，处理外部链接跳转
+      - redirect.js               // 重定向 API 处理程序，处理外部链接跳转
   - scripts/
-    - generate-pagination.js     // 分页生成脚本，自动生成分页页面
-  - content.config.ts           // 内容集合配置文件，定义内容的数据结构
+    - generate-pagination.js      // 分页生成脚本，自动生成分页页面
+  - content.config.ts             // 内容集合配置文件，定义内容的数据结构
 </FileTree>
 
 ## 编写博客
@@ -95,3 +95,27 @@ import { FileTree } from '@astrojs/starlight/components';
       - **blog/**
         - tech/
 </FileTree>
+如果您创建了分类，那么您需要同步在categories文件夹下面创建跟您分类名一致的mdx文件，比如您创建了一个tech的分类，那么就要在categories文件夹下面创建一个tech.mdx
+<FileTree>
+- src/
+  - content/
+    - docs/
+      - 404.mdx
+      - blog/
+      - **categories/**
+        - index.mdx
+        - **tech.mdx**
+</FileTree>
+tech.mdx内容如下，如果您创建的其它分类，相应修改内容即可，需要修改的地方我都标注好了，
+···md
+//src/content/docs/categories/tech.mdx
+---
+title: **技术文章**
+description: 查看所有**技术**相关文章
+template: splash
+---
+
+import CategoryList from '../../../components/CategoryList.astro';
+
+<CategoryList category="**tech**" /> 
+···
