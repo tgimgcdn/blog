@@ -75,91 +75,71 @@ function updateRunDays() {
 
 ### 修改说明
 
-<style>
-  table {
-    table-layout: fixed;
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1em 0;
-  }
-  th, td {
-    border: 1px solid #ccc;
-    padding: 0.5em;
-    vertical-align: top;
-  }
-  th {
-    text-align: center;
-    white-space: nowrap;
-  }
-  td {
-    word-wrap: break-word;
-    word-break: break-word;
-  }
-</style>
-
 <Tabs>
   <TabItem label="My-first-blog.mdx">
-    <table>
-      <thead>
-        <tr>
-          <th>修改项</th>
-          <th>作用</th>
-          <th>修改后的内容</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>title</td>
-          <td>博客标题</td>
-          <td>自定义博客标题</td>
-        </tr>
-        <tr>
-          <td>excerpt</td>
-          <td>博客摘要，用于简要介绍内容</td>
-          <td>支持 <code>Markdown</code>，可省略</td>
-        </tr>
-        <tr>
-          <td>giscus</td>
-          <td>是否启用评论功能</td>
-          <td>填 <code>true</code> 开启，默认关闭</td>
-        </tr>
-        <tr>
-          <td>date</td>
-          <td>博客的发布日期</td>
-          <td>如：<code>2025-05-11</code></td>
-        </tr>
-        <tr>
-          <td>lastUpdated</td>
-          <td>最近更新日期</td>
-          <td>有更新时填写，无可省略</td>
-        </tr>
-        <tr>
-          <td>category</td>
-          <td>博客分类，用于自动归类</td>
-          <td>如：<code>life</code>、<code>tech</code> 等</td>
-        </tr>
-        <tr>
-          <td>thumbnail</td>
-          <td>博客缩略图</td>
-          <td><code>/public/images/My-first-blog.jpg</code> 或网络图像地址</td>
-        </tr>
-        <tr>
-          <td>tags</td>
-          <td>标签，每行为一个</td>
-          <td>如：<code>前端</code>、<code>学习</code>、<code>随笔</code></td>
-        </tr>
-        <tr>
-          <td>作者头像</td>
-          <td>头像地址</td>
-          <td>
-            <code>https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg</code><br />
-            可替换为本地路径
-          </td>
-        </tr>
-      </tbody>
-    </table>
+
+  **表格字段说明：**
+
+  <table>
+    <thead>
+      <tr>
+        <th>修改项</th>
+        <th>作用</th>
+        <th>修改后的内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>title</td>
+        <td>博客标题</td>
+        <td>自定义博客标题</td>
+      </tr>
+      <tr>
+        <td>excerpt</td>
+        <td>博客摘要</td>
+        <td><code>支持 Markdown，可省略</code></td>
+      </tr>
+      <tr>
+        <td>giscus</td>
+        <td>启用评论</td>
+        <td><code>true</code> 开启，默认关闭</td>
+      </tr>
+      <tr>
+        <td>date</td>
+        <td>发布日期</td>
+        <td><code>2025-05-11</code></td>
+      </tr>
+      <tr>
+        <td>lastUpdated</td>
+        <td>最近更新</td>
+        <td>可省略</td>
+      </tr>
+      <tr>
+        <td>category</td>
+        <td>分类</td>
+        <td><code>life</code>、<code>tech</code></td>
+      </tr>
+      <tr>
+        <td>thumbnail</td>
+        <td>缩略图</td>
+        <td><code>/public/images/My-first-blog.jpg</code> 或网络地址</td>
+      </tr>
+      <tr>
+        <td>tags</td>
+        <td>标签</td>
+        <td><code>前端</code>、<code>学习</code>、<code>随笔</code></td>
+      </tr>
+      <tr>
+        <td>作者头像</td>
+        <td>头像地址</td>
+        <td><code>https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg</code></td>
+      </tr>
+    </tbody>
+  </table>
+
   </TabItem>
 </Tabs>
+
 
 
 
