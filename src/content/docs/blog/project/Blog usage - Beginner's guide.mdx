@@ -74,75 +74,31 @@ function updateRunDays() {
 </Tabs>
 
 ### 修改说明
-
 <Tabs>
-  <TabItem label="My-first-blog.mdx">
+<TabItem label="astro.config.mjs">
 
-  **表格字段说明：**
+| 修改项 | 作用 | 修改后的内容 |
+| :--: | :--: | :--: |
+| site: 'https://canjie.org', | 博客系统的URL，是否是外链的判断标准 | site: 'https://您的域名', |
+| repo: 'tgimgcdn/blog', | GIthub用户名/仓库名，评论系统需要 | 您的GIthub用户名/仓库名 |
+| repoId: 'R_kgDOOjxhOw', | GIthub仓库ID | 您的GIthub仓库ID |
+| categoryId: 'DIC_kwDOOjxhO84Cp6EN', | 讨论类别ID | 您的讨论类别ID |
+| cmssky | 作者名称 | 您自己的作者名称 |
+| https://img20.360buyimg.com/op..19.jpg | 作者头像 | 您自己的头像URL |
+| url: 'https://canjie.org', | 作者网站 | 您自己的网站 |
+| 参界说 | 网站标题 | 您自己的网站标题 |
 
-  <table>
-    <thead>
-      <tr>
-        <th>修改项</th>
-        <th>作用</th>
-        <th>修改后的内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>title</td>
-        <td>博客标题</td>
-        <td>自定义博客标题</td>
-      </tr>
-      <tr>
-        <td>excerpt</td>
-        <td>博客摘要</td>
-        <td><code>支持 Markdown，可省略</code></td>
-      </tr>
-      <tr>
-        <td>giscus</td>
-        <td>启用评论</td>
-        <td><code>true</code> 开启，默认关闭</td>
-      </tr>
-      <tr>
-        <td>date</td>
-        <td>发布日期</td>
-        <td><code>2025-05-11</code></td>
-      </tr>
-      <tr>
-        <td>lastUpdated</td>
-        <td>最近更新</td>
-        <td>可省略</td>
-      </tr>
-      <tr>
-        <td>category</td>
-        <td>分类</td>
-        <td><code>life</code>、<code>tech</code></td>
-      </tr>
-      <tr>
-        <td>thumbnail</td>
-        <td>缩略图</td>
-        <td><code>/public/images/My-first-blog.jpg</code> 或网络地址</td>
-      </tr>
-      <tr>
-        <td>tags</td>
-        <td>标签</td>
-        <td><code>前端</code>、<code>学习</code>、<code>随笔</code></td>
-      </tr>
-      <tr>
-        <td>作者头像</td>
-        <td>头像地址</td>
-        <td><code>https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg</code></td>
-      </tr>
-    </tbody>
-  </table>
+</TabItem>
 
-  </TabItem>
+<TabItem label="Footer.astro">
+
+| 修改项 | 作用 | 修改后的内容 |
+| :--: | :--: | :--: |
+| 参界说 | 页脚标题 | 您自己的页脚标题 |
+| 2023-01-01 | 用于显示页脚处的网站运行时间 | 填写您的网站实际建立时间 |
+
+</TabItem>
 </Tabs>
-
-
-
-
 
 
 ## 编写博客
@@ -210,85 +166,14 @@ This is my first blog, welcome!
 ```
 说明:
 
-### 配置项说明
-
-<style>
-  table {
-    table-layout: auto;
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1em 0;
-  }
-  th, td {
-    border: 1px solid #ccc;
-    padding: 0.5em;
-    vertical-align: top;
-  }
-  th {
-    text-align: center;
-    white-space: nowrap; 
-  }
-  td {
-    word-break: break-word;
-  }
-</style>
-
-<Tabs>
-  <TabItem label="My-first-blog.mdx">
-    <table>
-      <thead>
-        <tr>
-          <th>选项</th>
-          <th>可选性</th>
-          <th>说明</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>title</td>
-          <td>必填项</td>
-          <td>博客标题</td>
-        </tr>
-        <tr>
-          <td>excerpt</td>
-          <td>选填项</td>
-          <td>博客摘录，介绍博客的大致内容，支持基本的 Markdown 格式，不需要可以删除该行</td>
-        </tr>
-        <tr>
-          <td>giscus</td>
-          <td>选填项</td>
-          <td>开启评论，默认所有页面关闭评论，如需开启评论需保留，不需要可以删除该行</td>
-        </tr>
-        <tr>
-          <td>date</td>
-          <td>必填项</td>
-          <td>博客发布日期</td>
-        </tr>
-        <tr>
-          <td>lastUpdated</td>
-          <td>选填项</td>
-          <td>博客更新日期，如无更新日期可以删除该行</td>
-        </tr>
-        <tr>
-          <td>category</td>
-          <td>选填项</td>
-          <td>博客分类，如果博客在 <code>/src/content/docs/blog</code> 文件夹里面，在此处设定博客分类会将博客自动归到 life 分类，如果博客在 <code>/src/content/docs/blog/life</code> 文件夹里面，会自动归为 life 分类</td>
-        </tr>
-        <tr>
-          <td>thumbnail</td>
-          <td>选填项</td>
-          <td>缩略图，可以为 URL，也可以为图片地址。如果为图片地址的话将文件置于 <code>/public</code> 文件夹下面，比如文件位于 <code>/public/images</code> 里面，则此处填写 <code>/public/images/My first blog.jpg</code>。其中 My first blog 为图片名称，需更改为真实的图片名称。如果不填写此项，默认使用 <code>/public</code> 文件夹下面的 <code>social-card.webp</code> 文件</td>
-        </tr>
-        <tr>
-          <td>tags</td>
-          <td>选填项</td>
-          <td>标签，每行一个</td>
-        </tr>
-      </tbody>
-    </table>
-  </TabItem>
-</Tabs>
-
-
-
+| 选项 | 可选性 | 说明 |
+| :--: | :--: | :--: |
+| title | 必填项 | 博客标题 |
+| excerpt | 选填项 | 博客摘录，介绍博客的大致内容，支持基本的 Markdown 格式，不需要可以删除该行 |
+| giscus | 选填项 | 开启评论，默认所有页面关闭评论，如需开启评论需保留，不需要可以删除该行 |
+| date | 必填项 | 博客发布日期 |
+| lastUpdated | 选填项 | 博客更新日期，如无更新日期可以删除该行 |
+| category | 选填项 | 博客分类，如果博客在/src/content/docs/blog文件夹里面，在此处设定博客分类会将博客自动归到life分类，如果博客在/src/content/docs/blog/life文件夹里面，会自动归为life分类 |
+| thumbnail | 选填项 | 缩略图，可以为url，也可以为图片地址，如果为图片地址的话将文件置于/public文件夹下面，比如文件位于/public/images里面，则此处填写/public/images/My first blog.jpg 其中My first blog为图片名称，需更改为真实的图片名称，如果不填写此项，默认使用/public文件夹下面的social-card.webp文件 |
+| tags | 选填项 | 标签，每行一个 |
 
