@@ -12,7 +12,7 @@ tags:
   - "System"
 ---
 
-import { Tabs, TabItem, FileTree, LinkButton } from '@astrojs/starlight/components';
+import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
 
 ## 前言
 
@@ -84,10 +84,10 @@ import { Tabs, TabItem, FileTree, LinkButton } from '@astrojs/starlight/componen
 
 ## PSI
 <Tabs>
-  <TabItem label="Mobile">![CloudFlare_8-5-2025_16387_mobile.jpeg](https://cdn.canjie.org/CloudFlare_8-5-2025_16387_mobile.jpeg)
-</TabItem>
-  <TabItem label="Desktop">![CloudFlare_8-5-2025_163829_desktop.jpeg](https://cdn.canjie.org/CloudFlare_8-5-2025_163829_desktop.jpeg)
-</TabItem>
+  <TabItem label="Mobile">![CloudFlare_8-5-2025_16387_mobile.jpeg](https://cdn.canjie.org/CloudFlare_8-5-2025_16387_mobile.jpeg)</TabItem>
+
+  <TabItem label="Desktop">![CloudFlare_8-5-2025_163829_desktop.jpeg](https://cdn.canjie.org/CloudFlare_8-5-2025_163829_desktop.jpeg)</TabItem>
+
 </Tabs>
 
 ## 项目结构
@@ -213,7 +213,10 @@ SEO 优化
 点击Save and Deploy，CloudFlare即会开始自动部署项目
   ![AgAD2CQAAm3NAVU.webp](https://cdn.canjie.org/AgAD2CQAAm3NAVU.webp)
   </TabItem>
-  <TabItem label="Netlify">木卫一，木卫二，木卫三</TabItem>
+  <TabItem label="Netlify">
+  1. [Fork本项目](https://github.com/canjieorg/canjie)
+  2. 
+  </TabItem>
   <TabItem label="Vercel">木卫一，木卫二，木卫三</TabItem>
 </Tabs>
 
@@ -222,44 +225,44 @@ SEO 优化
 <Tabs>
   <TabItem label="npm">
   - 拉取镜像进入目录安装依赖
-  '''bash
-  npm create astro@latest -- --template tgimgcdn/blog blog && cd blog && npm install
-  '''
+  ```bash 
+  npm create astro@latest -- --template tgimgcdn/blog blog && cd blog && npm install 
+  ``` 
   - 启动本地开发服务器
-  '''bash
+  ```bash
   npm run dev
-  '''
+  ```
   - 构建静态文件
-  '''bash
+  ```bash
   npm run build
-  '''
+  ```
   </TabItem>
   <TabItem label="pnpm">
   - 拉取镜像进入目录安装依赖
-  '''bash
+  ```bash
   pnpm create astro@latest -- --template tgimgcdn/blog blog && cd blog && pnpm install
-  '''
+  ```
   - 启动本地开发服务器
-  '''bash
+  ```bash
   pnpm dev
-  '''
+  ```
   - 构建静态文件
-  '''bash
+  ```bash
   pnpm build
-  '''
+  ```
   </TabItem>
   <TabItem label="yarn">
 - 拉取镜像进入目录安装依赖
-  '''bash
+  ```bash
   yarn create astro --template tgimgcdn/blog blog && cd blog && yarn install
-  '''
+  ```
   - 启动本地开发服务器
-  '''bash
+  ```bash
   yarn dev
-  '''
+  ```
   - 构建静态文件
-  '''bash
+  ```bash
   yarn build
-  '''
+  ```
   </TabItem>
 </Tabs>
