@@ -12,7 +12,7 @@ tags:
   - "System"
 ---
 
-import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
+import { Tabs, TabItem, FileTree, LinkButton } from '@astrojs/starlight/components';
 
 ## 前言
 
@@ -217,7 +217,7 @@ SEO 优化
 点击Save and Deploy，CloudFlare即会开始自动部署项目
   ![AgAD2CQAAm3NAVU.webp](https://cdn.canjie.org/AgAD2CQAAm3NAVU.webp)
 
-[CloudFlare演示](https://cloudflare.canjie.org/)
+<LinkButton href="https://cloudflare.canjie.org/">CloudFlare演示</LinkButton>
   </TabItem>
   <TabItem label="Netlify">
   1. [Fork本项目](https://github.com/canjieorg/canjie)
@@ -227,7 +227,7 @@ SEO 优化
   - 在Publish directory处输入dist
   - 执行构建
 
-[Netlify演示](https://netlify.canjie.org/)
+<LinkButton href="https://netlify.canjie.org/">Netlify演示</LinkButton>
   </TabItem>
   <TabItem label="Vercel">
   1. [Fork本项目](https://github.com/canjieorg/canjie)
@@ -237,7 +237,7 @@ SEO 优化
   - 在Output Directory处输入dist
   - 执行构建
 
-[Vercel演示](https://vercel.canjie.org/)
+<LinkButton href="https://vercel.canjie.org/">Vercel演示</LinkButton>
   </TabItem>
 </Tabs>
 
