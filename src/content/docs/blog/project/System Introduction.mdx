@@ -82,6 +82,14 @@ import { Tabs, TabItem, FileTree, LinkButton } from '@astrojs/starlight/componen
 8. 新增分类页面
 9. 新增返回页顶按钮
 
+## PSI
+<Tabs>
+  <TabItem label="Mobile">![CloudFlare_8-5-2025_16387_mobile.jpeg](https://cdn.canjie.org/CloudFlare_8-5-2025_16387_mobile.jpeg)
+</TabItem>
+  <TabItem label="Desktop">![CloudFlare_8-5-2025_163829_desktop.jpeg](https://cdn.canjie.org/CloudFlare_8-5-2025_163829_desktop.jpeg)
+</TabItem>
+</Tabs>
+
 ## 项目结构
 
 <FileTree>
@@ -187,7 +195,7 @@ SEO 优化
   <TabItem label="CloudFlare">
   在部署之前首先确保您已经有了CloudFlare和GIthub账号。
   1. [Fork本项目](https://github.com/canjieorg/canjie)
-  2. 进入[CloudFlare后台](https://dash.cloudflare.com/)，点击左侧的Compute(Workers),在右侧出现的界面点击Pages，然后选择Import an existing Git repository点击Get Started
+  2. 进入[CloudFlare后台](https://dash.cloudflare.com/)，点击左侧的Compute(Workers),在右侧出现的界面点击Pages，然后点击Import an existing Git repository后面的Get Started
   ![AgAD2iQAAm3NAVU.webp](https://cdn.canjie.org/AgAD2iQAAm3NAVU.webp)
   3.在出现的界面点击 Connect GIthub
   ![AgAD0yQAAm3NAVU.webp](https://cdn.canjie.org/AgAD0yQAAm3NAVU.webp)
@@ -196,10 +204,62 @@ SEO 优化
   ![AgAD0SQAAm3NAVU.webp](https://cdn.canjie.org/AgAD0SQAAm3NAVU.webp)
   5.在Select a repository处选择刚才您授权的仓库，此时Begin setup会由灰色变成可点击，点击Begin setup继续
   ![AgAD1SQAAm3NAVU.webp](https://cdn.canjie.org/AgAD1SQAAm3NAVU.webp)
-  6.在Project name处填写您的项目名称，您可以随意取您喜欢的名称，在Build command处输入npm run build，在Build output directory处输入dist，点击Save and Deploy，CloudFlare即会开始自动部署项目
+  6.在Project name处填写您的项目名称，您可以随意取您喜欢的名称，
+
+在Build command处输入npm run build
+
+在Build output directory处输入dist
+
+点击Save and Deploy，CloudFlare即会开始自动部署项目
   ![AgAD2CQAAm3NAVU.webp](https://cdn.canjie.org/AgAD2CQAAm3NAVU.webp)
   </TabItem>
   <TabItem label="Netlify">木卫一，木卫二，木卫三</TabItem>
   <TabItem label="Vercel">木卫一，木卫二，木卫三</TabItem>
 </Tabs>
 
+### 自部署方案
+
+<Tabs>
+  <TabItem label="npm">
+  - 拉取镜像进入目录安装依赖
+  '''bash
+  npm create astro@latest -- --template tgimgcdn/blog blog && cd blog && npm install
+  '''
+  - 启动本地开发服务器
+  '''bash
+  npm run dev
+  '''
+  - 构建静态文件
+  '''bash
+  npm run build
+  '''
+  </TabItem>
+  <TabItem label="pnpm">
+  - 拉取镜像进入目录安装依赖
+  '''bash
+  pnpm create astro@latest -- --template tgimgcdn/blog blog && cd blog && pnpm install
+  '''
+  - 启动本地开发服务器
+  '''bash
+  pnpm dev
+  '''
+  - 构建静态文件
+  '''bash
+  pnpm build
+  '''
+  </TabItem>
+  <TabItem label="yarn">
+- 拉取镜像进入目录安装依赖
+  '''bash
+  yarn create astro --template tgimgcdn/blog blog && cd blog && yarn install
+  '''
+  - 启动本地开发服务器
+  '''bash
+  yarn dev
+  '''
+  - 构建静态文件
+  '''bash
+  yarn build
+  '''
+  </TabItem>
+</Tabs>
