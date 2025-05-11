@@ -93,6 +93,7 @@ export default defineConfig({
 				MarkdownContent: './src/components/MarkdownContent.astro',
 				PageTitle: './src/components/PageTitle.astro',
 				ThemeSelect: './src/components/ThemeSelect.astro',
+				LinkButton: './src/components/LinkButton.astro',
 			},
 			sidebar: [
 				{
