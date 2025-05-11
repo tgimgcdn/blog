@@ -11,7 +11,7 @@ tags:
   - "Blog"
 ---
 
-import { FileTree } from '@astrojs/starlight/components';
+import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## 前期准备
 在使用本个人博客系统之前，您有些准备工作需要做，以下是您需要修改的文件，我已经高亮标注：
@@ -23,6 +23,8 @@ import { FileTree } from '@astrojs/starlight/components';
     - **Footer.astro**
 </FileTree>
 
+<Tabs>
+<TabItem label="astro.config.mjs">
 ```js "canjie.org" "tgimgcdn/blog" "R_kgDOOjxhOw" "General" "DIC_kwDOOjxhO84Cp6EN" "cmssky" "https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg" "参界说" 
 ---
 //astro.config.mjs 
@@ -56,6 +58,9 @@ authors: {
 title: '参界说',
 			components: {
 ```
+</TabItem>
+
+<TabItem label="Footer.astro">
 
 ```astro "参界说" "2023-01-01"
 ---
@@ -67,6 +72,7 @@ function updateRunDays() {
         const startDate = new Date('2023-01-01T00:00:00+08:00'); // 使用北京时间
         const now = getBeijingTime();
 ```
+</TabItem>
 
 ## 编写博客
 博客文章位于blog目录，您可以将您编写的mdx或者md文件上传到这个目录，如果需要创建分类，也是在blog目录下创建新的文件夹，比如我就在blog目录下面创建了一个tech的文件夹，所有的技术类的文章都放置在这个文件夹里面。
