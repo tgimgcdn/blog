@@ -12,10 +12,21 @@ tags:
   - "System"
 ---
 
-import { FileTree } from '@astrojs/starlight/components';
+import { Tabs, TabItem, FileTree, LinkButton } from '@astrojs/starlight/components';
 
 ## 前言
+
+### 系统特点
+
+- 基于 Astro 的静态站点生成，提供极致的性能
+- 使用 Starlight 主题，提供优雅的默认设计
+- 完整的博客功能，包括文章管理、分类、标签等
+- 良好的开发体验，支持 TypeScript 和热更新
+- 注重安全性和性能优化
+- 支持主题定制和响应式设计
+
 ### 框架架构及主题
+
 本系统是基于 Astro 框架构建的。Astro 是一款现代、高性能的网站构建框架，专注于为内容驱动的项目（如文档系统、知识库、博客等）提供极快的加载速度和优秀的开发体验。它通过智能的前端优化，让系统具有轻量、快速、易扩展的特性。
 
 在 Astro 之上，本系统采用了 Starlight 作为文档系统的核心架构。Starlight 是专为文档类项目打造的解决方案，内置侧边栏导航、全文搜索、多语言支持、版本管理等功能，可以帮助我们快速搭建起完整的文档体系。这不仅节省了开发时间，也为系统的扩展和维护提供了极大的便利。
@@ -33,8 +44,10 @@ import { FileTree } from '@astrojs/starlight/components';
 选择这套组合，是希望打造一个性能卓越、功能完备、界面友好的系统，为用户带来高效流畅的使用体验。
 
 ### 插件
+
 为了让本系统更强大、更易用、更具表现力，系统集成了以下四个精选插件，每一个都在不同层面为系统赋能：
 1. Starlight Blog
+
 官网： [Starlight Blog](https://starlight-blog-docs.vercel.app/getting-started/)
 
 这个插件为 Starlight 系统引入了博客功能，使系统不仅限于文档展示，还可以扩展为内容创作和分享平台。
@@ -70,6 +83,7 @@ import { FileTree } from '@astrojs/starlight/components';
 9. 新增返回页顶按钮
 
 ## 项目结构
+
 <FileTree>
 - astro.config.mjs
 - package.json
@@ -106,6 +120,7 @@ import { FileTree } from '@astrojs/starlight/components';
 </FileTree>
 
 ## 功能特性
+
 内容展示
 - 响应式设计：自适应移动端和桌面端，提供最佳阅读体验
 - 文章分类：支持多级分类，可按技术、生活等主题组织文章
@@ -163,3 +178,12 @@ SEO 优化
 - 样式处理：CSS Modules
 - 内容管理：MDX
 - 部署支持：支持多种部署平台
+
+## 项目部署
+
+<Tabs>
+  <TabItem label="CloudFlare"> [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/YOURUSERNAME/YOURREPO) </TabItem>
+  <TabItem label="Netlify">木卫一，木卫二，木卫三</TabItem>
+  <TabItem label="Vercel">木卫一，木卫二，木卫三</TabItem>
+</Tabs>
+
