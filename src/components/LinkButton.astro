@@ -1,4 +1,4 @@
-import { Icon } from '@astrojs/starlight/components';
+import Default from '@astrojs/starlight/components/LinkButton.astro';
 
 interface Props {
   href: string;
@@ -31,10 +31,9 @@ const finalHref = (() => {
   }
 })();
 
-<a href={finalHref} class:list={['sl-button', `sl-button-${variant}`, className]}>
+<Default href={finalHref} variant={variant} icon={icon} class={className}>
   <slot />
-  {icon && <Icon name={icon} />}
-</a>
+</Default>
 
 <style>
   .sl-button {
