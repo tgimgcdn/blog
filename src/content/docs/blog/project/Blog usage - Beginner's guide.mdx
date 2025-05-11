@@ -13,77 +13,54 @@ tags:
 
 import { FileTree } from '@astrojs/starlight/components';
 
-## 项目结构
-
-### 无备注版
-<FileTree>
-- astro.config.mjs
-- package.json
-- src/
-  - components/
-    - BlogArchive.astro
-    - CategoryList.astro
-    - ExternalLinkRedirect.astro
-    - Footer.astro
-    - Head.astro
-    - HomePage.astro
-    - MarkdownContent.astro
-    - Page.astro
-    - PageTitle.astro
-    - ThemeSelect.astro
-  - content/
-    - docs/
-      - 404.mdx
-      - blog/
-      - categories/
-        - index.mdx
-        - tech.mdx
-      - index.mdx
-      - link.mdx
-      - page/
-        - index.mdx
-  - pages/
-    - api/
-      - redirect.js
-  - scripts/
-    - generate-pagination.js
-  - content.config.ts
-</FileTree>
-### 有备注版
+## 前期准备
+在使用本个人博客系统之前，您有些准备工作需要做，以下是您需要修改的文件，我已经高亮标注：
 
 <FileTree>
-- astro.config.mjs                // Astro 的主配置文件，定义了项目的基本设置、集成和插件
-- package.json                    // 项目依赖管理文件，定义了项目依赖、脚本命令和基本信息
+- **astro.config.mjs**
 - src/
   - components/
-    - BlogArchive.astro           // 博客归档页面组件，用于展示按时间归档的文章列表
-    - CategoryList.astro          // 分类列表组件，用于展示按分类组织的文章
-    - ExternalLinkRedirect.astro  // 外部链接重定向组件，处理外部链接的跳转确认
-    - Footer.astro                // 网站底部组件，包含版权信息和运行天数统计
-    - Head.astro                  // 页面头部组件，处理全局脚本和元数据
-    - HomePage.astro              // 首页组件，展示博客文章列表和分页
-    - MarkdownContent.astro       // Markdown 内容渲染组件，处理文章内容的展示
-    - Page.astro                  // 页面布局组件，定义页面的基本结构
-    - PageTitle.astro             // 页面标题组件，处理页面标题的显示
-    - ThemeSelect.astro           // 主题切换组件，处理深色/浅色主题的切换
-  - content/
-    - docs/
-      - 404.mdx                   // 404 错误页面，自定义的未找到页面
-      - blog/                     // 博客文章目录，存放所有博客文章
-      - categories/
-        - index.mdx               // 分类页面，展示所有文章分类
-        - tech.mdx                // 技术文章分类页面
-      - index.mdx                 // 网站首页内容
-      - link.mdx                  // 外部链接确认页面
-      - page/
-        - index.mdx               // 分页首页
-  - pages/
-    - api/
-      - redirect.js               // 重定向 API 处理程序，处理外部链接跳转
-  - scripts/
-    - generate-pagination.js      // 分页生成脚本，自动生成分页页面
-  - content.config.ts             // 内容集合配置文件，定义内容的数据结构
+    - **Footer.astro**
 </FileTree>
+```md "canjie.org" "tgimgcdn/blog" "R_kgDOOjxhOw" "General" "DIC_kwDOOjxhO84Cp6EN" "cmssky" "https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg" "参界说" 
+//astro.config.mjs 
+export default defineConfig({
+	site: 'https://canjie.org',
+...
+starlightGiscus({
+					repo: 'tgimgcdn/blog',
+					repoId: 'R_kgDOOjxhOw',
+					category: 'General',
+					categoryId: 'DIC_kwDOOjxhO84Cp6EN',
+					mapping: 'pathname',
+					strict: '0',
+					reactionsEnabled: '1',
+					emitMetadata: '0',
+					inputPosition: 'bottom',
+					theme: 'preferred_color_scheme',
+					lang: 'zh-CN',
+					loading: 'lazy',
+					crossorigin: 'anonymous'
+				}),
+...
+authors: {
+						cmssky: {
+							name: 'cmssky',
+							picture: 'https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg',
+							url: 'https://canjie.org',
+						},
+...
+title: '参界说',
+			components: {
+```
+```md "参界说" "2023-01-01"
+//src/components/Footer.astro
+<span class="copyright">©2023 - 2025 By 参界说</span>
+...
+function updateRunDays() {
+        const startDate = new Date('2023-01-01T00:00:00+08:00'); // 使用北京时间
+        const now = getBeijingTime();
+---
 
 ## 编写博客
 博客文章位于blog目录，您可以将您编写的mdx或者md文件上传到这个目录，如果需要创建分类，也是在blog目录下创建新的文件夹，比如我就在blog目录下面创建了一个tech的文件夹，所有的技术类的文章都放置在这个文件夹里面。
