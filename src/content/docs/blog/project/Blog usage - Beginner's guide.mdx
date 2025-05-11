@@ -25,7 +25,7 @@ import { FileTree, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 
 <Tabs>
 <TabItem label="astro.config.mjs">
-```js wrap "canjie.org" "tgimgcdn/blog" "R_kgDOOjxhOw" "DIC_kwDOOjxhO84Cp6EN" "cmssky" "https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg" "参界说" 
+```js {3, 7, 9, 12, 27, 29, 31, 35} wrap "canjie.org" "tgimgcdn/blog" "R_kgDOOjxhOw" "DIC_kwDOOjxhO84Cp6EN" "cmssky" "https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg" "参界说" 
 //astro.config.mjs 
 export default defineConfig({
 	site: 'https://canjie.org',
@@ -68,7 +68,7 @@ title: '参界说',
 
 <TabItem label="Footer.astro">
 
-```astro wrap "参界说" "2023-01-01"
+```astro {2, 6} wrap "参界说" "2023-01-01"
 ---
 //src/components/Footer.astro
 ---
@@ -133,7 +133,7 @@ import CategoryList from '../../../components/CategoryList.astro';
         - **life.mdx**
 </FileTree>
 My-first-blog.mdx的内容如下,必填的选项我都已经高亮标注：
-```md wrap "title: " "date: "
+```md {3, 5, 7, 9, 11, 13, 15, 19, 23} wrap "title: " "date: "
 //src/content/docs/blog/life/My-first-blog.mdx
 ---
 title: "我的第一篇博客"                                       
