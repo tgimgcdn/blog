@@ -9,9 +9,60 @@ interface Props {
 
 const { href, variant = 'primary', icon, class: className } = Astro.props;
 
-<Default href={href} variant={variant} icon={icon} class={className}>
+// 在构建时处理外部链接
+const finalHref = (() => {
+  try {
+    const urlObj = new URL(href);
+    const siteUrl = new URL(Astro.site);
+    const siteHostname = siteUrl.hostname;
+    
+    // 检查是否是本域名或子域名
+    const isSameDomain = urlObj.hostname === siteHostname || 
+                        urlObj.hostname.endsWith('.' + siteHostname) ||
+                        siteHostname.endsWith('.' + urlObj.hostname);
+    
+    // 如果不是本域名或子域名，且是http链接，则进行中转
+    if (!isSameDomain && urlObj.protocol.startsWith('http')) {
+      return `/link?url=${btoa(href)}`;
+    }
+    return href;
+  } catch (e) {
+    return href;
+  }
+})();
+
+<Default href={finalHref} variant={variant} icon={icon} class={className}>
   <slot />
 </Default>
+
+<script>
+  // 获取所有带有 data-external-link 属性的链接
+  const links = document.querySelectorAll('a[data-external-link]');
+  
+  // 为每个链接添加点击事件监听器
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      
+      try {
+        const url = new URL(href);
+        const currentHost = window.location.hostname;
+        
+        // 检查是否是外部链接
+        if (url.hostname !== currentHost && 
+            !url.hostname.endsWith('.' + currentHost) && 
+            !currentHost.endsWith('.' + url.hostname)) {
+          e.preventDefault();
+          // 重定向到 /link 页面
+          window.location.href = `/link?url=${btoa(href)}`;
+        }
+      } catch (e) {
+        // 如果 URL 解析失败，保持原样
+      }
+    });
+  });
+</script>
 
 <style>
   .sl-button {
