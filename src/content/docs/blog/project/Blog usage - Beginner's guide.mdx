@@ -75,62 +75,30 @@ function updateRunDays() {
 
 ### 修改说明
 
-<Tabs>
-  <TabItem label="astro.config.mjs">
-    <table>
-      <thead>
-        <tr>
-          <th>修改项</th>
-          <th>作用</th>
-          <th>修改后的内容</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>site: 'https://canjie.org'</td>
-          <td>博客系统的URL，是否是外链的判断标准</td>
-          <td>site: 'https://您的域名'</td>
-        </tr>
-        <tr>
-          <td>repo: 'tgimgcdn/blog'</td>
-          <td>GitHub 用户名/仓库名，评论系统需要</td>
-          <td>您的 GitHub 用户名/仓库名</td>
-        </tr>
-        <tr>
-          <td>repoId: 'R_kgDOOjxhOw'</td>
-          <td>GitHub 仓库 ID</td>
-          <td>您的 GitHub 仓库 ID</td>
-        </tr>
-        <tr>
-          <td>categoryId: 'DIC_kwDOOjxhO84Cp6EN'</td>
-          <td>讨论类别 ID</td>
-          <td>您的讨论类别 ID</td>
-        </tr>
-        <tr>
-          <td>cmssky</td>
-          <td>作者名称</td>
-          <td>您自己的作者名称</td>
-        </tr>
-        <tr>
-          <td>https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg</td>
-          <td>作者头像</td>
-          <td>您自己的头像 URL</td>
-        </tr>
-        <tr>
-          <td>url: 'https://canjie.org'</td>
-          <td>作者网站</td>
-          <td>您自己的网站</td>
-        </tr>
-        <tr>
-          <td>参界说</td>
-          <td>网站标题</td>
-          <td>您自己的网站标题</td>
-        </tr>
-      </tbody>
-    </table>
-  </TabItem>
+<style>
+  table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    vertical-align: top;
+  }
+  th {
+    text-align: center;
+    white-space: nowrap;
+  }
+  td {
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+</style>
 
-  <TabItem label="Footer.astro">
+<Tabs>
+  <TabItem label="My-first-blog.mdx">
     <table>
       <thead>
         <tr>
@@ -141,19 +109,57 @@ function updateRunDays() {
       </thead>
       <tbody>
         <tr>
-          <td>参界说</td>
-          <td>页脚标题</td>
-          <td>您自己的页脚标题</td>
+          <td>title</td>
+          <td>博客标题</td>
+          <td>自定义博客标题</td>
         </tr>
         <tr>
-          <td>2023-01-01</td>
-          <td>用于显示页脚处的网站运行时间</td>
-          <td>填写您的网站实际建立时间</td>
+          <td>excerpt</td>
+          <td>博客摘要，用于简要介绍内容</td>
+          <td>支持 Markdown，可省略</td>
+        </tr>
+        <tr>
+          <td>giscus</td>
+          <td>是否启用评论功能</td>
+          <td>填 `true` 开启，默认关闭</td>
+        </tr>
+        <tr>
+          <td>date</td>
+          <td>博客的发布日期</td>
+          <td>如：2025-05-11</td>
+        </tr>
+        <tr>
+          <td>lastUpdated</td>
+          <td>最近更新日期</td>
+          <td>有更新时填写，无可省略</td>
+        </tr>
+        <tr>
+          <td>category</td>
+          <td>博客分类，用于自动归类</td>
+          <td>如：life、tech 等</td>
+        </tr>
+        <tr>
+          <td>thumbnail</td>
+          <td>博客缩略图</td>
+          <td><code>/public/images/My-first-blog.jpg</code> 或网络图像地址</td>
+        </tr>
+        <tr>
+          <td>tags</td>
+          <td>标签，每行为一个</td>
+          <td>如：前端、学习、随笔</td>
+        </tr>
+        <tr>
+          <td>
+            https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg
+          </td>
+          <td>作者头像</td>
+          <td>您的头像 URL，可替换为本地路径</td>
         </tr>
       </tbody>
     </table>
   </TabItem>
 </Tabs>
+
 
 
 
@@ -224,6 +230,27 @@ This is my first blog, welcome!
 说明:
 
 ### 配置项说明
+
+<style>
+  table {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    vertical-align: top;
+  }
+  th {
+    text-align: center;
+    white-space: nowrap; 
+  }
+  td {
+    word-break: break-word;
+  }
+</style>
 
 <Tabs>
   <TabItem label="My-first-blog.mdx">
