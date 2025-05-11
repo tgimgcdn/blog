@@ -1,4 +1,3 @@
-import Default from '@astrojs/starlight/components/LinkButton.astro';
 import { Icon } from '@astrojs/starlight/components';
 
 interface Props {
@@ -24,13 +23,13 @@ function isExternalLink(url: string) {
 // 处理外部链接
 const finalHref = isExternalLink(href) ? `/link?url=${btoa(href)}` : href;
 
-<Default href={finalHref} variant={variant} class={className}>
+<a href={finalHref} class:list={['sl-button', `sl-button-${variant}`, className]}>
   <slot />
   {icon && <Icon name={icon} />}
-</Default>
+</a>
 
 <style>
-  :global(.sl-button) {
+  .sl-button {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -41,31 +40,31 @@ const finalHref = isExternalLink(href) ? `/link?url=${btoa(href)}` : href;
     transition: all 0.2s ease;
   }
 
-  :global(.sl-button-primary) {
+  .sl-button-primary {
     background-color: var(--sl-color-accent);
     color: white;
   }
 
-  :global(.sl-button-primary:hover) {
+  .sl-button-primary:hover {
     background-color: var(--sl-color-accent-high);
     transform: translateY(-2px);
   }
 
-  :global(.sl-button-secondary) {
+  .sl-button-secondary {
     background-color: var(--sl-color-gray-5);
     color: var(--sl-color-text);
   }
 
-  :global(.sl-button-secondary:hover) {
+  .sl-button-secondary:hover {
     background-color: var(--sl-color-gray-4);
     transform: translateY(-2px);
   }
 
-  :global(.sl-button-minimal) {
+  .sl-button-minimal {
     color: var(--sl-color-text);
   }
 
-  :global(.sl-button-minimal:hover) {
+  .sl-button-minimal:hover {
     color: var(--sl-color-accent);
   }
 </style> 
