@@ -13,8 +13,8 @@ const { href, variant = 'primary', icon, class: className } = Astro.props;
 const finalHref = (() => {
   try {
     const urlObj = new URL(href);
-    const siteUrl = new URL(Astro.site);
-    const siteHostname = siteUrl.hostname;
+    // 从配置中获取站点域名
+    const siteHostname = 'canjie.ggff.net'; // 这里使用配置中的域名
     
     // 检查是否是本域名或子域名
     const isSameDomain = urlObj.hostname === siteHostname || 
