@@ -1,0 +1,71 @@
+import Default from '@astrojs/starlight/components/LinkButton.astro';
+import { Icon } from '@astrojs/starlight/components';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'minimal';
+  icon?: string;
+  class?: string;
+}
+
+const { href, variant = 'primary', icon, class: className } = Astro.props;
+
+// 检查是否是外部链接
+function isExternalLink(url: string) {
+  try {
+    const urlObj = new URL(url);
+    const currentDomain = Astro.url.hostname;
+    return urlObj.hostname !== currentDomain && urlObj.protocol.startsWith('http');
+  } catch (e) {
+    return false;
+  }
+}
+
+// 处理外部链接
+const finalHref = isExternalLink(href) ? `/link?url=${btoa(href)}` : href;
+
+<Default href={finalHref} variant={variant} class={className}>
+  <slot />
+  {icon && <Icon name={icon} />}
+</Default>
+
+<style>
+  :global(.sl-button) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  :global(.sl-button-primary) {
+    background-color: var(--sl-color-accent);
+    color: white;
+  }
+
+  :global(.sl-button-primary:hover) {
+    background-color: var(--sl-color-accent-high);
+    transform: translateY(-2px);
+  }
+
+  :global(.sl-button-secondary) {
+    background-color: var(--sl-color-gray-5);
+    color: var(--sl-color-text);
+  }
+
+  :global(.sl-button-secondary:hover) {
+    background-color: var(--sl-color-gray-4);
+    transform: translateY(-2px);
+  }
+
+  :global(.sl-button-minimal) {
+    color: var(--sl-color-text);
+  }
+
+  :global(.sl-button-minimal:hover) {
+    color: var(--sl-color-accent);
+  }
+</style> 
