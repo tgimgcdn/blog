@@ -25,16 +25,20 @@ import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
 
 <Tabs>
 <TabItem label="astro.config.mjs">
-```js "canjie.org" "tgimgcdn/blog" "R_kgDOOjxhOw" "DIC_kwDOOjxhO84Cp6EN" "cmssky" "https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg" "参界说" 
+```js wrap "canjie.org" "tgimgcdn/blog" "R_kgDOOjxhOw" "DIC_kwDOOjxhO84Cp6EN" "cmssky" "https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg" "参界说" 
 //astro.config.mjs 
 export default defineConfig({
 	site: 'https://canjie.org',
+//博客系统的URL，是否是外链的判断标准，修改为site: 'https://您的域名',
 ...
 starlightGiscus({
 					repo: 'tgimgcdn/blog',
+//GIthub用户名/仓库名，评论系统需要，修改为您的GIthub用户名/仓库名
 					repoId: 'R_kgDOOjxhOw',
+//GIthub仓库ID，修改为您的GIthub仓库ID
 					category: 'General',
 					categoryId: 'DIC_kwDOOjxhO84Cp6EN',
+//讨论类别ID，修改为您的讨论类别ID
 					mapping: 'pathname',
 					strict: '0',
 					reactionsEnabled: '1',
@@ -49,56 +53,36 @@ starlightGiscus({
 authors: {
 						cmssky: {
 							name: 'cmssky',
+//作者名称，修改为您的作者名称
 							picture: 'https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg',
+//作者头像，修改为您的作者头像
 							url: 'https://canjie.org',
+//作者网站，修改为您的网站
 						},
 ...
 title: '参界说',
+//网站标题，修改为您的网站标题
 			components: {
 ```
 </TabItem>
 
 <TabItem label="Footer.astro">
 
-```astro "参界说" "2023-01-01"
+```astro wrap "参界说" "2023-01-01"
 ---
 //src/components/Footer.astro
 ---
 <span class="copyright">©2023 - 2025 By 参界说</span>
+//页脚标题，修改为您自己的页脚标题
 ...
 function updateRunDays() {
         const startDate = new Date('2023-01-01T00:00:00+08:00'); // 使用北京时间
+//用于显示页脚处的网站运行时间，修改为您的网站实际建立时间
         const now = getBeijingTime();
 ```
 </TabItem>
 </Tabs>
 
-### 修改说明
-<Tabs>
-<TabItem label="astro.config.mjs">
-
-| 修改项 | 作用 | 修改后的内容 |
-| :--: | :--: | :--: |
-| site: 'https://canjie.org', | 博客系统的URL，是否是外链的判断标准 | site: 'https://您的域名', |
-| repo: 'tgimgcdn/blog', | GIthub用户名/仓库名，评论系统需要 | 您的GIthub用户名/仓库名 |
-| repoId: 'R_kgDOOjxhOw', | GIthub仓库ID | 您的GIthub仓库ID |
-| categoryId: 'DIC_kwDOOjxhO84Cp6EN', | 讨论类别ID | 您的讨论类别ID |
-| cmssky | 作者名称 | 您自己的作者名称 |
-| https://img20.360buyimg.com/op..19.jpg | 作者头像 | 您自己的头像URL |
-| url: 'https://canjie.org', | 作者网站 | 您自己的网站 |
-| 参界说 | 网站标题 | 您自己的网站标题 |
-
-</TabItem>
-
-<TabItem label="Footer.astro">
-
-| 修改项 | 作用 | 修改后的内容 |
-| :--: | :--: | :--: |
-| 参界说 | 页脚标题 | 您自己的页脚标题 |
-| 2023-01-01 | 用于显示页脚处的网站运行时间 | 填写您的网站实际建立时间 |
-
-</TabItem>
-</Tabs>
 
 
 ## 编写博客
@@ -147,21 +131,21 @@ import CategoryList from '../../../components/CategoryList.astro';
         - **life.mdx**
 </FileTree>
 My-first-blog.mdx的内容如下,必填的选项我都已经高亮标注：
-```md "title: " "date: "
+```md wrap "title: " "date: "
 //src/content/docs/blog/life/My-first-blog.mdx
 ---
-title: "我的第一篇博客" 
-excerpt: "这是我的第一篇博客，欢迎您的到来！"
-giscus: true
-date: 2025-05-09
-lastUpdated: 2025-05-10
-category: life
-thumbnail: https://cdn.canjie.org/AgAD4BgAAmga2VQ.webp
-tags:
+title: "我的第一篇博客"                                       //必填项，博客标题
+excerpt: "这是我的第一篇博客，欢迎您的到来！"                   //选填项，博客摘录，介绍博客的大致内容，支持基本的 Markdown 格式，不需要可以删除该行
+giscus: true                                                 //选填项，开启评论，默认所有页面关闭评论，如需开启评论需保留，不需要可以删除该行
+date: 2025-05-09                                             //必填项，博客发布日期
+lastUpdated: 2025-05-10                                      //选填项，博客更新日期，如无更新日期可以删除该行
+category: life                                               //选填项，博客分类，如果博客在/src/content/docs/blog文件夹里面，在此处设定博客分类会将博客自动归到life分类，如果博客在/src/content/docs/blog/life文件夹里面，会自动归为life分类
+thumbnail: https://cdn.canjie.org/AgAD4BgAAmga2VQ.webp       //选填项，缩略图，可以为url，也可以为图片地址，如果为图片地址的话将文件置于/public文件夹下面，比如文件位于/public/images里面，则此处填写/public/images/My first blog.jpg 其中My first blog为图片名称，需更改为真实的图片名称，如果不填写此项，默认使用/public文件夹下面的social-card.webp文件
+tags:                                                        //选填项，标签，每行一个
   - "博客"
   - "Blog"
 ---
-这是我的第一篇博客，欢迎您的到来！
+这是我的第一篇博客，欢迎您的到来！                              //博客正文
 This is my first blog, welcome!
 ```
 说明:
