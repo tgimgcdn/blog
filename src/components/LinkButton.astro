@@ -13,8 +13,16 @@ const { href, variant = 'primary', icon, class: className } = Astro.props;
 function isExternalLink(url: string) {
   try {
     const urlObj = new URL(url);
-    const currentDomain = Astro.url.hostname;
-    return urlObj.hostname !== currentDomain && urlObj.protocol.startsWith('http');
+    const siteUrl = new URL(Astro.site);
+    const siteHostname = siteUrl.hostname;
+    
+    // 检查是否是本域名或子域名
+    const isSameDomain = urlObj.hostname === siteHostname || 
+                        urlObj.hostname.endsWith('.' + siteHostname) ||
+                        siteHostname.endsWith('.' + urlObj.hostname);
+    
+    // 如果不是本域名或子域名，且是http链接，则进行中转
+    return !isSameDomain && urlObj.protocol.startsWith('http');
   } catch (e) {
     return false;
   }
