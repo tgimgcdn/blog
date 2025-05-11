@@ -51,6 +51,55 @@ function processMarkdownLinks() {
 	};
 }
 
+// 处理 LinkButton 组件的链接
+function processLinkButtonLinks() {
+	return {
+		name: 'process-linkbutton-links',
+		hooks: {
+			'astro:config:setup': ({ updateConfig, config }) => {
+				updateConfig({
+					vite: {
+						plugins: [
+							{
+								name: 'process-linkbutton-links',
+								transform(code, id) {
+									if (id.includes('LinkButton.astro')) {
+										// 获取站点域名
+										const siteUrl = new URL(config.site);
+										const siteHostname = siteUrl.hostname;
+										
+										// 替换链接处理逻辑
+										return code.replace(
+											/const finalHref = \(\(\) => {[^}]*}\)\(\);/s,
+											`const finalHref = (() => {
+												try {
+													const urlObj = new URL(href);
+													// 检查是否是本域名或子域名
+													const isSameDomain = urlObj.hostname === '${siteHostname}' || 
+																	urlObj.hostname.endsWith('.${siteHostname}') ||
+																	'${siteHostname}'.endsWith('.' + urlObj.hostname);
+													
+													// 如果不是本域名或子域名，且是http链接，则进行中转
+													if (!isSameDomain && urlObj.protocol.startsWith('http')) {
+														return \`/link?url=\${btoa(href)}\`;
+													}
+													return href;
+												} catch (e) {
+													return href;
+												}
+											})();`
+										);
+									}
+								}
+							}
+						]
+					}
+				});
+			}
+		}
+	};
+}
+
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://canjie.ggff.net',
@@ -109,5 +158,6 @@ export default defineConfig({
 			},
 		}),
 		processMarkdownLinks(),
+		processLinkButtonLinks(),
 	],
 });
