@@ -12,7 +12,7 @@ tags:
   - "System"
 ---
 
-import { Tabs, TabItem, FileTree, LinkButton } from '@astrojs/starlight/components';
+import { Tabs, TabItem, FileTree, LinkButton, Steps } from '@astrojs/starlight/components';
 
 ## 前言
 
@@ -194,6 +194,7 @@ SEO 优化
 <Tabs>
   <TabItem label="CloudFlare">
   在部署之前首先确保您已经有了CloudFlare和GIthub账号。
+<Steps>
   1. [Fork本项目](https://github.com/canjieorg/canjie)
   2. 进入[CloudFlare后台](https://dash.cloudflare.com/)，点击左侧的Compute(Workers),在右侧出现的界面点击Pages，然后点击Import an existing Git repository后面的Get Started
   ![AgAD2iQAAm3NAVU.webp](https://cdn.canjie.org/AgAD2iQAAm3NAVU.webp)
@@ -216,27 +217,29 @@ SEO 优化
 
 点击Save and Deploy，CloudFlare即会开始自动部署项目
   ![AgAD2CQAAm3NAVU.webp](https://cdn.canjie.org/AgAD2CQAAm3NAVU.webp)
-
+</Steps>
 <LinkButton href="https://cloudflare.canjie.org/" variant="secondary">CloudFlare演示</LinkButton>
   </TabItem>
   <TabItem label="Netlify">
+<Steps>
   1. [Fork本项目](https://github.com/canjieorg/canjie)
   2. GIthub授权参考CloudFlare
   3. 找到Build settings
   - 在Build command处输入npm run build
   - 在Publish directory处输入dist
   - 执行构建
-
+</Steps>
 <LinkButton href="https://netlify.canjie.org/" variant="secondary">Netlify演示</LinkButton>
   </TabItem>
   <TabItem label="Vercel">
+<Steps>
   1. [Fork本项目](https://github.com/canjieorg/canjie)
   2. GIthub授权参考CloudFlare
   3. 找到Build and Output settings
   - 在Build Command处输入npm run build
   - 在Output Directory处输入dist
   - 执行构建
-
+</Steps>
 <LinkButton href="https://vercel.canjie.org/" variant="secondary">Vercel演示</LinkButton>
   </TabItem>
 </Tabs>
