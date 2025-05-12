@@ -77,6 +77,10 @@ export default defineConfig({
 	site: 'https://canjie.org',
 	integrations: [
 		starlight({
+			locales: {
+                            root: { label: '简体中文', lang: 'zh' },
+                            en: { label: 'English', lang: 'en' },
+                                  },
 			plugins: [
 				starlightImageZoom(),
 				starlightGiscus({
@@ -95,6 +99,10 @@ export default defineConfig({
 					crossorigin: 'anonymous'
 				}),
 				starlightBlog({
+					title: {
+                                           zh: '参界说',
+                                           en: 'Canjie Says',
+                                         },
 					authors: {
 						cmssky: {
 							name: 'cmssky',
