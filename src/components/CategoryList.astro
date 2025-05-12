@@ -5,9 +5,32 @@ const { category } = Astro.props;
 // 从 starlightBlog 获取文章数据
 const starlightBlog = Astro.locals?.starlightBlog;
 
+// 获取所有分类文件
+const categoryFiles = await Astro.glob('../../content/docs/categories/*.mdx');
+const categories = categoryFiles.map(file => file.frontmatter.title || file.file.split('/').pop()?.replace('.mdx', ''));
+
 // 获取所有文章并按分类组织
 const postsByCategory = starlightBlog?.posts?.reduce((acc, post) => {
-  const postCategory = post.entry?.data?.category || '未分类';
+  // 从文章路径中提取分类
+  const pathParts = post.entry.id.split('/');
+  const blogIndex = pathParts.indexOf('blog');
+  let postCategory = '未分类';
+  
+  // 如果文章在 blog 目录下，且后面还有目录
+  if (blogIndex !== -1 && pathParts.length > blogIndex + 1) {
+    // 获取 blog 目录后的第一个目录名作为分类
+    const categoryFromPath = pathParts[blogIndex + 1];
+    // 如果这个目录名在我们的分类列表中，就使用它
+    if (categories.includes(categoryFromPath)) {
+      postCategory = categoryFromPath;
+    }
+  }
+  
+  // 如果文章在 frontmatter 中指定了分类，优先使用它
+  if (post.entry?.data?.category && categories.includes(post.entry.data.category)) {
+    postCategory = post.entry.data.category;
+  }
+  
   if (!acc[postCategory]) {
     acc[postCategory] = [];
   }
@@ -58,7 +81,7 @@ const monthNames = {
 <div class="categories-container">
   {Object.entries(categoriesToShow).map(([cat, years]) => (
     <div class="category-section">
-      <h2 class="category-title">{cat === 'tech' ? '技术文章' : cat === 'life' ? '生活随笔' : '未分类文章'}</h2>
+      <h2 class="category-title">{cat}</h2>
       {Object.entries(years).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA)).map(([year, months]) => {
         const totalPosts = Object.values(months).reduce((sum, monthPosts) => sum + monthPosts.length, 0);
         return (
