@@ -166,7 +166,7 @@ table.forEach(row => {
 
 - 倚天屠龙记 16:9
 <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-  <iframe src="https://cdn.0163.eu.org/player?id=129"
+  <iframe src="https://cdn.0163.eu.org/player?id=6"
     frameborder="0"
     allowfullscreen
     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
@@ -174,7 +174,7 @@ table.forEach(row => {
 </div>
   
 - 成为昏君后我读心百官 9:16
-<iframe src="https://cdn.0163.eu.org/player?id=1248" class="responsive-iframe" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://cdn.0163.eu.org/player?id=527" class="responsive-iframe" frameborder="0" allowfullscreen></iframe>
 
 <style>
 .responsive-iframe {
