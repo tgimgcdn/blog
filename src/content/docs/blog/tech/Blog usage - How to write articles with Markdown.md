@@ -2,8 +2,8 @@
 title: "如何使用Markdown写文章"
 excerpt: "本文将对Markdown代码在mdx文件里面的渲染进行讲解。"
 giscus: true
-date: 2024-05-01
-lastUpdated: 2025-04-30
+date: 2025-05-01
+lastUpdated: 2025-05-12
 thumbnail: https://cdn.canjie.org/AgAD4BgAAmga2VQ.webp
 tags:
   - "Markdown"
