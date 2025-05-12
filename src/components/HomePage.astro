@@ -32,9 +32,33 @@ if (starlightBlog && starlightBlog.posts) {
     }
     return post;
   });
+
+  // 为每篇文章添加分类信息
+  posts = posts.map(post => {
+    // 从文章路径中提取分类
+    const pathParts = post.entry.id.split('/');
+    const blogIndex = pathParts.indexOf('blog');
+    let postCategory = '未分类';
+    
+    // 如果文章在 blog 目录下，且后面还有目录
+    if (blogIndex !== -1 && pathParts.length > blogIndex + 1) {
+      // 获取 blog 目录后的第一个目录名作为分类
+      postCategory = pathParts[blogIndex + 1];
+    }
+    
+    // 如果文章在 frontmatter 中指定了分类，优先使用它
+    if (post.entry?.data?.category) {
+      postCategory = post.entry.data.category;
+    }
+
+    return {
+      ...post,
+      category: postCategory
+    };
+  });
   
   // 打印一些文章的示例链接进行调试
-  console.log("Sample post links:", posts.slice(0, 3).map(p => ({title: p.title, href: p.href})));
+  console.log("Sample post links:", posts.slice(0, 3).map(p => ({title: p.title, href: p.href, category: p.category})));
   console.log(`总文章数: ${posts.length}`);
 } else {
   console.log("starlightBlog数据不可用");
@@ -113,8 +137,8 @@ const defaultThumbnail = "/Business Event Website.jpg";
             </a>
             <p class="excerpt" style="flex: 1 0 auto; min-height: 2.8em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
             <div class="meta">
-              <a href={`/categories/${encodeURIComponent(post.entry?.data?.category || '未分类')}`} class="category">
-                {post.entry?.data?.category || '未分类'}
+              <a href={`/categories/${encodeURIComponent(post.category)}`} class="category">
+                {post.category}
               </a>
               <time class="date">{formatDate(post.entry?.data?.pubDate || post.entry?.data?.date || new Date())}</time>
             </div>
