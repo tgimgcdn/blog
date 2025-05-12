@@ -1,0 +1,40 @@
+---
+title: "博客使用-设置评论系统"
+excerpt: "本文将对基于starlight构建的博客系统设置评论系统进行介绍。"
+giscus: true
+date: 2025-05-10
+thumbnail: https://cdn.canjie.org/AgAD4BgAAmga2VQ.webp
+tags:
+  - "评论系统"
+  - "博客"
+  - "Blog"
+  - "comment"
+---
+
+import { FileTree, Tabs, TabItem, Aside, Steps } from '@astrojs/starlight/components';
+
+## 修改评论系统参数
+本博客系统已经内置了[giscus](https://giscus.app/)评论系统，本文将引导您进行设置。
+<Steps>
+1. 如果您是参考[参界 - 基于 Astro + Starlight 的现代化个人博客系统 - 优雅、高效、安全](https://canjie.org/blog/project/canjie-system-introduction)的平台部署，则您已经有了一个公开的仓库，如果您是自部署的，则在[GIthub](https://github.com/)新建一个公开仓库
+2. 安装[giscus app](https://github.com/apps/giscus)，否则访客将无法评论和回应。如下图，点击**install**即可安装
+![AgADahgAAkWUCVU.webp](https://cdn.canjie.org/AgADahgAAkWUCVU.webp)
+3. 开启仓库的[Discussions功能](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository)
+3.1 进入您的仓库
+3.2 点击页面上方的**Settings**
+3.3 下滑找到**Discussions**，点击前面的复选框即可开启
+![AgADbBgAAkWUCVU.webp](https://cdn.canjie.org/AgADbBgAAkWUCVU.webp)
+3.4 开启以后返回页面上方，显示**Discussions**即代表开启成功
+<Tabs>
+  <TabItem label="开启前">![AgADZhgAAkWUCVU.webp](https://cdn.canjie.org/AgADZhgAAkWUCVU.webp)</TabItem>
+  <TabItem label="开启后">![AgADZxgAAkWUCVU.webp](https://cdn.canjie.org/AgADZxgAAkWUCVU.webp)</TabItem>
+</Tabs>
+4. 打开[giscus官网](https://giscus.app/)
+4.1 找到**仓库**，输入您的GIthub用户名/仓库名
+![AgADaBgAAkWUCVU.webp](https://cdn.canjie.org/AgADaBgAAkWUCVU.webp)
+4.2 找到**Discussion 分类**，选择**General**，当然您也可以选择其它的分类或者自建分类
+![AgADaRgAAkWUCVU.webp](https://cdn.canjie.org/AgADaRgAAkWUCVU.webp)
+4.3 找到**启用 giscus**，即可看到相关代码
+![AgADaxgAAkWUCVU.webp](https://cdn.canjie.org/AgADaxgAAkWUCVU.webp)
+4.4 参考[博客使用-基础篇](https://canjie.org/blog/project/blog-usage---beginners-guide/)修改相关代码
+</Steps>
