@@ -5,10 +5,6 @@ const { category } = Astro.props;
 // 从 starlightBlog 获取文章数据
 const starlightBlog = Astro.locals?.starlightBlog;
 
-// 获取所有分类文件
-const categoryFiles = await import.meta.glob('../../content/docs/categories/*.mdx', { eager: true });
-const categories = Object.values(categoryFiles).map(file => file.frontmatter.title || file.file.split('/').pop()?.replace('.mdx', ''));
-
 // 定义类型
 interface BlogPost {
   entry: {
@@ -46,15 +42,11 @@ if (starlightBlog?.posts) {
     // 如果文章在 blog 目录下，且后面还有目录
     if (blogIndex !== -1 && pathParts.length > blogIndex + 1) {
       // 获取 blog 目录后的第一个目录名作为分类
-      const categoryFromPath = pathParts[blogIndex + 1];
-      // 如果这个目录名在我们的分类列表中，就使用它
-      if (categories.includes(categoryFromPath)) {
-        postCategory = categoryFromPath;
-      }
+      postCategory = pathParts[blogIndex + 1];
     }
     
     // 如果文章在 frontmatter 中指定了分类，优先使用它
-    if (post.entry?.data?.category && categories.includes(post.entry.data.category)) {
+    if (post.entry?.data?.category) {
       postCategory = post.entry.data.category;
     }
     
