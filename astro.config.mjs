@@ -74,7 +74,7 @@ function processMarkdownLinks() {
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://canjie.ggff.net',
+	site: 'https://canjie.org',
 	integrations: [
 		starlight({
 			plugins: [
