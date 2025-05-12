@@ -14,7 +14,7 @@ tags:
 import { FileTree, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 
 ## 前期准备
-在使用本个人博客系统之前，您有些准备工作需要做，以下是您需要**修改**的文件，我已经**高亮**标注：
+在使用本个人博客系统之前，您有些准备工作需要做，以下是您需要**修改**的文件，我已经**高亮**标注，同时添加了相关**备注**：
 
 <FileTree>
 - **astro.config.mjs**
@@ -96,6 +96,7 @@ function updateRunDays() {
       - **blog/**
         - tech/
 </FileTree>
+### 温馨提示
 <Aside type="tip">如果您创建了分类，那么您需要同步在categories文件夹下面创建跟您分类名一致的mdx文件，比如您创建了一个tech的分类，那么就要在categories文件夹下面创建一个tech.mdx</Aside>
 <FileTree>
 - src/
@@ -132,7 +133,7 @@ import CategoryList from '../../../components/CategoryList.astro';
         - index.mdx
         - **life.mdx**
 </FileTree>
-My-first-blog.mdx的内容如下,必填的选项我都已经高亮标注：
+My-first-blog.mdx的内容如下,必填的选项我都已经**高亮**标注，同时添加了相关**备注**：
 ```md {4, 6, 8, 10, 12, 14, 16, 20, 24} wrap "title: " "date: "
 //src/content/docs/blog/life/My-first-blog.mdx
 ---
