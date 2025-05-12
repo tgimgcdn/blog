@@ -6,8 +6,8 @@ const { category } = Astro.props;
 const starlightBlog = Astro.locals?.starlightBlog;
 
 // 获取所有分类文件
-const categoryFiles = await Astro.glob('../../content/docs/categories/*.mdx');
-const categories = categoryFiles.map(file => file.frontmatter.title || file.file.split('/').pop()?.replace('.mdx', ''));
+const categoryFiles = await import.meta.glob('../../content/docs/categories/*.mdx', { eager: true });
+const categories = Object.values(categoryFiles).map(file => file.frontmatter.title || file.file.split('/').pop()?.replace('.mdx', ''));
 
 // 定义类型
 interface BlogPost {
