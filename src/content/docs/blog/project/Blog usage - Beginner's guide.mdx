@@ -21,6 +21,9 @@ import { FileTree, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 - src/
   - components/
     - **Footer.astro**
+  - content/
+    - docs/
+      - **index.mdx**
 </FileTree>
 
 <Tabs>
@@ -79,6 +82,20 @@ function updateRunDays() {
         const startDate = new Date('2023-01-01T00:00:00+08:00'); // 使用北京时间
 //用于显示页脚处的网站运行时间，修改为您的网站实际建立时间
         const now = getBeijingTime();
+```
+</TabItem>
+
+<TabItem label="index.mdx">
+
+```md {9} wrap "分享技术，记录生活!"
+---
+//src/content/docs/index.mdx
+---
+---
+title: 分享技术，记录生活!
+//首页显示的文字
+description: 欢迎来到我的博客
+template: splash
 ```
 </TabItem>
 </Tabs>
