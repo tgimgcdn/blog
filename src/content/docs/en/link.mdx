@@ -1,0 +1,33 @@
+---
+title: External Link Confirmation
+description: You are about to leave this site
+template: splash
+head:
+  - tag: meta
+    attrs:
+      property: og:title
+      content: External Link Confirmation
+  - tag: script
+    attrs:
+      type: text/javascript
+    content: |
+      document.addEventListener('DOMContentLoaded', function() {
+        // Find all title elements on the page
+        const titleElements = document.querySelectorAll('.content-title, .page-title, h1');
+        // Apply center styles to each element
+        titleElements.forEach(function(el) {
+          el.style.textAlign = 'center';
+          el.style.width = '100%';
+          el.style.display = 'block';
+          // If the title is in a container, also adjust the container style
+          if (el.parentElement) {
+            el.parentElement.style.textAlign = 'center';
+            el.parentElement.style.width = '100%';
+          }
+        });
+      });
+---
+
+import ExternalLinkRedirect from '../../../components/ExternalLinkRedirect.astro';
+
+<ExternalLinkRedirect /> 
