@@ -23,6 +23,9 @@ normalizedPath = normalizedPath.replace(/\/$/, '');
 // 确定无需硬编码域名的唯一标识符 
 // 对于Giscus，我们只需使用标准化路径作为唯一标识符即可共享评论
 const discussionId = normalizedPath;
+
+// 根据当前页面语言设置Giscus评论区语言
+const giscusLang = currentLanguage === 'en' ? 'en' : 'zh-CN';
 ---
 
 <StarlightImageZoom />
@@ -44,7 +47,7 @@ const discussionId = normalizedPath;
         data-emit-metadata="0"
         data-input-position="bottom"
         data-theme="preferred_color_scheme"
-        data-lang="zh-CN"
+        data-lang={giscusLang}
         data-loading="lazy"
         crossorigin="anonymous"
         async
