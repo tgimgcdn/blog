@@ -1,0 +1,180 @@
+---
+title: "Blog Usage - Basic Guide"
+excerpt: "This article introduces the basic usage of the blog system built with Starlight."
+giscus: true
+date: 2025-05-10
+category: tech
+thumbnail: https://cdn.canjie.org/AgADNxgAAkWUEVU.webp
+tags:
+  - "Markdown"
+  - "Blog"
+  - "Blog"
+---
+
+import { FileTree, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+## Preparation
+Before using this personal blog system, there are some preparations you need to make. Below are the files you need to **modify**, which I have **highlighted**, with relevant **notes** added:
+
+<FileTree>
+- **astro.config.mjs**
+- src/
+  - components/
+    - **Footer.astro**
+  - content/
+    - docs/
+      - **index.mdx**
+</FileTree>
+
+<Tabs>
+<TabItem label="astro.config.mjs">
+```js {4, 8, 10, 13, 28, 30, 32, 36} wrap "canjie.org" "tgimgcdn/blog" "R_kgDOOjxhOw" "DIC_kwDOOjxhO84Cp6EN" "cmssky" "https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg" "参界说" 
+//astro.config.mjs 
+export default defineConfig({
+	site: 'https://canjie.org',
+//Blog system URL, check whether it is an external link by modifying site: 'https://your-domain',
+...
+starlightGiscus({
+					repo: 'tgimgcdn/blog',
+//GitHub username/repo, required for comment system, modify it to your GitHub username/repo
+					repoId: 'R_kgDOOjxhOw',
+//GitHub repository ID, modify it to your GitHub repository ID
+					category: 'General',
+					categoryId: 'DIC_kwDOOjxhO84Cp6EN',
+//Discussion category ID, modify it to your discussion category ID
+					mapping: 'pathname',
+					strict: '0',
+					reactionsEnabled: '1',
+					emitMetadata: '0',
+					inputPosition: 'bottom',
+					theme: 'preferred_color_scheme',
+					lang: 'zh-CN',
+					loading: 'lazy',
+					crossorigin: 'anonymous'
+				}),
+...
+authors: {
+						cmssky: {
+							name: 'cmssky',
+//Author name, modify it to your author name
+							picture: 'https://img20.360buyimg.com/openfeedback/jfs/t1/297564/4/2943/9987/6816f2f6Ff7a97a86/37decef475f8f719.jpg',
+//Author picture, modify it to your author picture
+							url: 'https://canjie.org',
+//Author website, modify it to your website
+						},
+...
+title: '参界说',
+//Website title, modify it to your website title
+			components: {
+```
+</TabItem>
+
+<TabItem label="Footer.astro">
+
+```astro {5, 9} wrap "参界说" "2023-01-01"
+---
+//src/components/Footer.astro
+---
+<span class="copyright">©2023 - 2025 By 参界说</span>
+//Footer title, modify it to your footer title
+...
+function updateRunDays() {
+        const startDate = new Date('2023-01-01T00:00:00+08:00'); // Use Beijing time
+//Displays the website runtime in the footer, modify it to your website's actual start date
+        const now = getBeijingTime();
+```
+</TabItem>
+
+<TabItem label="index.mdx">
+
+```md {6} wrap "分享技术，记录生活!"
+---
+//src/content/docs/index.mdx
+---
+---
+title: 分享技术，记录生活!
+//首页显示的文字，修改为您希望展示的文字
+description: 欢迎来到我的博客
+template: splash
+```
+</TabItem>
+</Tabs>
+
+For modifying the comment system parameters, refer to [Blog Usage - Set Up Comment System](https://canjie.org/en/blog/tech/blog-usage---set-up-comment-system/)
+Writing Blog Posts
+Blog posts are located in the blog directory. You can upload your mdx or md files to this directory.
+
+If you need to create categories, create new folders under the blog directory. For example, I created a "tech" folder under the blog directory and placed all technology-related articles in it.
+<FileTree>
+- src/
+  - content/
+    - docs/
+      - **blog/**
+        - tech/
+</FileTree>
+### Friendly Reminder
+<Aside type="tip">If you create a category, you need to synchronize by creating an mdx file with the same name as your category in the categories folder. For example, if you created a "tech" category, create a tech.mdx file in the categories folder.</Aside>
+<FileTree>
+- src/
+  - content/
+    - docs/
+      - blog/
+        - tech/
+      - **categories/**
+        - index.mdx
+        - **tech.mdx**
+</FileTree>
+
+The content of tech.mdx is as follows. If you create other categories, modify the content accordingly, and I've marked the necessary changes.
+
+```md "技术" "tech"
+//src/content/docs/categories/tech.mdx
+---
+title: 技术文章
+description: 查看所有技术相关文章
+template: splash
+---
+
+import CategoryList from '../../../components/CategoryList.astro';
+
+<CategoryList category="tech" /> 
+```
+Once you have completed the above tasks, congratulations! You can now start writing your first blog post. For example, if you created a "life" category, you can create an mdx file in that folder, such as My-first-blog.mdx (you can also name it My first blog.mdx) as your first blog post.
+
+<FileTree>
+- src/
+  - content/
+    - docs/
+      - blog/
+        - **life/**
+          - **My-first-blog.mdx**
+      - categories/
+        - index.mdx
+        - **life.mdx**
+</FileTree>
+The content of My-first-blog.mdx is as follows. I've highlighted the required fields and added relevant notes:
+//src/content/docs/blog/life/My-first-blog.mdx
+---
+title: "My First Blog"                                       
+//Required field, blog title
+excerpt: "This is my first blog, welcome!"                   
+//Optional field, blog excerpt, introducing the blog's general content, supports basic Markdown formatting, delete if not needed
+giscus: true                                                 
+//Optional field, enable comments, by default all pages have comments disabled, retain if you want to enable comments
+date: 2025-05-09                                             
+//Required field, blog publish date
+lastUpdated: 2025-05-10                                      
+//Optional field, blog update date, delete if no update date
+category: life                                               
+//Optional field, blog category, if the blog is in /src/content/docs/blog, the blog will automatically be categorized under "life". If it is in /src/content/docs/blog/life, it will automatically be categorized under "life"
+thumbnail: https://cdn.canjie.org/AgAD4BgAAmga2VQ.webp       
+//Optional field, thumbnail, can be a URL or image address, place the file in the /public folder if using an image, for example, /public/images/My first blog.jpg. If not provided, the default /public/social-card.webp will be used
+tags:                                                        
+  - "Blog"
+  - "Blog"
+//Optional field, tags, one per line
+---
+This is my first blog, welcome!                              
+这是我的第一篇博客，欢迎您的到来！
+//Blog content
+```
