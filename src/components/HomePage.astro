@@ -6,39 +6,23 @@ let currentPage = typeof pageNum === 'number' ? pageNum : parseInt(String(pageNu
 // 确保页码至少为1
 currentPage = Math.max(1, currentPage);
 
-// 调试输出
-console.log(`HomePage组件: 接收到页码=${pageNum}, 处理后页码=${currentPage}`);
+// 导入i18n工具函数
+import { getLanguageFromURL, getUrlPrefix, getLocalizedText } from '../utils/i18n.js';
 
 // 获取当前URL路径
 const currentPath = Astro.url.pathname;
 console.log(`当前路径: ${currentPath}`);
 
 // 检测当前语言
-function getCurrentLanguage() {
-  const pathSegments = currentPath.split('/').filter(segment => segment);
-  // 检查第一个路径段是否为语言代码
-  if (pathSegments.length > 0) {
-    const firstSegment = pathSegments[0];
-    if (firstSegment === 'en') {
-      return 'en';
-    }
-    // 如果将来有其他语言，可以在这里添加
-    // 例如: if (firstSegment === 'fr') return 'fr';
-  }
-  // 默认为中文
-  return 'zh';
-}
-
-const currentLanguage = getCurrentLanguage();
+const currentLanguage = getLanguageFromURL(currentPath);
 console.log(`检测到语言: ${currentLanguage}`);
 
 // 根据当前语言构建URL前缀
-function getUrlPrefix() {
-  return currentLanguage === 'zh' ? '' : `/${currentLanguage}`;
-}
-
-const urlPrefix = getUrlPrefix();
+const urlPrefix = getUrlPrefix(currentLanguage);
 console.log(`URL前缀: ${urlPrefix}`);
+
+// 调试输出
+console.log(`HomePage组件: 接收到页码=${pageNum}, 处理后页码=${currentPage}`);
 
 // 获取博客文章数据
 let posts = [];
@@ -137,11 +121,6 @@ function formatDate(dateString) {
 function processTagForUrl(tag) {
   // 将标签转换为小写并替换特殊字符
   return encodeURIComponent(String(tag).toLowerCase().trim());
-}
-
-// 根据当前语言显示相应的文本
-function getLocalizedText(zh, en) {
-  return currentLanguage === 'en' ? en : zh;
 }
 
 // 默认缩略图
