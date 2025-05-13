@@ -98,7 +98,7 @@ export default defineConfig({
 					repoId: 'R_kgDOOjxhOw',
 					category: 'General',
 					categoryId: 'DIC_kwDOOjxhO84Cp6EN',
-					mapping: 'pathname',
+					mapping: 'url',
 					strict: '0',
 					reactionsEnabled: '1',
 					emitMetadata: '0',
