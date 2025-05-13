@@ -17,10 +17,19 @@ function processMarkdownLinks() {
 					markdown: {
 						remarkPlugins: [
 							function() {
-								return function(tree) {
+								return function(tree, file) {
 									// 获取站点域名
 									const siteUrl = new URL(config.site);
 									const siteHostname = siteUrl.hostname;
+									
+									// 检测当前文件的语言
+									let lang = 'zh'; // 默认为中文
+									const filePath = file.history[0] || '';
+									if (filePath.includes('/en/') || filePath.includes('\\en\\')) {
+										lang = 'en';
+									}
+									// 构建语言前缀
+									const langPrefix = lang === 'zh' ? '' : `/${lang}`;
 									
 									// 遍历所有节点
 									visit(tree, ['link', 'mdxJsxFlowElement'], (node) => {
@@ -48,12 +57,12 @@ function processMarkdownLinks() {
 													// 将链接替换为重定向链接，使用base64编码
 													const encodedUrl = btoa(url);
 													if (node.type === 'link') {
-														node.url = `/link?url=${encodedUrl}`;
+														node.url = `${langPrefix}/link?url=${encodedUrl}`;
 													} else if (node.type === 'mdxJsxFlowElement') {
 														// 更新 LinkButton 的 href 属性
 														const hrefAttr = node.attributes.find(attr => attr.name === 'href');
 														if (hrefAttr) {
-															hrefAttr.value = `/link?url=${encodedUrl}`;
+															hrefAttr.value = `${langPrefix}/link?url=${encodedUrl}`;
 														}
 													}
 												}
