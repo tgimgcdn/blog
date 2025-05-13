@@ -7,8 +7,12 @@ export function i18nPlugin() {
   return {
     name: 'starlight-zh-translations-plugin',
     hooks: {
-      'i18n:setup': ({ addTranslations }) => {
-        addTranslations({
+      'config:setup': () => {
+        // 必须的钩子，可以为空
+      },
+      'i18n:setup': ({ injectTranslations }) => {
+        // 注意：Starlight中的方法是injectTranslations，不是addTranslations
+        injectTranslations({
           zh: StarlightBlogTranslations.zh
         });
       }
