@@ -1,7 +1,6 @@
 ---
 import Default from '@astrojs/starlight/components/PageTitle.astro';
-// 检查是否是任何语言的404页面
-const is404Page = Astro.locals.starlightRoute.id === '404' || Astro.locals.starlightRoute.id?.endsWith('/404');
+const is404Page = Astro.locals.starlightRoute.id === '404';
 ---
 
 {/* 如果是 404 页面，不渲染任何内容 */}
