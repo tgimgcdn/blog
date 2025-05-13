@@ -16,11 +16,15 @@ import Default from '@astrojs/starlight/components/Head.astro';
       // 检查当前页面是否是中转页面
       var currentPath = window.location.pathname;
       var currentUrl = window.location.href;
-      var redirectPage = '/link';
       
-      if (currentPath === redirectPage || 
-          currentPath === redirectPage + '/' || 
-          currentUrl.includes(redirectPage + '?')) {
+      // 检测当前语言
+      var isEnglish = currentPath.includes('/en/');
+      var langPrefix = isEnglish ? '/en' : '';
+      var redirectPage = langPrefix + '/link';
+      
+      if (currentPath.endsWith('/link') || 
+          currentPath.endsWith('/link/') || 
+          currentUrl.includes('/link?')) {
         console.log('[全局重定向] 当前是中转页面，不处理外链');
         return;
       }
@@ -54,7 +58,7 @@ import Default from '@astrojs/starlight/components/Head.astro';
       window.open = function(url, target, features) {
         if (isExternalLink(url)) {
           console.log('[全局重定向] 拦截window.open:', url);
-          var redirectUrl = redirectPage + '?url=' + encodeURIComponent(url);
+          var redirectUrl = redirectPage + '?url=' + btoa(url);
           return originalWindowOpen.call(window, redirectUrl, target, features);
         }
         return originalWindowOpen.apply(window, arguments);
@@ -78,21 +82,24 @@ import Default from '@astrojs/starlight/components/Head.astro';
           e.preventDefault();
           e.stopPropagation();
           console.log('[全局重定向] 拦截链接点击:', link.href);
-          var redirectUrl = redirectPage + '?url=' + encodeURIComponent(link.href);
+          var redirectUrl = redirectPage + '?url=' + btoa(link.href);
           window.location.href = redirectUrl;
           return false;
         }
       }, true);
       
-      console.log('[全局重定向] 脚本已加载, 当前域名:', currentDomain);
+      console.log('[全局重定向] 脚本已加载, 当前域名:', currentDomain, '语言:', isEnglish ? 'English' : '中文');
     })();
   </script>
 
   <!-- 简单的外链处理脚本 -->
   <script is:inline>
     (function() {
-      // 获取当前域名
+      // 获取当前域名和语言
       const currentDomain = window.location.hostname;
+      const currentPath = window.location.pathname;
+      const isEnglish = currentPath.includes('/en/');
+      const langPrefix = isEnglish ? '/en' : '';
       
       // 检查是否是外部链接
       function isExternalLink(url) {
@@ -118,8 +125,8 @@ import Default from '@astrojs/starlight/components/Head.astro';
         // 如果是外部链接
         if (isExternalLink(target.href)) {
           e.preventDefault();
-          // 跳转到确认页面
-          window.location.href = `/link?url=${encodeURIComponent(target.href)}`;
+          // 跳转到确认页面，使用base64编码
+          window.location.href = `${langPrefix}/link?url=${btoa(target.href)}`;
         }
       }, true);
     })();
