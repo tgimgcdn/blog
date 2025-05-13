@@ -1,0 +1,51 @@
+---
+title: "Blog Usage - Setting Up a Comment System"
+excerpt: "This article introduces how to configure a comment system for a blog built with Starlight."
+giscus: true
+date: 2025-05-12
+thumbnail: https://cdn.canjie.org/AgADOxgAAkWUEVU.webp
+tags:
+  - "Comment System"
+  - "Blog"
+  - "Blogging"
+  - "comment"
+---
+
+import { FileTree, Tabs, TabItem, Aside, Steps } from '@astrojs/starlight/components';
+
+## Modify Comment System Parameters
+
+This blog system comes with a built-in [giscus](https://giscus.app/) comment component. The following steps will guide you through its configuration:
+
+<Steps>
+
+1. **Prepare a GitHub Repository**  
+   - If your blog was deployed via the [Canjie - A modern personal blogging system based on Astro + Starlight](https://canjie.org/blog/project/canjie-system-introduction), then you already have a public repository.  
+   - If you built your project manually, go to [GitHub](https://github.com/) and create a new public repository.
+
+2. **Install the giscus GitHub App**  
+   - Visit the [giscus app page](https://github.com/apps/giscus) and click **Install** to add it to your repository. Otherwise, visitors will not be able to comment or reply.  
+   ![AgADahgAAkWUCVU.webp](https://cdn.canjie.org/AgADahgAAkWUCVU.webp)
+
+3. **Enable the Discussions Feature**  
+   - Go to your GitHub repository  
+   - Click **Settings** in the top navigation  
+   - Scroll down and find the **Discussions** option, then enable it  
+   - Once enabled, the **Discussions** tab will appear at the top of the repository  
+   ![AgADbBgAAkWUCVU.webp](https://cdn.canjie.org/AgADbBgAAkWUCVU.webp)  
+   <Tabs>
+     <TabItem label="Before Enabling">
+       ![AgADZhgAAkWUCVU.webp](https://cdn.canjie.org/AgADZhgAAkWUCVU.webp)
+     </TabItem>
+     <TabItem label="After Enabling">
+       ![AgADZxgAAkWUCVU.webp](https://cdn.canjie.org/AgADZxgAAkWUCVU.webp)
+     </TabItem>
+   </Tabs>
+
+4. **Configure giscus Parameters**  
+   - Open the [giscus official site](https://giscus.app/)  
+   - In the **Repository** input field, enter your GitHub username and repository name in the format `username/repository`  
+   ![AgADaBgAAkWUCVU.webp](https://cdn.canjie.org/AgADaBgAAkWUCVU.webp)
+
+   - For **Discussion Category**, select a category such as `General`, or define your own  
+   ![AgADaRgAAkWUCVU.webp](https://cdn.canjie.org/AgADaRgAAkWUCVU
