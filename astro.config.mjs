@@ -6,6 +6,7 @@ import starlightImageZoom from 'starlight-image-zoom'
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 import { visit } from 'unist-util-visit'
 import starlightGiscus from 'starlight-giscus'
+import { StarlightBlogTranslations } from './src/utils/blog-translations.js';
 
 // 自定义 Markdown 处理器
 function processMarkdownLinks() {
@@ -143,6 +144,10 @@ export default defineConfig({
 					],
 				},
 			],
+			// 添加中文翻译
+			customI18n: {
+                          zh: StarlightBlogTranslations.zh
+                        },
 			// 添加需要隐藏在侧边栏和搜索结果中的页面
 			pagefind: {
 				excludeSelectors: ['[data-pagefind-ignore]'],
