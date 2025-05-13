@@ -1,12 +1,17 @@
 ---
 import { Icon } from '@astrojs/starlight/components';
+import { getLanguageFromURL, getLocalizedText } from '../utils/i18n.js';
+
+// 获取当前路径和语言
+const currentPath = Astro.url.pathname;
+const currentLanguage = getLanguageFromURL(currentPath);
 ---
 
 <footer class="sl-footer">
   <div class="sl-footer-content">
     <div class="copyright-row">
-      <span class="copyright">©2023 - 2025 By 参界说</span>
-      <span class="run-days">本站已稳定运行 <span id="run-days"></span> 天</span>
+      <span class="copyright">©2023 - 2025 By {getLocalizedText('参界说', 'Canjie Says', currentLanguage)}</span>
+      <span class="run-days">{getLocalizedText('本站已稳定运行', 'This site has been running for', currentLanguage)} <span id="run-days"></span> {getLocalizedText('天', 'days', currentLanguage)}</span>
     </div>
 
     <script>
@@ -48,7 +53,7 @@ import { Icon } from '@astrojs/starlight/components';
           <Icon name="astro" />
           <span>Astro</span>
         </a>
-        <a href="https://github.com/withastro/starlight" class="sl-footer-link">
+        <a href="https://github.com/canjieorg/canjie" class="sl-footer-link">
           <Icon name="github" />
           <span>GitHub</span>
         </a>
@@ -58,9 +63,9 @@ import { Icon } from '@astrojs/starlight/components';
           <Icon name="seti:xml" />
           <span>Sitemap</span>
         </a>
-        <a href="/archives/" class="sl-footer-link">
+        <a href={currentLanguage === 'en' ? '/en/archives/' : '/archives/'} class="sl-footer-link">
           <Icon name="document" />
-          <span>Archives</span>
+          <span>{getLocalizedText('归档', 'Archives', currentLanguage)}</span>
         </a>
       </div>
     </div>
@@ -71,8 +76,8 @@ import { Icon } from '@astrojs/starlight/components';
 <div id="back-to-top-container" data-astro-cid-sz7xmlte>
   <button 
     id="back-to-top-button" 
-    aria-label="返回顶部" 
-    title="返回顶部" 
+    aria-label={getLocalizedText('返回顶部', 'Back to Top', currentLanguage)} 
+    title={getLocalizedText('返回顶部', 'Back to Top', currentLanguage)} 
     style="cursor: pointer !important; pointer-events: auto !important;">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="18 15 12 9 6 15"></polyline>
