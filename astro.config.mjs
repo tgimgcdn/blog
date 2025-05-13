@@ -5,7 +5,6 @@ import starlightBlog from 'starlight-blog'
 import starlightImageZoom from 'starlight-image-zoom'
 import starlightThemeFlexoki from 'starlight-theme-flexoki'
 import { visit } from 'unist-util-visit'
-import starlightGiscus from 'starlight-giscus'
 import { i18nPlugin } from './src/utils/i18n-plugin.js';
 
 // 自定义 Markdown 处理器
@@ -93,21 +92,6 @@ export default defineConfig({
                                   },
 			plugins: [
 				starlightImageZoom(),
-				starlightGiscus({
-					repo: 'tgimgcdn/blog',
-					repoId: 'R_kgDOOjxhOw',
-					category: 'General',
-					categoryId: 'DIC_kwDOOjxhO84Cp6EN',
-					mapping: 'url',
-					strict: '0',
-					reactionsEnabled: '1',
-					emitMetadata: '0',
-					inputPosition: 'bottom',
-					theme: 'preferred_color_scheme',
-					lang: 'zh-CN',
-					loading: 'lazy',
-					crossorigin: 'anonymous'
-				}),
 				starlightBlog({
 					title: {
                                            zh: '参界说',
