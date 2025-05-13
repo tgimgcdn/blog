@@ -24,7 +24,7 @@ const currentLanguage = getLanguageFromURL(currentPath);
       }
 
       function updateRunDays() {
-        const startDate = new Date('2023-01-01T00:00:00+08:00'); // 使用北京时间
+        const startDate = new Date('2023-06-20T00:00:00+08:00'); // 使用北京时间
         const now = getBeijingTime();
         const diffTime = Math.abs(now.getTime() - startDate.getTime());
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -65,7 +65,7 @@ const currentLanguage = getLanguageFromURL(currentPath);
         </a>
         <a href={currentLanguage === 'en' ? '/en/archives/' : '/archives/'} class="sl-footer-link">
           <Icon name="document" />
-          <span>{getLocalizedText('归档', 'Archives', currentLanguage)}</span>
+          <span>{getLocalizedText('Archives', 'Archives', currentLanguage)}</span>
         </a>
       </div>
     </div>
