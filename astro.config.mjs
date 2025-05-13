@@ -135,24 +135,14 @@ export default defineConfig({
 				PageTitle: './src/components/PageTitle.astro',
 				ThemeSelect: './src/components/ThemeSelect.astro',
 			},
-			sidebar: {
-                            zh: [
-                              {
-                                label: '博客',
-                                items: [
-                                  { label: '文章归档', link: '/archives/' },
-                                ],
-                              }
-                            ],
-                            en: [
-                              {
-                                label: 'Blog',
-                                items: [
-                                  { label: 'Archives', link: '/en/archives/' },
-                                ],
-                              }
-                            ]
-                          },
+			sidebar: [
+				{
+					label: '博客',
+					items: [
+						{ label: '文章归档', link: '/archives/' },
+					],
+				},
+			],
 			// 添加需要隐藏在侧边栏和搜索结果中的页面
 			pagefind: {
 				excludeSelectors: ['[data-pagefind-ignore]'],
