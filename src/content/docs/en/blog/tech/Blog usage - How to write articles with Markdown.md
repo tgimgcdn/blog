@@ -4,7 +4,7 @@ excerpt: "This article explains how Markdown code is rendered in `.md` files."
 giscus: true
 date: 2025-05-01
 lastUpdated: 2025-05-12
-thumbnail: https://cdn.canjie.org/AgADPxgAAkWUEVU.webp
+thumbnail: https://cdn.canjie.org/AgAD5xcAAgf-GFU.webp
 tags:
   - "Markdown"
   - "md"
