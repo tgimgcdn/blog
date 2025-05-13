@@ -1,26 +1,151 @@
 ---
+import { getLanguageFromURL } from '../utils/i18n';
+
 // 获取当前URL路径
 const currentPath = Astro.url.pathname;
+const lang = getLanguageFromURL(currentPath);
 
-// 检测当前语言
-function getCurrentLanguage() {
-  const pathSegments = currentPath.split('/').filter(segment => segment);
-  // 检查第一个路径段是否为语言代码
-  if (pathSegments.length > 0) {
-    const firstSegment = pathSegments[0];
-    if (firstSegment === 'en') {
-      return 'en';
-    }
-    // 如果将来有其他语言，可以在这里添加
-    // 例如: if (firstSegment === 'fr') return 'fr';
-  }
-  // 默认为中文
-  return 'zh';
+// 根据当前语言加载相应的404内容
+let title, message, buttonText;
+
+if (lang === 'en') {
+  title = "404 - Page Not Found";
+  message = "Oops! The page you are looking for does not exist.";
+  buttonText = "Return to Home";
+} else {
+  title = "404 - 页面未找到";
+  message = "哎呀！您访问的页面不存在。";
+  buttonText = "返回首页";
 }
 
-const language = getCurrentLanguage();
-const redirectUrl = language === 'zh' ? '/404/' : `/${language}/404/`;
+// 设置状态码为404
+Astro.response.status = 404;
+---
 
-// 重定向到对应语言的404页面
-return Astro.redirect(redirectUrl);
---- 
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        color: #333;
+        background: radial-gradient(circle at center, var(--sl-color-bg, #fff) 0%, var(--sl-color-bg-accent, #f5f5f5) 100%);
+      }
+      .container {
+        text-align: center;
+        padding: 2rem;
+        max-width: 600px;
+      }
+      .error-code {
+        font-size: 8rem;
+        font-weight: bold;
+        margin: 0;
+        background: linear-gradient(45deg, #3584e4, #8ab4f8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: float 3s ease-in-out infinite;
+      }
+      .message {
+        font-size: 1.5rem;
+        margin: 1rem 0 2rem;
+      }
+      .home-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: #3584e4;
+        color: white;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+      .home-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background: #2b6cb0;
+      }
+      .icon {
+        width: 20px;
+        height: 20px;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+      }
+      .space-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle var(--duration, 2s) ease-in-out infinite;
+        opacity: 0;
+      }
+      @keyframes twinkle {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="space-bg" id="space-bg"></div>
+    <div class="container">
+      <h1 class="error-code">404</h1>
+      <p class="message">{message}</p>
+      <a href={lang === 'en' ? '/en/' : '/'} class="home-button">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>{buttonText}</span>
+      </a>
+    </div>
+    
+    <script>
+      // 创建星星背景
+      function createStars() {
+        const spaceBg = document.getElementById('space-bg');
+        const starCount = 50;
+
+        for (let i = 0; i < starCount; i++) {
+          const star = document.createElement('div');
+          star.className = 'star';
+          
+          // 随机位置
+          star.style.left = `${Math.random() * 100}%`;
+          star.style.top = `${Math.random() * 100}%`;
+          
+          // 随机大小
+          const size = Math.random() * 3;
+          star.style.width = `${size}px`;
+          star.style.height = `${size}px`;
+          
+          // 随机动画持续时间
+          star.style.setProperty('--duration', `${1 + Math.random() * 2}s`);
+          
+          spaceBg.appendChild(star);
+        }
+      }
+
+      // 页面加载完成后创建星星
+      document.addEventListener('DOMContentLoaded', createStars);
+    </script>
+  </body>
+</html> 
