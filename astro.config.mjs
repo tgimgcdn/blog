@@ -124,7 +124,10 @@ export default defineConfig({
 				}),
 				starlightThemeFlexoki()
 			],
-			title: '参界说',
+			title: {
+                          zh: '参界说',
+                          en: 'Canjie Says',
+                        },
 			components: {
 				Footer: './src/components/Footer.astro',
 				Page: './src/components/Page.astro',
@@ -132,14 +135,24 @@ export default defineConfig({
 				PageTitle: './src/components/PageTitle.astro',
 				ThemeSelect: './src/components/ThemeSelect.astro',
 			},
-			sidebar: [
-				{
-					label: '博客',
-					items: [
-						{ label: '文章归档', link: '/archives/' },
-					],
-				},
-			],
+			sidebar: {
+                            zh: [
+                              {
+                                label: '博客',
+                                items: [
+                                  { label: '文章归档', link: '/archives/' },
+                                ],
+                              }
+                            ],
+                            en: [
+                              {
+                                label: 'Blog',
+                                items: [
+                                  { label: 'Archives', link: '/en/archives/' },
+                                ],
+                              }
+                            ]
+                          },
 			// 添加需要隐藏在侧边栏和搜索结果中的页面
 			pagefind: {
 				excludeSelectors: ['[data-pagefind-ignore]'],
