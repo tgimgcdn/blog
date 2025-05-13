@@ -4,37 +4,16 @@
 import StarlightBlog from 'starlight-blog/overrides/MarkdownContent.astro';
 import StarlightImageZoom from 'starlight-image-zoom/components/ImageZoom.astro';
 import Comments from 'starlight-giscus/components/Comments.astro';
-import { getLanguageFromURL } from '../utils/i18n.js';
 
 // 检查当前页面是否启用了评论
 const { entry } = Astro.props;
 const enableComments = entry?.data?.giscus !== false;
-
-// 获取当前URL并规范化，移除语言前缀用于评论映射
-const currentPath = Astro.url.pathname;
-const currentLanguage = getLanguageFromURL(currentPath);
-
-// 提取不带语言前缀的路径用于Giscus映射
-let normalizedPath = currentPath;
-if (currentLanguage === 'en' && currentPath.startsWith('/en/')) {
-  normalizedPath = currentPath.replace(/^\/en/, '');
-}
-
-// 如果路径以斜杠结尾，删除它，确保中英文版本路径匹配
-normalizedPath = normalizedPath.replace(/\/$/, '');
-
-// 获取网站域名
-const siteDomain = Astro.site ? new URL(Astro.site).host : 'canjie.org';
 ---
 
 <StarlightImageZoom />
 <StarlightBlog>
   <slot />
-  {enableComments && 
-    <div id="giscus-container" data-giscus-path={normalizedPath} data-giscus-domain={siteDomain}>
-      <Comments />
-    </div>
-  }
+  {enableComments && <div id="giscus-container"><Comments /></div>}
 </StarlightBlog>
 
 <script>
@@ -116,35 +95,9 @@ const siteDomain = Astro.site ? new URL(Astro.site).host : 'canjie.org';
     });
   }
 
-  // 处理Giscus评论区的语言一致性问题
-  function patchGiscusForLanguageConsistency() {
-    // 找到Giscus容器
-    const giscusContainer = document.getElementById('giscus-container');
-    if (!giscusContainer) return;
-
-    // 获取规范化后的路径和域名
-    const normalizedPath = giscusContainer.getAttribute('data-giscus-path');
-    const domain = giscusContainer.getAttribute('data-giscus-domain');
-    
-    if (!normalizedPath || !domain) return;
-    
-    // 查找所有giscus脚本
-    const giscusScript = document.querySelector('script.giscus-script');
-    if (giscusScript) {
-      // 为giscus脚本设置统一的路径属性，确保中英文版本共享评论
-      giscusScript.setAttribute('data-mapping', 'specific');
-      giscusScript.setAttribute('data-term', `https://${domain}${normalizedPath}`);
-      
-      console.log('[Giscus] 设置统一映射路径:', `https://${domain}${normalizedPath}`);
-    }
-  }
-
   // 主函数
   async function init() {
     try {
-      // 首先修补Giscus的映射
-      patchGiscusForLanguageConsistency();
-      
       // 使用 Intersection Observer 监听评论区域
       const giscusContainer = document.getElementById('giscus-container');
       if (!giscusContainer) {
