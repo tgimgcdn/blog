@@ -9,6 +9,37 @@ currentPage = Math.max(1, currentPage);
 // 调试输出
 console.log(`HomePage组件: 接收到页码=${pageNum}, 处理后页码=${currentPage}`);
 
+// 获取当前URL路径
+const currentPath = Astro.url.pathname;
+console.log(`当前路径: ${currentPath}`);
+
+// 检测当前语言
+function getCurrentLanguage() {
+  const pathSegments = currentPath.split('/').filter(segment => segment);
+  // 检查第一个路径段是否为语言代码
+  if (pathSegments.length > 0) {
+    const firstSegment = pathSegments[0];
+    if (firstSegment === 'en') {
+      return 'en';
+    }
+    // 如果将来有其他语言，可以在这里添加
+    // 例如: if (firstSegment === 'fr') return 'fr';
+  }
+  // 默认为中文
+  return 'zh';
+}
+
+const currentLanguage = getCurrentLanguage();
+console.log(`检测到语言: ${currentLanguage}`);
+
+// 根据当前语言构建URL前缀
+function getUrlPrefix() {
+  return currentLanguage === 'zh' ? '' : `/${currentLanguage}`;
+}
+
+const urlPrefix = getUrlPrefix();
+console.log(`URL前缀: ${urlPrefix}`);
+
 // 获取博客文章数据
 let posts = [];
 
@@ -27,7 +58,7 @@ if (starlightBlog && starlightBlog.posts) {
       const blogPath = post.entry.id.replace(/^blog\//, '').replace(/\.mdx?$/, '');
       return {
         ...post,
-        href: `/blog/${post.entry.slug || blogPath}`
+        href: `${urlPrefix}/blog/${post.entry.slug || blogPath}`
       };
     }
     return post;
@@ -96,6 +127,9 @@ const hasMorePosts = totalPages > 1;
 
 // 格式化日期
 function formatDate(dateString) {
+  if (currentLanguage === 'en') {
+    return dateString ? new Date(dateString).toLocaleDateString('en-US') : '';
+  }
   return dateString ? new Date(dateString).toLocaleDateString('zh-CN') : '';
 }
 
@@ -105,13 +139,18 @@ function processTagForUrl(tag) {
   return encodeURIComponent(String(tag).toLowerCase().trim());
 }
 
+// 根据当前语言显示相应的文本
+function getLocalizedText(zh, en) {
+  return currentLanguage === 'en' ? en : zh;
+}
+
 // 默认缩略图
 const defaultThumbnail = "/Business Event Website.jpg";
 ---
 
 <main class="grid-container">
   {!displayPosts || displayPosts.length === 0 ? (
-    <p>暂无文章</p>
+    <p>{getLocalizedText('暂无文章', 'No articles available')}</p>
   ) : null}
 
   <div class="custom-grid">
@@ -122,7 +161,7 @@ const defaultThumbnail = "/Business Event Website.jpg";
             <div class="thumbnail" style="height: 180px; width: 100%; overflow: hidden; flex: 0 0 auto;">
               <img 
                 src={post.entry?.data?.thumbnail || defaultThumbnail} 
-                alt={post.title || '文章封面'}
+                alt={post.title || getLocalizedText('文章封面', 'Article Cover')}
                 onerror="this.src='/social-card.webp'"
                 style="width: 100%; height: 100%; object-fit: cover;"
               />
@@ -131,13 +170,13 @@ const defaultThumbnail = "/Business Event Website.jpg";
           <div class="content" style="padding: 1rem; display: flex; flex-direction: column; flex: 1 1 auto;">
             <a href={post.href} class="title-link">
               <h2 class="title" title={post.title} style="line-height: 1.5; margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem;">
-                {post.entry?.data?.featured && <span class="featured-star" aria-label="精选文章">⭐</span>}
-                {post.title || '无标题文章'}
+                {post.entry?.data?.featured && <span class="featured-star" aria-label={getLocalizedText('精选文章', 'Featured Article')}>⭐</span>}
+                {post.title || getLocalizedText('无标题文章', 'Untitled Article')}
               </h2>
             </a>
             <p class="excerpt" style="flex: 1 0 auto; min-height: 2.8em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{post.entry?.data?.description || post.entry?.data?.excerpt || ''}</p>
             <div class="meta">
-              <a href={`/categories/${encodeURIComponent(post.category)}`} class="category">
+              <a href={`${urlPrefix}/categories/${encodeURIComponent(post.category)}`} class="category">
                 {post.category}
               </a>
               <time class="date">{formatDate(post.entry?.data?.pubDate || post.entry?.data?.date || new Date())}</time>
@@ -146,10 +185,10 @@ const defaultThumbnail = "/Business Event Website.jpg";
               <div class="tags">
                 {Array.isArray(post.entry.data.tags) 
                   ? post.entry.data.tags.map(tag => (
-                      <a href={`/blog/tags/${processTagForUrl(tag)}`} class="tag">#{tag}</a>
+                      <a href={`${urlPrefix}/blog/tags/${processTagForUrl(tag)}`} class="tag">#{tag}</a>
                     ))
                   : typeof post.entry.data.tags === 'string' 
-                    ? <a href={`/blog/tags/${processTagForUrl(post.entry.data.tags)}`} class="tag">#{post.entry.data.tags}</a>
+                    ? <a href={`${urlPrefix}/blog/tags/${processTagForUrl(post.entry.data.tags)}`} class="tag">#{post.entry.data.tags}</a>
                     : null
                 }
               </div>
@@ -165,14 +204,16 @@ const defaultThumbnail = "/Business Event Website.jpg";
       <div class="pagination">
         {Array.from({ length: totalPages }).map((_, i) => {
           const pageNum = i + 1;
-          // 使用正确的路径格式
-          const pageUrl = pageNum === 1 ? '/' : `/page/${pageNum}/`;
+          // 使用正确的路径格式，根据当前语言构建
+          const pageUrl = pageNum === 1 
+            ? `${urlPrefix}/` 
+            : `${urlPrefix}/page/${pageNum}/`;
           return (
             <a 
               href={pageUrl} 
               class={`page-link ${currentPage === pageNum ? 'active' : ''}`}
               aria-current={currentPage === pageNum ? 'page' : undefined}
-              aria-label={`第 ${pageNum} 页`}
+              aria-label={getLocalizedText(`第 ${pageNum} 页`, `Page ${pageNum}`)}
             >
               {pageNum}
             </a>
