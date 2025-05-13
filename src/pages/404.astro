@@ -1,0 +1,26 @@
+---
+// 获取当前URL路径
+const currentPath = Astro.url.pathname;
+
+// 检测当前语言
+function getCurrentLanguage() {
+  const pathSegments = currentPath.split('/').filter(segment => segment);
+  // 检查第一个路径段是否为语言代码
+  if (pathSegments.length > 0) {
+    const firstSegment = pathSegments[0];
+    if (firstSegment === 'en') {
+      return 'en';
+    }
+    // 如果将来有其他语言，可以在这里添加
+    // 例如: if (firstSegment === 'fr') return 'fr';
+  }
+  // 默认为中文
+  return 'zh';
+}
+
+const language = getCurrentLanguage();
+const redirectUrl = language === 'zh' ? '/404/' : `/${language}/404/`;
+
+// 重定向到对应语言的404页面
+return Astro.redirect(redirectUrl);
+--- 
