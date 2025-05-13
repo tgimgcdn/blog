@@ -2,6 +2,13 @@
 // 获取所有博客文章
 const { posts } = Astro.locals.starlightBlog;
 
+// 导入i18n工具
+import { getLanguageFromURL, getLocalizedText } from '../utils/i18n.js';
+
+// 获取当前路径和语言
+const currentPath = Astro.url.pathname;
+const currentLanguage = getLanguageFromURL(currentPath);
+
 // 按日期排序（从新到旧）
 const sortedPosts = [...posts].sort((a, b) => {
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -34,6 +41,25 @@ function formatDate(dateString: string) {
   const date = new Date(dateString);
   return `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
+
+// 月份名称本地化
+const monthNames = {
+  zh: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+  en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+};
+
+// 年份和文章数量的本地化文本
+function getYearLabel(year, count) {
+  return currentLanguage === 'zh' 
+    ? `${year}年 (${count}篇文章)` 
+    : `${year} (${count} Articles)`;
+}
+
+// 获取月份名称
+function getMonthName(monthNum) {
+  const index = parseInt(monthNum) - 1;
+  return monthNames[currentLanguage][index];
+}
 ---
 
 <div class="archive-page">
@@ -43,11 +69,11 @@ function formatDate(dateString: string) {
     
     return (
       <div class="archive-year">
-        <h2>{year}年 ({yearPostsCount}篇文章)</h2>
+        <h2>{getYearLabel(year, yearPostsCount)}</h2>
         
         {months.map(month => (
           <div class="archive-month">
-            <h3>{month}月</h3>
+            <h3>{getMonthName(month)}</h3>
             <ul>
               {postsByYearAndMonth[year][month].map(post => (
                 <li>
