@@ -1,5 +1,21 @@
 ---
 // 外链跳转组件
+import { getLanguageFromURL } from '../utils/i18n.js';
+
+// 获取当前URL路径并确定语言
+const currentPath = Astro.url.pathname;
+const lang = getLanguageFromURL(currentPath);
+
+// 根据语言设置文本
+const texts = {
+  title: lang === 'en' ? 'You are about to leave this site' : '您即将离开本站',
+  loading: lang === 'en' ? 'Loading target website information...' : '正在加载目标网站信息...',
+  warning: lang === 'en' ? 'This site is not responsible for the content of external websites. Please protect your personal information!' : '本站不对外部网站的内容负责，请注意保护您的个人信息安全！',
+  confirm: lang === 'en' ? 'Confirm' : '确认继续',
+  cancel: lang === 'en' ? 'Go Back' : '返回上一页',
+  goingTo: lang === 'en' ? 'Going to: ' : '即将前往: ',
+  invalidUrl: lang === 'en' ? 'Invalid link format' : '链接格式无效'
+};
 ---
 
 <div class="link-redirect">
@@ -11,12 +27,12 @@
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
     </div>
-    <h1>您即将离开本站</h1>
-    <p id="target-domain">正在加载目标网站信息...</p>
-    <p class="warning">本站不对外部网站的内容负责，请注意保护您的个人信息安全！</p>
+    <h1>{texts.title}</h1>
+    <p id="target-domain">{texts.loading}</p>
+    <p class="warning">{texts.warning}</p>
     <div class="button-group">
-      <a href="#" id="confirm-redirect" class="confirm"><span>确认继续</span></a>
-      <a href="javascript:void(0)" id="cancel-redirect" class="cancel"><span>返回上一页</span></a>
+      <a href="#" id="confirm-redirect" class="confirm"><span>{texts.confirm}</span></a>
+      <a href="javascript:void(0)" id="cancel-redirect" class="cancel"><span>{texts.cancel}</span></a>
     </div>
   </div>
 </div>
@@ -144,14 +160,16 @@
   }
 </style>
 
-<script>
+<script define:vars={{ texts }}>
   document.addEventListener('DOMContentLoaded', function() {
     // 从URL获取目标链接
     const urlParams = new URLSearchParams(window.location.search);
     const encodedUrl = urlParams.get('url');
     
     if (!encodedUrl) {
-      window.location.href = '/';
+      // 根据当前语言决定回到哪个首页
+      const isEnglish = window.location.pathname.includes('/en/');
+      window.location.href = isEnglish ? '/en/' : '/';
       return;
     }
 
@@ -161,9 +179,9 @@
       // 解码base64 URL
       const decodedUrl = atob(encodedUrl);
       const url = new URL(decodedUrl);
-      targetDomainElement.textContent = '即将前往: ' + url.hostname;
+      targetDomainElement.textContent = texts.goingTo + url.hostname;
     } catch (e) {
-      targetDomainElement.textContent = '链接格式无效';
+      targetDomainElement.textContent = texts.invalidUrl;
       return;
     }
     
