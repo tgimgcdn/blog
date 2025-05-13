@@ -3,17 +3,54 @@
 // 这个组件结合了starlight-blog和starlight-image-zoom的功能
 import StarlightBlog from 'starlight-blog/overrides/MarkdownContent.astro';
 import StarlightImageZoom from 'starlight-image-zoom/components/ImageZoom.astro';
-import Comments from 'starlight-giscus/components/Comments.astro';
+import { getLanguageFromURL } from '../utils/i18n.js';
 
 // 检查当前页面是否启用了评论
 const { entry } = Astro.props;
 const enableComments = entry?.data?.giscus !== false;
+
+// 获取当前请求信息
+const currentUrl = Astro.url.pathname;
+const currentLanguage = getLanguageFromURL(currentUrl);
+
+// 构建标准化路径用于Giscus (移除语言前缀和末尾斜杠)
+let normalizedPath = currentUrl;
+if (currentLanguage === 'en' && normalizedPath.startsWith('/en/')) {
+  normalizedPath = normalizedPath.replace(/^\/en/, '');
+}
+normalizedPath = normalizedPath.replace(/\/$/, '');
+
+// 确定无需硬编码域名的唯一标识符 
+// 对于Giscus，我们只需使用标准化路径作为唯一标识符即可共享评论
+const discussionId = normalizedPath;
 ---
 
 <StarlightImageZoom />
 <StarlightBlog>
   <slot />
-  {enableComments && <div id="giscus-container"><Comments /></div>}
+  {enableComments && 
+    <div id="giscus-container" class="giscus-wrapper">
+      <!-- 直接插入Giscus脚本 -->
+      <script 
+        src="https://giscus.app/client.js"
+        data-repo="tgimgcdn/blog"
+        data-repo-id="R_kgDOOjxhOw"
+        data-category="General" 
+        data-category-id="DIC_kwDOOjxhO84Cp6EN"
+        data-mapping="specific"
+        data-term={discussionId}
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      ></script>
+    </div>
+  }
 </StarlightBlog>
 
 <script>
@@ -162,5 +199,12 @@ const enableComments = entry?.data?.giscus !== false;
     text-align: center;
     padding: 2rem;
     color: var(--sl-color-text-accent);
+  }
+  
+  /* 在评论容器周围添加一些空间 */
+  .giscus-wrapper {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-gray-5);
   }
 </style> 
