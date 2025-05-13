@@ -5,6 +5,13 @@ const { category } = Astro.props;
 // 从 starlightBlog 获取文章数据
 const starlightBlog = Astro.locals?.starlightBlog;
 
+// 导入i18n工具
+import { getLanguageFromURL, getLocalizedText } from '../utils/i18n.js';
+
+// 获取当前路径和语言
+const currentPath = Astro.url.pathname;
+const currentLanguage = getLanguageFromURL(currentPath);
+
 // 定义类型
 interface BlogPost {
   entry: {
@@ -86,9 +93,22 @@ const categoriesToShow = category ? { [category]: postsByCategory[category] || {
 
 // 月份名称映射
 const monthNames = {
-  1: '1月', 2: '2月', 3: '3月', 4: '4月', 5: '5月', 6: '6月',
-  7: '7月', 8: '8月', 9: '9月', 10: '10月', 11: '11月', 12: '12月'
+  zh: {
+    1: '1月', 2: '2月', 3: '3月', 4: '4月', 5: '5月', 6: '6月',
+    7: '7月', 8: '8月', 9: '9月', 10: '10月', 11: '11月', 12: '12月'
+  },
+  en: {
+    1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
+    7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
+  }
 };
+
+// 年份和文章数量的本地化文本
+function getYearLabel(year, count) {
+  return currentLanguage === 'zh' 
+    ? `${year}年 (${count}篇文章)` 
+    : `${year} (${count} Articles)`;
+}
 ---
 
 <div class="categories-container">
@@ -99,10 +119,10 @@ const monthNames = {
         const totalPosts = Object.values(months).reduce((sum, monthPosts) => sum + monthPosts.length, 0);
         return (
           <div class="year-section">
-            <h3 class="year-title">{year}年 ({totalPosts}篇文章)</h3>
+            <h3 class="year-title">{getYearLabel(year, totalPosts)}</h3>
             {Object.entries(months).sort(([monthA], [monthB]) => Number(monthB) - Number(monthA)).map(([month, posts]) => (
               <div class="month-section">
-                <h4 class="month-title">{monthNames[Number(month)]}</h4>
+                <h4 class="month-title">{monthNames[currentLanguage][Number(month)]}</h4>
                 <div class="posts-list">
                   {posts.map(post => (
                     <div class="post-item">
