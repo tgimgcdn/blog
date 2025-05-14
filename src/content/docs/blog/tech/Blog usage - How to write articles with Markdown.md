@@ -231,3 +231,166 @@ table.forEach(row => {
   <source src="https://cdn.0163.eu.org/%E5%87%A1%E4%BA%BA%E4%BF%AE%E4%BB%99%E4%BC%A0%E4%BB%99%E7%95%8C%E7%AF%87-%E7%AC%AC1%E9%9B%86_%E9%A3%9E%E5%8D%87%E4%BB%99%E7%95%8C.ogg" type="video/ogg">
 </video>
 
+
+### 2. 书写一个质能守恒公式[^LaTeX]
+
+$$
+E=mc^2
+$$
+
+### 4. 高效绘制[流程图](https://github.com/knsv/mermaid#flowchart)
+
+```mermaid
+graph TD
+    A[用户请求] --> B[语义解析]
+    B --> C[RAG检索]
+    
+    C -->|✅ 知识库匹配| D[上下文增强]
+    C -->|❌ 无匹配| E[任务分解]
+    
+    D --> E
+    
+    E --> F{工具选择}
+    
+    F -->|🛠️ 核心工具| G{基础操作}
+    F -->|🔌 MCP扩展服务| H{MCP操作}
+    
+    G -->|✏️ 文件操作| I[读写/替换]
+    G -->|🖥️ 系统命令执行| J[执行命令]
+    G -->|🔍 代码分析| K[代码分析]
+    
+    H -->|⚙️ 使用MCP工具| L[使用MCP工具]
+    H -->|📦 访问MCP资源| M[访问MCP资源]
+    
+    I --> N[结果验证]
+    J --> N
+    K --> N
+    L --> N
+    M --> N
+    
+    N --> O{完成判断}
+    
+    O -->|✅| P[提交最终结果]
+    O -->|❌| E
+```
+
+---
+
+### 5. 高效绘制[序列图](https://github.com/knsv/mermaid#sequence-diagram)
+
+```mermaid
+sequenceDiagram
+  participant Alice
+  participant Bob
+  Alice->John: Hello John, how are you?
+  loop Healthcheck
+      John->John: Fight against hypochondria
+  end
+  Note right of John: Rational thoughts <br/>prevail...
+  John-->Alice: Great!
+  John->Bob: How about you?
+  Bob-->John: Jolly good!
+```
+
+---
+
+### 6. 高效绘制[甘特图](https://github.com/knsv/mermaid#gantt-diagram)
+
+> **甘特图**内在思想简单。基本是一条线条图，横轴表示时间，纵轴表示活动（项目），线条表示在整个期间上计划和实际的活动完成情况。它直观地表明任务计划在什么时候进行，及实际进展与计划要求的对比。
+
+```mermaid
+gantt
+  title 项目开发流程
+  section 项目确定
+    需求分析       :a1, 2019-06-22, 3d
+    可行性报告     :after a1, 5d
+    概念验证       : 5d
+  section 项目实施
+    概要设计      :2019-07-05  , 5d
+    详细设计      :2019-07-08, 10d
+    编码          :2019-07-15, 10d
+    测试          :2019-07-22, 5d
+  section 发布验收
+    发布: 2d
+    验收: 3d
+```
+
+### 7. 支持图表
+
+```echarts
+{
+  "backgroundColor": "#212121",
+  "title": {
+    "text": "「晚晴幽草轩」访问来源",
+    "subtext": "2019 年 6 月份",
+    "x": "center",
+    "textStyle": {
+      "color": "#f2f2f2"
+    }
+  },
+  "tooltip": {
+    "trigger": "item",
+    "formatter": "{a} <br/>{b} : {c} ({d}%)"
+  },
+  "legend": {
+    "orient": "vertical",
+    "left": "left",
+    "data": [
+      "搜索引擎",
+      "直接访问",
+      "推荐",
+      "其他",
+      "社交平台"
+    ],
+    "textStyle": {
+      "color": "#f2f2f2"
+    }
+  },
+  "series": [
+    {
+      "name": "访问来源",
+      "type": "pie",
+      "radius": "55%",
+      "center": [
+        "50%",
+        "60%"
+      ],
+      "data": [
+        {
+          "value": 10440,
+          "name": "搜索引擎",
+          "itemStyle": {
+            "color": "#ef4136"
+          }
+        },
+        {
+          "value": 4770,
+          "name": "直接访问"
+        },
+        {
+          "value": 2430,
+          "name": "推荐"
+        },
+        {
+          "value": 342,
+          "name": "其他"
+        },
+        {
+          "value": 18,
+          "name": "社交平台"
+        }
+      ],
+      "itemStyle": {
+        "emphasis": {
+          "shadowBlur": 10,
+          "shadowOffsetX": 0,
+          "shadowColor": "rgba(0, 0, 0, 0.5)"
+        }
+      }
+    }
+  ]
+}
+```
+
+> **备注**：上述 echarts 图表📈，其数据，须使用严格的 **JSON** 格式；您可使用 JSON.stringify(data)，将对象传换从而得标准数据，即可正常使用。
+
