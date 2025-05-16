@@ -162,9 +162,10 @@ const texts = {
 
 <script define:vars={{ texts }}>
   document.addEventListener('DOMContentLoaded', function() {
-    // 从URL获取目标链接
+    // 从URL获取目标链接和锚点
     const urlParams = new URLSearchParams(window.location.search);
     const encodedUrl = urlParams.get('url');
+    const hashPart = urlParams.get('hash'); // 获取锚点参数
     
     if (!encodedUrl) {
       // 根据当前语言决定回到哪个首页
@@ -175,11 +176,15 @@ const texts = {
 
     // 显示目标域名
     const targetDomainElement = document.getElementById('target-domain');
+    let decodedUrl = '';
+    let hostname = '';
+    
     try {
       // 解码base64 URL
-      const decodedUrl = atob(encodedUrl);
+      decodedUrl = atob(encodedUrl);
       const url = new URL(decodedUrl);
-      targetDomainElement.textContent = texts.goingTo + url.hostname;
+      hostname = url.hostname;
+      targetDomainElement.textContent = texts.goingTo + hostname;
     } catch (e) {
       targetDomainElement.textContent = texts.invalidUrl;
       return;
@@ -190,10 +195,18 @@ const texts = {
     confirmButton.addEventListener('click', function(e) {
       e.preventDefault();
       try {
-        // 解码base64 URL并跳转
-        const decodedUrl = atob(encodedUrl);
-        window.location.href = decodedUrl;
+        // 构建最终URL，包括锚点（如果有）
+        let finalUrl = decodedUrl;
+        
+        // 如果有锚点参数，添加到URL
+        if (hashPart) {
+          finalUrl += '#' + decodeURIComponent(hashPart);
+        }
+        
+        // 跳转到目标URL
+        window.location.href = finalUrl;
       } catch (e) {
+        console.error('跳转错误:', e);
         window.history.back();
       }
     });
