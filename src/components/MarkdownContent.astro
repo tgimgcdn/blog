@@ -6,22 +6,33 @@ import StarlightImageZoom from 'starlight-image-zoom/components/ImageZoom.astro'
 import { getLanguageFromURL } from '../utils/i18n.js';
 
 // 检查当前页面是否启用了评论
-const { entry } = Astro.props;
-const enableComments = entry?.data?.giscus !== false;
+const { entry } = Astro.locals.starlightRoute;
+
+// 获取 giscus 值并确保它是布尔类型
+let giscusValue = entry?.data?.giscus;
+
+// 处理不同类型的 giscus 值
+if (typeof giscusValue === 'string') {
+  giscusValue = giscusValue.toLowerCase() === 'true';
+} else if (giscusValue === undefined) {
+  giscusValue = false;
+}
+
+// 确保 giscusValue 是布尔值
+const enableComments = Boolean(giscusValue);
 
 // 获取当前请求信息
 const currentUrl = Astro.url.pathname;
 const currentLanguage = getLanguageFromURL(currentUrl);
 
-// 构建标准化路径用于Giscus (移除语言前缀和末尾斜杠)
+// 构建标准化路径用于Giscus
 let normalizedPath = currentUrl;
 if (currentLanguage === 'en' && normalizedPath.startsWith('/en/')) {
   normalizedPath = normalizedPath.replace(/^\/en/, '');
 }
 normalizedPath = normalizedPath.replace(/\/$/, '');
 
-// 确定无需硬编码域名的唯一标识符 
-// 对于Giscus，我们只需使用标准化路径作为唯一标识符即可共享评论
+// 确定唯一标识符
 const discussionId = normalizedPath;
 
 // 根据当前页面语言设置Giscus评论区语言
@@ -31,29 +42,35 @@ const giscusLang = currentLanguage === 'en' ? 'en' : 'zh-CN';
 <StarlightImageZoom />
 <StarlightBlog>
   <slot />
-  {enableComments && 
-    <div id="giscus-container" class="giscus-wrapper">
-      <!-- 直接插入Giscus脚本 -->
-      <script 
-        src="https://giscus.app/client.js"
-        data-repo="tgimgcdn/blog"
-        data-repo-id="R_kgDOOjxhOw"
-        data-category="General" 
-        data-category-id="DIC_kwDOOjxhO84Cp6EN"
-        data-mapping="specific"
-        data-term={discussionId}
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang={giscusLang}
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async
-      ></script>
-    </div>
-  }
+  {(() => {
+    if (!enableComments) {
+      return null;
+    }
+    
+    return (
+      <div id="giscus-container" class="giscus-wrapper" data-debug="comments-enabled" data-giscus-value={String(entry?.data?.giscus)}>
+        <script 
+          is:inline
+          src="https://giscus.app/client.js"
+          data-repo="canjieorg/canjie"
+          data-repo-id="R_kgDOOoe47g"
+          data-category="General"
+          data-category-id="DIC_kwDOOoe47s4CqGkA"
+          data-mapping="specific"
+          data-term={discussionId}
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang={giscusLang}
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async
+        ></script>
+      </div>
+    );
+  })()}
 </StarlightBlog>
 
 <script>
@@ -106,14 +123,12 @@ const giscusLang = currentLanguage === 'en' ? 'en' : 'zh-CN';
 
   // 设置主题观察器
   function setupThemeObserver(giscusFrame) {
-    if (!giscusFrame) {
-      return;
-    }
+    if (!giscusFrame) return;
 
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === 'data-theme') {
-          const theme = document.documentElement.getAttribute('data-theme');          
+          const theme = document.documentElement.getAttribute('data-theme');
           try {
             giscusFrame.contentWindow.postMessage({
               giscus: {
@@ -123,7 +138,7 @@ const giscusLang = currentLanguage === 'en' ? 'en' : 'zh-CN';
               }
             }, 'https://giscus.app');
           } catch (error) {
-            console.error('[主题切换] 发送消息失败:', error);
+            console.error('Failed to send theme message:', error);
           }
         }
       });
@@ -138,76 +153,56 @@ const giscusLang = currentLanguage === 'en' ? 'en' : 'zh-CN';
   // 主函数
   async function init() {
     try {
-      // 使用 Intersection Observer 监听评论区域
       const giscusContainer = document.getElementById('giscus-container');
-      if (!giscusContainer) {
-        return;
-      }
+      if (!giscusContainer) return;
 
       const observer = new IntersectionObserver(async (entries) => {
         const entry = entries[0];
         if (entry.isIntersecting) {
-          observer.disconnect(); // 停止观察
+          observer.disconnect();
 
-          // 等待 Giscus iframe 加载
           const frame = await waitForGiscus();
-          
-          // 设置主题观察器
           if (frame) {
             setupThemeObserver(frame);
           }
-
-          // 处理外链
-          if (typeof window.handleExternalLinks === 'function') {
-            window.handleExternalLinks();
-          }
         }
       }, {
-        rootMargin: '100px' // 提前 100px 开始加载
+        rootMargin: '100px'
       });
 
       observer.observe(giscusContainer);
     } catch (error) {
-      console.error('[初始化错误]', error);
+      console.error('Error initializing Giscus:', error);
     }
   }
 
   // 确保在 DOM 完全加载后再执行
-  function waitForDOM() {
-    return new Promise((resolve) => {
-      if (document.readyState === 'complete') {
-        resolve();
-      } else {
-        window.addEventListener('load', resolve);
-      }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(init, 100);
     });
+  } else {
+    setTimeout(init, 100);
   }
-
-  // 初始化
-  waitForDOM().then(() => {
-    setTimeout(init, 100); // 添加小延迟确保 DOM 完全准备好
-  });
 </script>
 
 <style>
-  /* 隐藏 Giscus 加载错误消息 */
+  .giscus-wrapper {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+    min-height: 200px;
+  }
+
   .giscus-frame {
     min-height: 200px;
   }
-  
-  /* 当 Giscus 加载失败时显示友好的提示 */
+
   .giscus-frame:not([src])::after {
     content: '评论区加载中...';
     display: block;
     text-align: center;
     padding: 2rem;
     color: var(--sl-color-text-accent);
-  }
-  
-  /* 在评论容器周围添加一些空间 */
-  .giscus-wrapper {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--sl-color-gray-5);
   }
 </style> 
