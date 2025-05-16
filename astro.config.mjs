@@ -46,29 +46,61 @@ function processMarkdownLinks() {
 											}
 											
 											if (url) {
-												const urlObj = new URL(url);
-												// 检查是否是本域名或子域名
-												const isSameDomain = urlObj.hostname === siteHostname || 
-																urlObj.hostname.endsWith('.' + siteHostname) ||
-																siteHostname.endsWith('.' + urlObj.hostname);
+												// 检查URL是否符合格式要求
+												if (!isValidExternalUrl(url)) {
+													return; // 如果不是有效的外部URL，跳过处理
+												}
 												
-												// 如果不是本域名或子域名，且是http链接，则进行中转
-												if (!isSameDomain && urlObj.protocol.startsWith('http')) {
-													// 将链接替换为重定向链接，使用base64编码
-													const encodedUrl = btoa(url);
-													if (node.type === 'link') {
-														node.url = `${langPrefix}/link?url=${encodedUrl}`;
-													} else if (node.type === 'mdxJsxFlowElement') {
-														// 更新 LinkButton 的 href 属性
-														const hrefAttr = node.attributes.find(attr => attr.name === 'href');
-														if (hrefAttr) {
-															hrefAttr.value = `${langPrefix}/link?url=${encodedUrl}`;
+												try {
+													const urlObj = new URL(url);
+													
+													// 检查是否是本域名或子域名
+													const isSameDomain = urlObj.hostname === siteHostname || 
+																	urlObj.hostname.endsWith('.' + siteHostname) ||
+																	siteHostname.endsWith('.' + urlObj.hostname);
+													
+													// 如果不是本域名或子域名，且是http链接，则进行中转
+													if (!isSameDomain && urlObj.protocol.startsWith('http')) {
+														// 提取URL中的锚点部分（不包含#符号）
+														let hashPart = '';
+														if (urlObj.hash) {
+															hashPart = urlObj.hash.substring(1); // 移除开头的#
+														}
+														
+														try {
+															// 对URL主体部分进行base64编码（不含锚点）
+															const encodedUrl = btoa(url.split('#')[0]);
+															
+															// 构建最终的URL，将锚点作为查询参数传递
+															let finalUrl = `${langPrefix}/link/?url=${encodedUrl}`;
+															
+															// 如果有锚点，将其作为额外查询参数
+															if (hashPart) {
+																finalUrl += `&hash=${encodeURIComponent(hashPart)}`;
+															}
+															
+															if (node.type === 'link') {
+																node.url = finalUrl;
+															} else if (node.type === 'mdxJsxFlowElement') {
+																// 更新 LinkButton 的 href 属性
+																const hrefAttr = node.attributes.find(attr => attr.name === 'href');
+																if (hrefAttr) {
+																	hrefAttr.value = finalUrl;
+																}
+															}
+														} catch (encodeError) {
+															// 如果base64编码失败（可能包含非ASCII字符），使用整个链接而不处理
+															console.log('链接编码失败，使用原始链接:', url, encodeError.message);
 														}
 													}
+												} catch (urlError) {
+													// URL无效或不是标准的URL，跳过处理
+													console.log('链接格式不标准，跳过处理:', url);
 												}
 											}
 										} catch (e) {
 											// 如果URL解析失败，保持原样
+											console.log('链接处理失败:', e.message);
 										}
 									});
 								};
@@ -79,6 +111,40 @@ function processMarkdownLinks() {
 			}
 		}
 	};
+}
+
+// 检查URL是否是有效的外部链接
+function isValidExternalUrl(url) {
+	// 检查是否为空
+	if (!url || typeof url !== 'string') {
+		return false;
+	}
+	
+	// 跳过锚点链接(#开头)、相对路径(/开头)和特殊协议链接
+	if (url.startsWith('#') || url.startsWith('/')) {
+		return false;
+	}
+	
+	// 检查特殊协议
+	const specialProtocols = ['mailto:', 'tel:', 'javascript:', 'file:'];
+	for (const protocol of specialProtocols) {
+		if (url.startsWith(protocol)) {
+			return false;
+		}
+	}
+	
+	// 确保URL有协议前缀
+	if (!url.includes('://')) {
+		return false;
+	}
+	
+	// 基本格式验证
+	try {
+		new URL(url);
+		return true;
+	} catch (e) {
+		return false;
+	}
 }
 
 // https://astro.build/config
