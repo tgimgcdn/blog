@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node src/scripts/generate-pagination.js && node src/scripts/generate-en-pagination.js && astro build",
+    "build": "node src/scripts/generate-pagination.js && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate-pages": "node src/scripts/generate-pagination.js && node src/scripts/generate-en-pagination.js"
+    "generate-pages": "node src/scripts/generate-pagination.js"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.34.2",
